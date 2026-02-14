@@ -1,0 +1,190 @@
+<svg viewBox="0 0 1200 2400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background (dark theme) -->
+  <rect width="1200" height="2400" fill="#1a1a2e"/>
+
+  <!-- Header/Navigation -->
+  <rect x="0" y="0" width="1200" height="80" fill="#16213e" stroke="#0f3460" stroke-width="2"/>
+  <text x="60" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#e94560">TCG LOGO</text>
+  <text x="1000" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e0e0e0">Shop</text>
+  <text x="1060" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e0e0e0">About</text>
+  <text x="1120" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e0e0e0">Login</text>
+
+  <!-- Section label: Header -->
+  <text x="20" y="25" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">HEADER / NAV</text>
+
+  <!-- Hero Section -->
+  <rect x="0" y="100" width="1200" height="500" fill="#0f3460" stroke="#e94560" stroke-width="2"/>
+
+  <!-- Hero content container -->
+  <rect x="100" y="180" width="500" height="340" fill="none" stroke="#4a5568" stroke-width="1" stroke-dasharray="5,5"/>
+
+  <!-- Hero text -->
+  <text x="120" y="230" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#e0e0e0">Epic Card Battles</text>
+  <text x="120" y="270" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#e0e0e0">Await</text>
+  <text x="120" y="330" font-family="Arial, sans-serif" font-size="18" fill="#a0a0a0">Build your deck, master the game,</text>
+  <text x="120" y="355" font-family="Arial, sans-serif" font-size="18" fill="#a0a0a0">and dominate the battlefield.</text>
+
+  <!-- Hero CTA buttons -->
+  <rect x="120" y="390" width="180" height="50" fill="#e94560" stroke="#e94560" stroke-width="2" rx="6"/>
+  <text x="210" y="422" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Start Playing</text>
+
+  <rect x="320" y="390" width="180" height="50" fill="none" stroke="#e0e0e0" stroke-width="2" rx="6"/>
+  <text x="410" y="422" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Watch Trailer</text>
+
+  <!-- Hero image placeholder -->
+  <rect x="680" y="180" width="420" height="340" fill="#16213e" stroke="#4a5568" stroke-width="2" rx="8"/>
+  <text x="890" y="360" font-family="Arial, sans-serif" font-size="16" fill="#666" text-anchor="middle">[Hero Image/</text>
+  <text x="890" y="380" font-family="Arial, sans-serif" font-size="16" fill="#666" text-anchor="middle">Card Animation]</text>
+
+  <!-- Section label: Hero -->
+  <text x="20" y="125" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">HERO SECTION</text>
+
+  <!-- Features Section -->
+  <rect x="0" y="640" width="1200" height="480" fill="#1a1a2e" stroke="#0f3460" stroke-width="2"/>
+
+  <!-- Features title -->
+  <text x="600" y="700" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Game Features</text>
+  <rect x="480" y="715" width="240" height="2" fill="#e94560"/>
+
+  <!-- Feature cards -->
+  <rect x="80" y="770" width="310" height="300" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <circle cx="235" cy="840" r="35" fill="none" stroke="#e94560" stroke-width="2"/>
+  <text x="235" y="850" font-family="Arial, sans-serif" font-size="24" fill="#e94560" text-anchor="middle">⚔</text>
+  <text x="235" y="920" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Strategic Combat</text>
+  <text x="235" y="960" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0" text-anchor="middle">Master complex mechanics</text>
+  <text x="235" y="980" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0" text-anchor="middle">and outsmart opponents</text>
+
+  <rect x="445" y="770" width="310" height="300" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <circle cx="600" cy="840" r="35" fill="none" stroke="#e94560" stroke-width="2"/>
+  <text x="600" y="850" font-family="Arial, sans-serif" font-size="24" fill="#e94560" text-anchor="middle">🎨</text>
+  <text x="600" y="920" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Stunning Art</text>
+  <text x="600" y="960" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0" text-anchor="middle">Collect beautifully designed</text>
+  <text x="600" y="980" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0" text-anchor="middle">cards and rare editions</text>
+
+  <rect x="810" y="770" width="310" height="300" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <circle cx="965" cy="840" r="35" fill="none" stroke="#e94560" stroke-width="2"/>
+  <text x="965" y="850" font-family="Arial, sans-serif" font-size="24" fill="#e94560" text-anchor="middle">🌐</text>
+  <text x="965" y="920" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Global Ranked</text>
+  <text x="965" y="960" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0" text-anchor="middle">Compete with players</text>
+  <text x="965" y="980" font-family="Arial, sans-serif" font-size="14" fill="#a0a0a0" text-anchor="middle">worldwide</text>
+
+  <!-- Section label: Features -->
+  <text x="20" y="665" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">FEATURES SECTION</text>
+
+  <!-- Currently Available Packs Section -->
+  <rect x="0" y="1160" width="1200" height="420" fill="#0f3460" stroke="#16213e" stroke-width="2"/>
+
+  <!-- Section title -->
+  <text x="600" y="1220" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Available Now</text>
+  <rect x="450" y="1235" width="300" height="2" fill="#e94560"/>
+
+  <!-- Pack cards -->
+  <rect x="100" y="1280" width="250" height="250" fill="#16213e" stroke="#e94560" stroke-width="2" rx="8"/>
+  <rect x="120" y="1300" width="210" height="150" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="225" y="1385" font-family="Arial, sans-serif" font-size="14" fill="#666" text-anchor="middle">[Pack Image]</text>
+  <text x="225" y="1475" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Starter Pack</text>
+  <text x="225" y="1505" font-family="Arial, sans-serif" font-size="16" fill="#e94560" text-anchor="middle">$9.99</text>
+
+  <rect x="400" y="1280" width="250" height="250" fill="#16213e" stroke="#e94560" stroke-width="2" rx="8"/>
+  <rect x="420" y="1300" width="210" height="150" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="525" y="1385" font-family="Arial, sans-serif" font-size="14" fill="#666" text-anchor="middle">[Pack Image]</text>
+  <text x="525" y="1475" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Legends Pack</text>
+  <text x="525" y="1505" font-family="Arial, sans-serif" font-size="16" fill="#e94560" text-anchor="middle">$24.99</text>
+
+  <rect x="700" y="1280" width="250" height="250" fill="#16213e" stroke="#e94560" stroke-width="2" rx="8"/>
+  <rect x="720" y="1300" width="210" height="150" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="825" y="1385" font-family="Arial, sans-serif" font-size="14" fill="#666" text-anchor="middle">[Pack Image]</text>
+  <text x="825" y="1475" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Premium Pack</text>
+  <text x="825" y="1505" font-family="Arial, sans-serif" font-size="16" fill="#e94560" text-anchor="middle">$49.99</text>
+
+  <rect x="1000" y="1280" width="100" height="250" fill="none" stroke="#4a5568" stroke-width="1" stroke-dasharray="5,5" rx="8"/>
+  <text x="1050" y="1410" font-family="Arial, sans-serif" font-size="24" fill="#666" text-anchor="middle">→</text>
+
+  <!-- Section label: Available Packs -->
+  <text x="20" y="1185" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">CURRENTLY AVAILABLE PACKS</text>
+
+  <!-- Schedules/Upcoming Packs Section -->
+  <rect x="0" y="1620" width="1200" height="380" fill="#1a1a2e" stroke="#0f3460" stroke-width="2"/>
+
+  <!-- Section title -->
+  <text x="600" y="1680" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Upcoming Releases</text>
+  <rect x="430" y="1695" width="340" height="2" fill="#e94560"/>
+
+  <!-- Timeline items -->
+  <rect x="150" y="1740" width="300" height="220" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <rect x="170" y="1760" width="80" height="80" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="210" y="1810" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">[Image]</text>
+  <text x="320" y="1780" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0">Shadow Realm</text>
+  <text x="280" y="1810" font-family="Arial, sans-serif" font-size="14" fill="#e94560">March 15, 2026</text>
+  <text x="280" y="1845" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">New dark-themed expansion</text>
+  <text x="280" y="1865" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">with 150+ cards</text>
+  <rect x="170" y="1900" width="120" height="35" fill="none" stroke="#e94560" stroke-width="2" rx="4"/>
+  <text x="230" y="1923" font-family="Arial, sans-serif" font-size="13" fill="#e94560" text-anchor="middle">Pre-order</text>
+
+  <rect x="500" y="1740" width="300" height="220" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <rect x="520" y="1760" width="80" height="80" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="560" y="1810" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">[Image]</text>
+  <text x="670" y="1780" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0">Crystal Warriors</text>
+  <text x="630" y="1810" font-family="Arial, sans-serif" font-size="14" fill="#e94560">April 22, 2026</text>
+  <text x="630" y="1845" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">Legendary heroes return</text>
+  <text x="630" y="1865" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">with powerful abilities</text>
+  <rect x="520" y="1900" width="120" height="35" fill="none" stroke="#e94560" stroke-width="2" rx="4"/>
+  <text x="580" y="1923" font-family="Arial, sans-serif" font-size="13" fill="#e94560" text-anchor="middle">Notify Me</text>
+
+  <rect x="850" y="1740" width="300" height="220" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <rect x="870" y="1760" width="80" height="80" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="910" y="1810" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">[Image]</text>
+  <text x="1020" y="1780" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0">Cyber Age</text>
+  <text x="980" y="1810" font-family="Arial, sans-serif" font-size="14" fill="#e94560">May 10, 2026</text>
+  <text x="980" y="1845" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">Futuristic tech-themed</text>
+  <text x="980" y="1865" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">cards and mechanics</text>
+  <rect x="870" y="1900" width="120" height="35" fill="none" stroke="#e94560" stroke-width="2" rx="4"/>
+  <text x="930" y="1923" font-family="Arial, sans-serif" font-size="13" fill="#e94560" text-anchor="middle">Coming Soon</text>
+
+  <!-- Section label: Schedules -->
+  <text x="20" y="1645" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">UPCOMING RELEASES / SCHEDULE</text>
+
+  <!-- Company Information Section -->
+  <rect x="0" y="2040" width="1200" height="240" fill="#0f3460" stroke="#16213e" stroke-width="2"/>
+
+  <!-- Company info layout -->
+  <rect x="150" y="2090" width="200" height="140" fill="none" stroke="#4a5568" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="250" y="2125" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#e0e0e0" text-anchor="middle">About Us</text>
+  <text x="250" y="2155" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">Leading TCG publisher</text>
+  <text x="250" y="2175" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">since 2020. Creating</text>
+  <text x="250" y="2195" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">epic card experiences.</text>
+
+  <rect x="400" y="2090" width="200" height="140" fill="none" stroke="#4a5568" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="500" y="2125" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Community</text>
+  <text x="500" y="2155" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">Join 500K+ players</text>
+  <text x="500" y="2175" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">Discord • Reddit</text>
+  <text x="500" y="2195" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">Twitter • Forums</text>
+
+  <rect x="650" y="2090" width="200" height="140" fill="none" stroke="#4a5568" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="750" y="2125" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Support</text>
+  <text x="750" y="2155" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">Help Center</text>
+  <text x="750" y="2175" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">Game Rules</text>
+  <text x="750" y="2195" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0" text-anchor="middle">Contact Us</text>
+
+  <rect x="900" y="2090" width="200" height="140" fill="none" stroke="#4a5568" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="1000" y="2125" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Newsletter</text>
+  <rect x="920" y="2140" width="160" height="35" fill="#16213e" stroke="#4a5568" stroke-width="1"/>
+  <text x="1000" y="2163" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">your@email.com</text>
+  <rect x="920" y="2185" width="160" height="30" fill="#e94560" stroke="#e94560" stroke-width="2" rx="4"/>
+  <text x="1000" y="2206" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">Subscribe</text>
+
+  <!-- Section label: Company Info -->
+  <text x="20" y="2065" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">COMPANY INFORMATION</text>
+
+  <!-- Footer -->
+  <rect x="0" y="2320" width="1200" height="80" fill="#16213e" stroke="#0f3460" stroke-width="2"/>
+
+  <!-- Footer content -->
+  <text x="150" y="2360" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">© 2026 TCG Studios. All rights reserved.</text>
+  <text x="900" y="2360" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Privacy Policy</text>
+  <text x="1010" y="2360" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Terms</text>
+  <text x="1070" y="2360" font-family="Arial, sans-serif" font-size="12" fill="#a0a0a0">Legal</text>
+
+  <!-- Section label: Footer -->
+  <text x="20" y="2345" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">FOOTER</text>
+</svg>
