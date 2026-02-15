@@ -1,0 +1,44 @@
+<svg viewBox="0 0 1200 380" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="380" fill="#1a1a2e" stroke="#0f3460" stroke-width="2"/>
+
+  <!-- Section title -->
+  <text x="600" y="60" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#e0e0e0" text-anchor="middle">Timeline / Schedule</text>
+  <rect x="430" y="75" width="340" height="2" fill="#e94560"/>
+
+  <!-- Timeline card 1 -->
+  <rect x="150" y="120" width="300" height="220" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <rect x="170" y="140" width="80" height="80" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="210" y="190" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">[Image]</text>
+  <text x="320" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0">Event Title 1</text>
+  <text x="280" y="190" font-family="Arial, sans-serif" font-size="14" fill="#e94560">Date / Time</text>
+  <text x="280" y="225" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">Brief description or details</text>
+  <text x="280" y="245" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">about this event</text>
+  <rect x="170" y="280" width="120" height="35" fill="none" stroke="#e94560" stroke-width="2" rx="4"/>
+  <text x="230" y="303" font-family="Arial, sans-serif" font-size="13" fill="#e94560" text-anchor="middle">CTA Button</text>
+
+  <!-- Timeline card 2 -->
+  <rect x="500" y="120" width="300" height="220" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <rect x="520" y="140" width="80" height="80" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="560" y="190" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">[Image]</text>
+  <text x="670" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0">Event Title 2</text>
+  <text x="630" y="190" font-family="Arial, sans-serif" font-size="14" fill="#e94560">Date / Time</text>
+  <text x="630" y="225" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">Brief description or details</text>
+  <text x="630" y="245" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">about this event</text>
+  <rect x="520" y="280" width="120" height="35" fill="none" stroke="#e94560" stroke-width="2" rx="4"/>
+  <text x="580" y="303" font-family="Arial, sans-serif" font-size="13" fill="#e94560" text-anchor="middle">CTA Button</text>
+
+  <!-- Timeline card 3 -->
+  <rect x="850" y="120" width="300" height="220" fill="#16213e" stroke="#0f3460" stroke-width="2" rx="8"/>
+  <rect x="870" y="140" width="80" height="80" fill="#1a1a2e" stroke="#4a5568" stroke-width="1"/>
+  <text x="910" y="190" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">[Image]</text>
+  <text x="1020" y="160" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0">Event Title 3</text>
+  <text x="980" y="190" font-family="Arial, sans-serif" font-size="14" fill="#e94560">Date / Time</text>
+  <text x="980" y="225" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">Brief description or details</text>
+  <text x="980" y="245" font-family="Arial, sans-serif" font-size="13" fill="#a0a0a0">about this event</text>
+  <rect x="870" y="280" width="120" height="35" fill="none" stroke="#e94560" stroke-width="2" rx="4"/>
+  <text x="930" y="303" font-family="Arial, sans-serif" font-size="13" fill="#e94560" text-anchor="middle">CTA Button</text>
+
+  <!-- Component label -->
+  <text x="20" y="25" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">TIMELINE / SCHEDULE (3 COLUMNS)</text>
+</svg>

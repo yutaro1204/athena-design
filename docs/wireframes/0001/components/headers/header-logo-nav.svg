@@ -1,0 +1,15 @@
+<svg viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="80" fill="#16213e" stroke="#0f3460" stroke-width="2"/>
+
+  <!-- Logo -->
+  <text x="60" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#e94560">LOGO</text>
+
+  <!-- Navigation links -->
+  <text x="1000" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e0e0e0">Link 1</text>
+  <text x="1060" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e0e0e0">Link 2</text>
+  <text x="1120" y="50" font-family="Arial, sans-serif" font-size="16" fill="#e0e0e0">Link 3</text>
+
+  <!-- Component label -->
+  <text x="20" y="25" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">HEADER / NAV</text>
+</svg>

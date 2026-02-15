@@ -35,11 +35,14 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
    - Include proper labels for sections
    - Use standard wireframe elements (boxes, lines, circles for icons)
 
-4. **File naming**: Save the wireframe with the page ID as a prefix in the format:
-   - `docs/wireframes/{NNNN}-{page-name}-wireframe.svg`
+4. **File naming and directory structure**:
+   - Create directory: `docs/wireframes/{NNNN}/`
+   - Save the wireframe in that directory: `docs/wireframes/{NNNN}/{page-name}-wireframe.svg`
    - Where {NNNN} is the 4-digit page ID (e.g., 0001, 0002, 0003)
-   - Example: `docs/wireframes/0001-login-page-wireframe.svg`
-   - Example: `docs/wireframes/0002-dashboard-wireframe.svg`
+   - Example directory: `docs/wireframes/0001/`
+   - Example file: `docs/wireframes/0001/login-page-wireframe.svg`
+   - Example: `docs/wireframes/0002/dashboard-wireframe.svg`
+   - Create the directory if it doesn't exist
 
 5. **Output**: After creating the wireframe:
    - Confirm the file has been created with its page ID
