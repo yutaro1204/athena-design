@@ -4,12 +4,21 @@ This document provides context and guidelines for Claude (AI assistant) when wor
 
 ## Project Overview
 
-This is a **wireframe-driven frontend development project** using React, TypeScript, and Tailwind CSS v4. The project uses a structured workflow with custom Claude Code skills to streamline the design-to-implementation process.
+This is a **wireframe-driven frontend development project** that supports both React and Astro frameworks with TypeScript and Tailwind CSS v4. The project uses a structured workflow with custom Claude Code skills to streamline the design-to-implementation process.
+
+## Claude Code Skills Structure
+
+This project uses **custom Claude Code skills** for wireframe-driven development:
+- **skills/**: 8 custom commands for the workflow
+- **docs/**: Example artifacts (wireframes, assets, documentation) that skills reference
+- **.claude/**: Claude Code configuration (settings only)
+- **CLAUDE.md**: This file - project instructions for Claude
+- **README.md**: User-facing documentation
 
 ## Technology Stack
 
-- **Framework**: React 18 with TypeScript
-- **Build Tool**: Vite
+- **Framework**: React 18 or Astro (auto-detected or specified)
+- **Build Tool**: Vite (React) or Astro
 - **Styling**: Tailwind CSS v4
 - **Design Format**: SVG wireframes
 - **Asset Format**: WebP (with JPEG fallback), SVG for icons/logos
@@ -26,40 +35,85 @@ This is a **wireframe-driven frontend development project** using React, TypeScr
 ### Directory Structure
 
 ```
-docs/wireframes/{NNNN}/              # Wireframe ID directory
-  {page-name}-wireframe.svg          # Original wireframe design
-  {breakpoint}/                      # Responsive versions (768, 1024, etc.)
-    {page-name}-responsive-wireframe.svg
-  components/                        # Extracted reusable components
-    README.md                        # Component library documentation
-    headers/*.svg                    # Header components
-    heroes/*.svg                     # Hero section components
-    sections/*.svg                   # Content section components
-    footers/*.svg                    # Footer components
-docs/assets/                         # Image assets
-docs/assets-list.md                  # Asset requirements document
-src/App.tsx                          # Main React component
+project/
+├── .claude/                                  # Claude Code configuration
+│   └── settings.json                         # Claude Code settings
+├── skills/                                   # Custom Claude Code skills (8 skills)
+│   ├── create-page-wireframe/
+│   ├── create-page-from-wireframe/
+│   ├── create-responsive-design/
+│   ├── apply-responsive-design/
+│   ├── create-required-assets-list/
+│   ├── apply-required-assets/
+│   ├── create-components-from-wireframe/
+│   └── generate-wireframe-catalog/
+├── docs/                                     # Example artifacts and assets
+│   ├── wireframes/{NNNN}/                    # Wireframe ID directory
+│   │   ├── {page-name}-wireframe.svg         # Original wireframe design
+│   │   ├── {breakpoint}/                     # Responsive versions (768, 1024, etc.)
+│   │   │   └── {page-name}-responsive-wireframe.svg
+│   │   └── components/                       # Extracted reusable components
+│   │       ├── README.md                     # Component library documentation
+│   │       ├── headers/*.svg                 # Header components
+│   │       ├── heroes/*.svg                  # Hero section components
+│   │       ├── sections/*.svg                # Content section components
+│   │       └── footers/*.svg                 # Footer components
+│   ├── assets/                               # Example image assets
+│   └── assets-list.md                        # Asset requirements document
+├── src/                                      # Application source code
+│   ├── App.tsx                               # React: Main component
+│   └── pages/{page-name}.astro               # Astro: Page files (file-based routing)
+├── CLAUDE.md                                 # This file - project instructions
+└── README.md                                 # User-facing documentation
+```
+
+### Framework Support
+
+**React or Astro**: Skills automatically detect the framework or you can specify it explicitly.
+
+**Key Differences**:
+
+| Feature | React | Astro |
+|---------|-------|-------|
+| File extension | `.tsx` | `.astro` |
+| Output path | `src/App.tsx` | `src/pages/{page-name}.astro` |
+| Class attribute | `className` | `class` |
+| Comments | `{/* comment */}` | `<!-- comment -->` |
+| Image imports | `<img src={img} />` | `<img src={img.src} />` |
+| Import location | Top of file | Frontmatter (`---`) |
+| Routing | Manual/library | File-based (automatic) |
+
+**Usage**:
+```bash
+# Auto-detect framework (recommended)
+/create-page-from-wireframe 0001
+
+# Explicitly specify React
+/create-page-from-wireframe 0001 react
+
+# Explicitly specify Astro
+/create-page-from-wireframe 0001 astro
 ```
 
 ### Tailwind CSS v4 Configuration
 
-**Important**: This project uses Tailwind CSS v4, which differs from v3:
-- ✅ Use `@import "tailwindcss";` in `src/index.css`
+**Important**: Both React and Astro projects use Tailwind CSS v4, which differs from v3:
+- ✅ Use `@import "tailwindcss";` in CSS file
 - ❌ DO NOT create `tailwind.config.js`
 - ❌ DO NOT create `postcss.config.js`
 - ❌ DO NOT use `@tailwind base/components/utilities` directives
 
 ## Available Skills
 
-The project has 8 custom Claude Code skills for frontend development:
+The project has 8 custom Claude Code skills for frontend development (React and Astro):
 
 1. **create-page-wireframe**: Creates SVG wireframe designs
 2. **create-components-from-wireframe**: Extracts reusable component SVGs from wireframes
-3. **create-page-from-wireframe**: Implements React components from wireframes
+3. **create-page-from-wireframe**: Implements React or Astro components from wireframes (framework auto-detected)
 4. **create-responsive-design**: Creates responsive wireframe visualizations
-5. **apply-responsive-design**: Applies responsive design to components
+5. **apply-responsive-design**: Applies responsive design to React or Astro components (framework auto-detected)
 6. **create-required-assets-list**: Generates asset requirements documentation
-7. **apply-required-assets**: Integrates assets into components
+7. **apply-required-assets**: Integrates assets into React or Astro components (framework auto-detected)
 8. **generate-wireframe-catalog**: Generates comprehensive wireframe catalog documentation
 
 ## Working with This Project
@@ -72,6 +126,8 @@ The project has 8 custom Claude Code skills for frontend development:
    - **If user says "like [website]"**: Use URL parameter: `/create-page-wireframe "description" "https://website.com"`
    - **If user provides URL**: Use it to analyze and extract design system
 3. **If wireframe exists**: Use `/create-page-from-wireframe {NNNN}`
+   - Framework will be auto-detected (checks for Astro config or React files)
+   - Or specify explicitly: `/create-page-from-wireframe {NNNN} react` or `/create-page-from-wireframe {NNNN} astro`
 
 **URL Reference Usage**:
 - User says: "Create a page like Stripe" → Use `/create-page-wireframe "" "https://stripe.com"`
@@ -610,5 +666,5 @@ This project uses a **structured, skill-based workflow** for frontend developmen
 
 ---
 
-**For detailed skill documentation**: See `.claude/skills/{skill-name}/SKILL.md`
-**For user documentation**: See `.claude/README.md`
+**For detailed skill documentation**: See `skills/{skill-name}/SKILL.md`
+**For user documentation**: See `README.md`

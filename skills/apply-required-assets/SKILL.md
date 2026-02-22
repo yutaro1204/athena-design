@@ -1,25 +1,37 @@
 ---
 name: apply-required-assets
-description: Integrates actual images from docs/assets into component files based on assets-list.md
+description: Integrates actual images from docs/assets into React/Astro component files based on assets-list.md
 argument-hint: "[component-file-path]"
 disable-model-invocation: true
 ---
 
 # Apply Required Assets
 
-You are a frontend developer. Your task is to integrate actual image assets from `docs/assets` directory into a React component file, replacing placeholders with real images based on the specifications in `docs/assets-list.md`.
+You are a frontend developer. Your task is to integrate actual image assets from `docs/assets` directory into a React or Astro component file, replacing placeholders with real images based on the specifications in `docs/assets-list.md`.
 
 ## Instructions
 
 1. **Parse the argument**:
-   - Argument: Component file path (optional)
-   - Default: `src/App.tsx` if not provided
+   - Argument: Component file path (optional, will auto-detect if not provided)
    - Examples:
-     - `src/App.tsx` (default)
-     - `src/components/Page0001.tsx`
-     - `src/pages/Landing.tsx`
+     - Auto-detect (no argument)
+     - `src/App.tsx` (React)
+     - `src/components/Page0001.tsx` (React)
+     - `src/pages/landing.astro` (Astro)
+     - `src/pages/index.astro` (Astro)
 
-2. **Read assets-list.md**:
+2. **Auto-detect component file** (if not provided):
+   - Look for recently created/modified files
+   - Check `src/App.tsx` for React
+   - Check `src/pages/*.astro` for Astro
+   - Inform the user which file was detected
+
+3. **Detect framework from file extension**:
+   - `.tsx` or `.jsx` → React
+   - `.astro` → Astro
+   - This determines import syntax and image handling
+
+4. **Read assets-list.md**:
    - Read `docs/assets-list.md` to understand:
      - What assets are required (logo, hero images, pack images, icons, etc.)
      - Expected file names and formats
@@ -27,24 +39,25 @@ You are a frontend developer. Your task is to integrate actual image assets from
      - Loading strategies (eager vs lazy)
    - Extract the list of required assets from the document
 
-3. **Check available assets**:
+5. **Check available assets**:
    - List files in `docs/assets` directory
    - Match available files with required assets from assets-list.md
    - Identify which assets are available for integration
    - Note: Some assets may be missing - only integrate what's available
 
-4. **Read the target component file**:
-   - Read the specified component file (e.g., `src/App.tsx`)
+6. **Read the target component file**:
+   - Read the specified component file
    - Identify placeholder elements that need replacement:
      - Text placeholders like `[Image]`, `[Pack Image]`, `[Hero Image]`, `[Logo]`
      - Placeholder divs with text content
      - Elements marked for asset integration
+   - Note the framework-specific syntax (className vs class)
 
-5. **Add import statements**:
-   - Add import statements at the top of the file for all available assets
+7. **Add import statements** (framework-specific):
+   ### For React (.tsx):
+   - Add import statements at the top of the file
    - Use descriptive variable names in camelCase
    - Use relative path from component location to `docs/assets` directory
-   - For components in `src/` directory, use `../docs/assets/` path
    - Example format (for src/App.tsx):
    ```tsx
    import logoImage from '../docs/assets/logo.png'
@@ -53,24 +66,40 @@ You are a frontend developer. Your task is to integrate actual image assets from
    ```
    - Place imports after CSS imports but before component definitions
 
-6. **Replace placeholders with images**:
+   ### For Astro (.astro):
+   - Add import statements in the frontmatter section (between `---` markers)
+   - Use descriptive variable names in camelCase
+   - Use relative path from component location to `docs/assets` directory
+   - Example format (for src/pages/landing.astro):
+   ```astro
+   ---
+   import logoImage from '../../docs/assets/logo.png'
+   import heroImage from '../../docs/assets/hero-card-animation.webp'
+   import packStarterImage from '../../docs/assets/pack-starter.webp'
+   ---
+   ```
+   - Note: Astro pages in `src/pages/` need `../../docs/assets/` (one more `../` than React)
+
+8. **Replace placeholders with images** (framework-specific):
    Follow these patterns for different asset types:
 
-   **Logo (Header):**
-   - Replace text logo with `<img>` tag
-   - Make it responsive with height classes
-   - Example:
+   **Logo (Header) - React:**
    ```tsx
    <div className="flex items-center">
      <img src={logoImage} alt="[Brand] Logo" className="h-10 md:h-12" />
    </div>
    ```
 
-   **Hero Image (Above the fold):**
-   - Replace placeholder div with `<img>` tag
-   - Use `object-contain` to maintain aspect ratio
-   - No `loading` attribute (loads immediately)
-   - Example:
+   **Logo (Header) - Astro:**
+   ```astro
+   <div class="flex items-center">
+     <img src={logoImage.src} alt="[Brand] Logo" class="h-10 md:h-12" />
+   </div>
+   ```
+
+   **Important**: In Astro, imported images are objects, use `.src` to get the URL.
+
+   **Hero Image (Above the fold) - React:**
    ```tsx
    <div className="flex-1 w-full flex items-center justify-center">
      <img
@@ -81,11 +110,18 @@ You are a frontend developer. Your task is to integrate actual image assets from
    </div>
    ```
 
-   **Product/Pack Images (Below the fold):**
-   - Replace placeholder div with `<img>` tag
-   - Use `object-cover` for consistent sizing
-   - Add `loading="lazy"` for performance
-   - Example:
+   **Hero Image (Above the fold) - Astro:**
+   ```astro
+   <div class="flex-1 w-full flex items-center justify-center">
+     <img
+       src={heroImage.src}
+       alt="[Descriptive alt text]"
+       class="w-full h-auto max-h-[240px] md:max-h-[340px] object-contain rounded-lg"
+     />
+   </div>
+   ```
+
+   **Product/Pack Images (Below the fold) - React:**
    ```tsx
    <div className="h-[120px] md:h-[150px] mb-3 md:mb-4 flex items-center justify-center overflow-hidden">
      <img
@@ -97,11 +133,19 @@ You are a frontend developer. Your task is to integrate actual image assets from
    </div>
    ```
 
-   **Thumbnail Images (Below the fold):**
-   - Replace placeholder div with `<img>` tag
-   - Use `object-cover` for thumbnails
-   - Add `loading="lazy"` for performance
-   - Example:
+   **Product/Pack Images (Below the fold) - Astro:**
+   ```astro
+   <div class="h-[120px] md:h-[150px] mb-3 md:mb-4 flex items-center justify-center overflow-hidden">
+     <img
+       src={packStarterImage.src}
+       alt="[Product name] - [Description]"
+       class="w-full h-full object-cover rounded"
+       loading="lazy"
+     />
+   </div>
+   ```
+
+   **Thumbnail Images (Below the fold) - React:**
    ```tsx
    <div className="w-16 md:w-20 h-16 md:h-20 flex items-center justify-center flex-shrink-0 overflow-hidden rounded">
      <img
@@ -113,9 +157,21 @@ You are a frontend developer. Your task is to integrate actual image assets from
    </div>
    ```
 
-   **Feature Icons:**
-   - If SVG icons are available, integrate them similarly
-   - For inline SVGs, consider embedding directly or importing as React components
+   **Thumbnail Images (Below the fold) - Astro:**
+   ```astro
+   <div class="w-16 md:w-20 h-16 md:h-20 flex items-center justify-center flex-shrink-0 overflow-hidden rounded">
+     <img
+       src={expansionShadowRealmImage.src}
+       alt="[Item name] thumbnail"
+       class="w-full h-full object-cover"
+       loading="lazy"
+     />
+   </div>
+   ```
+
+   **Note**: Both frameworks use the same image attributes (`loading`, `alt`), but:
+   - React uses `className` and direct image variable
+   - Astro uses `class` and `.src` property on image variable
 
 7. **Asset mapping strategy**:
    Based on assets-list.md, map assets to placeholders:
@@ -161,8 +217,15 @@ You are a frontend developer. Your task is to integrate actual image assets from
       - `h-[120px] md:h-[150px]` for product images
       - `w-16 md:w-20 h-16 md:h-20` for thumbnails
 
-11. **Output**:
+9. **Maintain responsive design and framework syntax**:
+    - Keep existing responsive classes (md:, lg:, etc.)
+    - Use correct attribute name: `className` for React, `class` for Astro
+    - Use correct image syntax: direct variable for React, `.src` property for Astro
+    - Ensure images work on both mobile and desktop
+
+10. **Output**:
     - Confirm the assets have been integrated
+    - Mention the framework detected (React or Astro)
     - List the component file that was modified
     - Summarize what assets were integrated:
       - Number of images integrated
@@ -174,7 +237,7 @@ You are a frontend developer. Your task is to integrate actual image assets from
 
 ## Asset Integration Patterns
 
-### Import Pattern
+### React Import Pattern (src/App.tsx)
 ```tsx
 // CSS imports
 import './App.css'
@@ -184,10 +247,6 @@ import logoImage from '../docs/assets/logo.png'
 import heroImage from '../docs/assets/hero-card-animation.webp'
 import packStarterImage from '../docs/assets/pack-starter.webp'
 import packLegendsImage from '../docs/assets/pack-legends.webp'
-import packPremiumImage from '../docs/assets/pack-premium.webp'
-import expansionShadowRealmImage from '../docs/assets/expansion-shadow-realm.webp'
-import expansionCrystalWarriorsImage from '../docs/assets/expansion-crystal-warriors.webp'
-import expansionCyberAgeImage from '../docs/assets/expansion-cyber-age.webp'
 
 // Component definition
 function Page0001() {
@@ -195,18 +254,52 @@ function Page0001() {
 }
 ```
 
+### Astro Import Pattern (src/pages/landing.astro)
+```astro
+---
+// Asset imports (relative path from src/pages/ to docs/assets/)
+import logoImage from '../../docs/assets/logo.png'
+import heroImage from '../../docs/assets/hero-card-animation.webp'
+import packStarterImage from '../../docs/assets/pack-starter.webp'
+import packLegendsImage from '../../docs/assets/pack-legends.webp'
+---
+
+<html lang="en">
+  <!-- Template content here -->
+</html>
+```
+
+**Path differences**:
+- From `src/App.tsx`: use `../docs/assets/`
+- From `src/pages/*.astro`: use `../../docs/assets/` (one more level up)
+
 ### Logo Replacement Pattern
-**Before:**
+
+**Before (React):**
 ```tsx
 <div className="text-xl md:text-2xl font-bold text-[#e94560]">
   TCG LOGO
 </div>
 ```
 
-**After:**
+**After (React):**
 ```tsx
 <div className="flex items-center">
   <img src={logoImage} alt="TCG Logo" className="h-10 md:h-12" />
+</div>
+```
+
+**Before (Astro):**
+```astro
+<div class="text-xl md:text-2xl font-bold text-[#e94560]">
+  TCG LOGO
+</div>
+```
+
+**After (Astro):**
+```astro
+<div class="flex items-center">
+  <img src={logoImage.src} alt="TCG Logo" class="h-10 md:h-12" />
 </div>
 ```
 
@@ -298,17 +391,20 @@ When replacing placeholders, use surrounding context to determine which asset to
 ## Usage Examples
 
 ```bash
-# Apply assets to default component (src/App.tsx)
+# Auto-detect component file and apply assets
 /apply-required-assets
 
-# Apply assets to specific component
+# Apply assets to React component
 /apply-required-assets src/App.tsx
 
-# Apply assets to custom component path
-/apply-required-assets src/components/Page0001.tsx
+# Apply assets to Astro page
+/apply-required-assets src/pages/landing.astro
 
-# Apply assets to page component
-/apply-required-assets src/pages/Landing.tsx
+# Apply assets to Astro index page
+/apply-required-assets src/pages/index.astro
+
+# Apply assets to React page component
+/apply-required-assets src/components/Page0001.tsx
 ```
 
 ## Workflow Example
@@ -322,16 +418,36 @@ When replacing placeholders, use surrounding context to determine which asset to
 
 ## Important Notes
 
-- **Read assets-list.md first**: This document contains the mapping between wireframe elements and required assets
+- **Framework Support**: Works with both React (.tsx) and Astro (.astro) files
+- **Auto-detection**: Component file and framework are auto-detected if not specified
+- **Image syntax difference**:
+  - React: `<img src={logoImage} />` (direct variable)
+  - Astro: `<img src={logoImage.src} />` (use `.src` property)
+- **Attribute difference**: React uses `className`, Astro uses `class`
+- **Read assets-list.md first**: Contains mapping between wireframe elements and required assets
 - **Context-aware replacement**: Use surrounding HTML/text to determine which asset matches which placeholder
 - **Graceful handling**: If an asset is missing, leave the placeholder and note it in the output
 - **Preserve styling**: Keep all existing Tailwind CSS classes and responsive design
 - **Alt text quality**: Write meaningful, descriptive alt text for accessibility
 - **Loading strategy**: Follow performance recommendations (eager for above-fold, lazy for below-fold)
 - **Maintain structure**: Don't change the component structure, only replace placeholders
-- **TypeScript compatibility**: Ensure import paths work with TypeScript/Vite
 - **Asset discovery**: Check actual files in docs/assets, don't assume based on assets-list.md alone
-- **Relative paths**: For components in src/ directory, use `../docs/assets/` path; adjust relative path based on component depth
+- **Relative paths**:
+  - From `src/App.tsx`: use `../docs/assets/`
+  - From `src/pages/*.astro`: use `../../docs/assets/`
+  - Adjust based on component depth
+
+## Framework Differences Summary
+
+| Feature | React | Astro |
+|---------|-------|-------|
+| File extension | `.tsx` | `.astro` |
+| Class attribute | `className` | `class` |
+| Image import | `import img from '...'` | `import img from '...'` (same) |
+| Image usage | `src={img}` | `src={img.src}` |
+| Import location | Top of file | Frontmatter (`---`) |
+| Import path from src/ | `../docs/assets/` | `../docs/assets/` |
+| Import path from src/pages/ | N/A | `../../docs/assets/` |
 
 ## Troubleshooting
 

@@ -389,8 +389,8 @@ All wireframes in this catalog follow these standards:
 
 ### Documentation
 
-- [Project README](../../.claude/README.md) - Skills overview and workflow
-- [Claude Instructions](../../.claude/CLAUDE.md) - AI assistant guidelines
+- [Project README](../../README.md) - Skills overview and workflow
+- [Claude Instructions](../../CLAUDE.md) - AI assistant guidelines
 - [Assets List](../assets-list.md) - Asset requirements for wireframe 0001
 - [Component Library](0001/components/README.md) - Reusable component docs
 
@@ -426,4 +426,4 @@ When adding new wireframes to this catalog:
 **Last Catalog Update**: 2026-02-15
 **Catalog Version**: 1.0
 
-For questions or suggestions, refer to the [Claude Instructions](../../.claude/CLAUDE.md) or project documentation.
+For questions or suggestions, refer to the [Claude Instructions](../../CLAUDE.md) or project documentation.
