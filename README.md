@@ -242,14 +242,14 @@ project/
 # Auto-detect framework and use default paths
 /apply-required-assets
 
-# Specify custom React component
+# Specify custom output path (React)
 /apply-required-assets src/components/Page.tsx
 
-# Specify custom Astro page
+# Specify custom output path (Astro)
 /apply-required-assets src/pages/landing.astro
 ```
 
-**Input**: Component file path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
+**Input**: Output path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
 
 **Output**:
 - React: Updated component with image imports and proper usage (e.g., `<img src={logoImage} />`)
@@ -354,7 +354,7 @@ When creating a new page from scratch, follow this order:
 | 4    | create-page-from-wireframe  | Wireframe ID + Framework  | React/Astro component               | ❌ No               |
 | 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive React/Astro component    | ✅ If desktop-only  |
 | 6    | [Manual]                    | assets-list.md            | Image files                         | ✅ If no images     |
-| 7    | apply-required-assets       | Component path            | React/Astro component with images   | ✅ If no images     |
+| 7    | apply-required-assets       | Output path               | React/Astro component with images   | ✅ If no images     |
 | 8    | npm run dev                 | -                         | Running dev server                  | ❌ No (for testing) |
 
 ### Minimal Workflows
