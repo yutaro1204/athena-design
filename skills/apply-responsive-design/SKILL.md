@@ -1,7 +1,7 @@
 ---
 name: apply-responsive-design
 description: Applies responsive design from wireframe to React/Astro components with Tailwind CSS
-argument-hint: '[wireframe-id] [breakpoint] [component-path]'
+argument-hint: '[wireframe-id] [breakpoint] [output-path]'
 disable-model-invocation: true
 ---
 
@@ -14,7 +14,7 @@ You are a frontend developer. Your task is to apply responsive design to a React
 1. **Parse the arguments**:
    - First argument: wireframe ID (4-digit number like "0001", required)
    - Second argument: breakpoint in pixels (optional, defaults to "768")
-   - Third argument: component file path (optional, auto-detects based on framework)
+   - Third argument: output path (optional, auto-detects based on framework)
    - Examples:
      - `0001`: Uses wireframe 0001, 768px breakpoint, auto-detect file
      - `0001 768`: Uses wireframe 0001, 768px breakpoint, auto-detect file
@@ -23,7 +23,7 @@ You are a frontend developer. Your task is to apply responsive design to a React
      - `0001 768 src/pages/landing.astro`: Astro page
    - If no wireframe ID is provided, ask the user for it
 
-2. **Auto-detect component file** (if not provided):
+2. **Auto-detect output file** (if not provided):
    - Look for recently created/modified files matching the wireframe
    - Check `src/App.tsx` for React
    - Check `src/pages/*.astro` for Astro
@@ -50,8 +50,8 @@ You are a frontend developer. Your task is to apply responsive design to a React
      - 1536px = `2xl:` (Tailwind's 2xl breakpoint)
    - Use the determined prefix throughout the responsive design (e.g., `md:`, `lg:`, etc.)
 
-6. **Read the target component file**:
-   - Read the specified component file (e.g., `src/App.tsx` or `src/pages/landing.astro`)
+6. **Read the target output file**:
+   - Read the specified output file (e.g., `src/App.tsx` or `src/pages/landing.astro`)
    - Understand the current structure and identify all sections
    - Identify elements that need responsive adjustments
    - Note the framework-specific syntax (className vs class)
@@ -166,7 +166,7 @@ You are a frontend developer. Your task is to apply responsive design to a React
    - Icon sizes: `w-[60px] {prefix}:w-[70px] h-[60px] {prefix}:h-[70px]`
    - Decorative elements: hide on mobile if not essential (`hidden {prefix}:flex`)
 
-10. **Update the component file**:
+10. **Update the output file**:
     - Detect framework from file extension (.tsx → React, .astro → Astro)
     - Apply responsive classes to all elements systematically
     - Use correct attribute name: `className` for React, `class` for Astro
@@ -238,7 +238,7 @@ You are a frontend developer. Your task is to apply responsive design to a React
 ## Usage Examples
 
 ```bash
-# Auto-detect component file with default 768px breakpoint (md:)
+# Auto-detect output file with default 768px breakpoint (md:)
 /apply-responsive-design 0001
 
 # Apply responsive design with 1024px breakpoint (lg:), auto-detect file
@@ -271,7 +271,7 @@ You are a frontend developer. Your task is to apply responsive design to a React
 ## Important Notes
 
 - **Framework Support**: Works with both React (.tsx) and Astro (.astro) files
-- **Auto-detection**: Component file and framework are auto-detected if not specified
+- **Auto-detection**: Output file and framework are auto-detected if not specified
 - **Prerequisites**: The responsive wireframe must exist at `docs/wireframes/{NNNN}/{breakpoint}/`
   - Create it first with `/create-responsive-design` if needed
 - **Mobile-first approach**: Default styles are for mobile, prefix for desktop/larger screens
@@ -354,7 +354,7 @@ The Tailwind classes themselves are identical.
 
 - Ensure Tailwind CSS is properly configured in the project
 - Check that the Tailwind prefix matches the breakpoint
-- Verify the component file exists and is readable
+- Verify the output file exists and is readable
 
 **If layout breaks:**
 
