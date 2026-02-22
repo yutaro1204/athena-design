@@ -1,6 +1,6 @@
 # Frontend Development Skills
 
-A comprehensive set of Claude Code skills for wireframe-driven frontend development with React and Tailwind CSS, including component extraction for reusability.
+A comprehensive set of Claude Code skills for wireframe-driven frontend development with React and Astro frameworks, using TypeScript and Tailwind CSS v4, including component extraction for reusability.
 
 ## Table of Contents
 
@@ -18,10 +18,10 @@ This skill collection enables a structured, design-first approach to frontend de
 
 1. **Design Phase**: Create wireframes as SVG files
 2. **Planning Phase**: Generate responsive designs and asset requirements
-3. **Implementation Phase**: Build React components with Tailwind CSS
+3. **Implementation Phase**: Build React or Astro components with Tailwind CSS
 4. **Integration Phase**: Apply responsive design and integrate assets
 
-All skills work together in a seamless workflow, ensuring consistency from design to implementation.
+All skills work together in a seamless workflow, ensuring consistency from design to implementation. Skills automatically detect whether your project uses React or Astro, or you can specify the framework explicitly.
 
 ## Directory Structure
 
@@ -126,18 +126,27 @@ project/
 
 ### 3. create-page-from-wireframe
 
-**Purpose**: Implements React components from wireframe designs
+**Purpose**: Implements React or Astro components from wireframe designs
 
 **Usage**:
 
 ```bash
+# Auto-detect framework (recommended)
 /create-page-from-wireframe 0001
 /create-page-from-wireframe 0002
+
+# Explicitly specify framework
+/create-page-from-wireframe 0001 react
+/create-page-from-wireframe 0001 astro
 ```
 
-**Input**: Wireframe ID (4-digit number)
+**Input**:
+- Wireframe ID (4-digit number, required)
+- Framework (optional: 'react' or 'astro', auto-detected if not specified)
 
-**Output**: React component in `src/App.tsx` with Tailwind CSS
+**Output**:
+- React: Component in `src/App.tsx` with Tailwind CSS
+- Astro: Page file in `src/pages/{page-name}.astro` with Tailwind CSS
 
 **When to use**: After wireframe is approved and ready for implementation
 
@@ -168,23 +177,31 @@ project/
 
 ### 5. apply-responsive-design
 
-**Purpose**: Applies responsive design from wireframe to React component code
+**Purpose**: Applies responsive design from wireframe to React or Astro component code
 
 **Usage**:
 
 ```bash
-/apply-responsive-design 0001                          # Default: 768px, src/App.tsx
+# Auto-detect framework and use default paths
+/apply-responsive-design 0001                          # Default: 768px
 /apply-responsive-design 0001 1024                     # 1024px breakpoint
-/apply-responsive-design 0001 768 src/components/Page.tsx  # Custom component
+
+# Specify custom component path (React)
+/apply-responsive-design 0001 768 src/components/Page.tsx
+
+# Specify custom page path (Astro)
+/apply-responsive-design 0001 768 src/pages/landing.astro
 ```
 
 **Input**:
 
 - Wireframe ID (required)
 - Breakpoint in pixels (optional, default: 768)
-- Component path (optional, default: src/App.tsx)
+- Component path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
 
-**Output**: Updated React component with responsive Tailwind CSS classes
+**Output**:
+- React: Updated component with responsive Tailwind CSS classes (using `className`)
+- Astro: Updated page file with responsive Tailwind CSS classes (using `class`)
 
 **When to use**: After component is implemented to make it responsive
 
@@ -217,18 +234,26 @@ project/
 
 ### 7. apply-required-assets
 
-**Purpose**: Integrates actual image assets into React components
+**Purpose**: Integrates actual image assets into React or Astro components
 
 **Usage**:
 
 ```bash
-/apply-required-assets                    # Default: src/App.tsx
+# Auto-detect framework and use default paths
+/apply-required-assets
+
+# Specify custom React component
 /apply-required-assets src/components/Page.tsx
+
+# Specify custom Astro page
+/apply-required-assets src/pages/landing.astro
 ```
 
-**Input**: Component file path (optional, default: src/App.tsx)
+**Input**: Component file path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
 
-**Output**: Updated React component with image imports and proper usage
+**Output**:
+- React: Updated component with image imports and proper usage (e.g., `<img src={logoImage} />`)
+- Astro: Updated page with image imports and proper usage (e.g., `<img src={logoImage.src} />`)
 
 **Prerequisites**:
 
@@ -297,10 +322,12 @@ When creating a new page from scratch, follow this order:
 # 💻 PHASE 3: IMPLEMENTATION
 # ────────────────────────────────────────
 4️⃣ /create-page-from-wireframe {NNNN}
-   → Creates: src/App.tsx (component with placeholders)
+   → Creates: src/App.tsx (React) or src/pages/{page-name}.astro (Astro)
+   → Component with placeholders
 
 5️⃣ /apply-responsive-design {NNNN} 768
-   → Updates: src/App.tsx (adds responsive Tailwind classes)
+   → Updates: React component (className) or Astro page (class)
+   → Adds responsive Tailwind classes
 
 # 🖼️ PHASE 4: INTEGRATION
 # ────────────────────────────────────────
@@ -308,7 +335,8 @@ When creating a new page from scratch, follow this order:
    → Place in: docs/assets/
 
 7️⃣ /apply-required-assets
-   → Updates: src/App.tsx (integrates image imports)
+   → Updates: React component or Astro page
+   → Integrates image imports with framework-specific syntax
 
 # ✅ PHASE 5: TESTING
 # ────────────────────────────────────────
@@ -318,30 +346,38 @@ When creating a new page from scratch, follow this order:
 
 ### Quick Reference Chart
 
-| Step | Skill                       | Input                     | Output                | Can Skip?           |
-| ---- | --------------------------- | ------------------------- | --------------------- | ------------------- |
-| 1    | create-page-wireframe       | Specification             | Wireframe SVG         | ❌ No               |
-| 2    | create-responsive-design    | Wireframe ID + Breakpoint | Responsive wireframe  | ✅ If desktop-only  |
-| 3    | create-required-assets-list | Wireframe ID              | assets-list.md        | ✅ If no images     |
-| 4    | create-page-from-wireframe  | Wireframe ID              | React component       | ❌ No               |
-| 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive component  | ✅ If desktop-only  |
-| 6    | [Manual]                    | assets-list.md            | Image files           | ✅ If no images     |
-| 7    | apply-required-assets       | Component path            | Component with images | ✅ If no images     |
-| 8    | npm run dev                 | -                         | Running dev server    | ❌ No (for testing) |
+| Step | Skill                       | Input                     | Output                              | Can Skip?           |
+| ---- | --------------------------- | ------------------------- | ----------------------------------- | ------------------- |
+| 1    | create-page-wireframe       | Specification             | Wireframe SVG                       | ❌ No               |
+| 2    | create-responsive-design    | Wireframe ID + Breakpoint | Responsive wireframe                | ✅ If desktop-only  |
+| 3    | create-required-assets-list | Wireframe ID              | assets-list.md                      | ✅ If no images     |
+| 4    | create-page-from-wireframe  | Wireframe ID + Framework  | React/Astro component               | ❌ No               |
+| 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive React/Astro component    | ✅ If desktop-only  |
+| 6    | [Manual]                    | assets-list.md            | Image files                         | ✅ If no images     |
+| 7    | apply-required-assets       | Component path            | React/Astro component with images   | ✅ If no images     |
+| 8    | npm run dev                 | -                         | Running dev server                  | ❌ No (for testing) |
 
 ### Minimal Workflows
 
 **Simple Page (No responsive, no images):**
 
 ```bash
+# Auto-detect framework
 /create-page-wireframe
 /create-page-from-wireframe 0001
+npm run dev
+
+# Or specify framework explicitly
+/create-page-wireframe
+/create-page-from-wireframe 0001 react  # Creates src/App.tsx
+/create-page-from-wireframe 0001 astro  # Creates src/pages/{name}.astro
 npm run dev
 ```
 
 **Responsive Page (No images):**
 
 ```bash
+# React or Astro (auto-detected)
 /create-page-wireframe
 /create-responsive-design 0001 768
 /create-page-from-wireframe 0001
@@ -352,6 +388,7 @@ npm run dev
 **Complete Page (Everything):**
 
 ```bash
+# Works for both React and Astro
 /create-page-wireframe
 /create-responsive-design 0001 768
 /create-required-assets-list 0001
@@ -360,6 +397,23 @@ npm run dev
 [create assets manually]
 /apply-required-assets
 npm run dev
+```
+
+**Astro-Specific Workflow (Multiple Pages):**
+
+```bash
+# Create multiple pages with file-based routing
+/create-page-wireframe "home page"
+/create-page-from-wireframe 0001 astro  # → src/pages/index.astro
+
+/create-page-wireframe "about page"
+/create-page-from-wireframe 0002 astro  # → src/pages/about.astro
+
+/create-page-wireframe "contact page"
+/create-page-from-wireframe 0003 astro  # → src/pages/contact.astro
+
+npm run dev
+# Access at: /, /about, /contact
 ```
 
 ### Important Rules
@@ -428,11 +482,11 @@ npm run dev
                               ↓
                 /create-page-from-wireframe 0001
                               ↓
-                    src/App.tsx (component)
+         src/App.tsx (React) or src/pages/{page}.astro (Astro)
                               ↓
                 /apply-responsive-design 0001 768
                               ↓
-              src/App.tsx (with responsive design)
+      React component or Astro page (with responsive design)
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
 │                  4. INTEGRATION PHASE                           │
@@ -444,7 +498,7 @@ npm run dev
                               ↓
                    /apply-required-assets
                               ↓
-                src/App.tsx (complete with images)
+        React component or Astro page (complete with images)
                               ↓
                         npm run dev
                               ↓
@@ -468,23 +522,39 @@ npm run dev
 /create-required-assets-list 0001
 # Output: docs/assets-list.md
 
-# 4. Implement the page
+# 4. Implement the page (auto-detects framework)
 /create-page-from-wireframe 0001
-# Output: src/App.tsx
+# Output: src/App.tsx (React) or src/pages/tcg-landing-page.astro (Astro)
 
 # 5. Apply responsive design
 /apply-responsive-design 0001 768
-# Output: Updated src/App.tsx with responsive classes
+# Output: Updated component/page with responsive classes
 
 # 6. Create/place assets in docs/assets/
 # (Manual step: create images based on assets-list.md)
 
 # 7. Integrate assets
 /apply-required-assets
-# Output: Updated src/App.tsx with image imports
+# Output: Updated component/page with image imports
+# React: <img src={logoImage} />
+# Astro: <img src={logoImage.src} />
 
 # 8. Run development server
 npm run dev
+```
+
+### Example: Explicitly Specifying Framework
+
+```bash
+# For React project
+/create-page-from-wireframe 0001 react
+/apply-responsive-design 0001 768 src/App.tsx
+/apply-required-assets src/App.tsx
+
+# For Astro project
+/create-page-from-wireframe 0001 astro
+/apply-responsive-design 0001 768 src/pages/landing.astro
+/apply-required-assets src/pages/landing.astro
 ```
 
 ## Detailed Usage
@@ -511,6 +581,42 @@ You can create multiple responsive designs for different breakpoints:
 - 1024px → `lg:` prefix
 - 1280px → `xl:` prefix
 - 1536px → `2xl:` prefix
+
+### Framework Detection and Selection
+
+Skills automatically detect your project framework by checking:
+
+1. **Astro detection**: Looks for `astro.config.mjs` or `astro.config.ts`
+2. **React detection**: Looks for React files in `src/` directory
+
+**Auto-detection (recommended):**
+```bash
+/create-page-from-wireframe 0001
+/apply-responsive-design 0001 768
+/apply-required-assets
+```
+
+**Manual specification:**
+```bash
+# Force React
+/create-page-from-wireframe 0001 react
+
+# Force Astro
+/create-page-from-wireframe 0001 astro
+```
+
+**Key Differences:**
+
+| Feature              | React                       | Astro                                |
+| -------------------- | --------------------------- | ------------------------------------ |
+| File extension       | `.tsx`                      | `.astro`                             |
+| Output path          | `src/App.tsx`               | `src/pages/{page-name}.astro`        |
+| CSS class attribute  | `className="..."`           | `class="..."`                        |
+| Comments             | `{/* comment */}`           | `<!-- comment -->`                   |
+| Image imports        | `<img src={img} />`         | `<img src={img.src} />`              |
+| Import location      | Top of file                 | Frontmatter (`---`)                  |
+| Routing              | Manual or library-based     | File-based (automatic)               |
+| Component structure  | JSX in function body        | Frontmatter + HTML-like template     |
 
 ### Asset Organization
 
@@ -679,6 +785,35 @@ ls docs/wireframes/0001/
 3. Verify `npm run dev` is running
 4. Clear browser cache
 
+### Wrong Framework Detected
+
+**Error**: Skill creates React file when you want Astro (or vice versa)
+
+**Solution**:
+
+```bash
+# Explicitly specify the framework
+/create-page-from-wireframe 0001 astro
+/apply-responsive-design 0001 768 src/pages/page.astro
+/apply-required-assets src/pages/page.astro
+
+# Or for React
+/create-page-from-wireframe 0001 react
+/apply-responsive-design 0001 768 src/App.tsx
+/apply-required-assets src/App.tsx
+```
+
+### Astro Page Not Found
+
+**Error**: 404 when accessing Astro page
+
+**Solution**:
+
+1. Ensure page is in `src/pages/` directory
+2. Check filename matches URL (e.g., `about.astro` → `/about`)
+3. Use `index.astro` for root routes
+4. Verify dev server is running: `npm run dev`
+
 ## Additional Resources
 
 ### Tailwind CSS v4
@@ -691,21 +826,40 @@ This project uses Tailwind CSS v4, which has a different configuration:
 
 ### Vite Configuration
 
-The project uses Vite as the build tool:
+The project uses Vite (React) or Astro as the build tool:
 
 - Fast development server
 - Automatic image optimization
 - TypeScript support
 - Hot module replacement (HMR)
 
-### React + TypeScript
+### Framework-Specific Features
 
-Components are written in TypeScript:
+**React + TypeScript:**
+- Type safety for props and components
+- Component-based architecture with `.tsx` files
+- JSX syntax with `className` for CSS classes
+- Image imports: `<img src={image} />`
+- Better IDE support and fewer runtime errors
+- Single-page application (SPA) architecture
 
-- Type safety for props
-- Better IDE support
-- Fewer runtime errors
-- Improved maintainability
+**Astro:**
+- File-based routing (pages in `src/pages/`)
+- Component frontmatter with `---` delimiters
+- HTML-like syntax with `class` for CSS classes
+- Image imports with `.src`: `<img src={image.src} />`
+- Static site generation (SSG) by default
+- Partial hydration for interactive components
+- Zero JavaScript by default (ship less JS)
+- Multi-page application (MPA) architecture
+
+**Astro Routing Examples:**
+```
+src/pages/index.astro       → /
+src/pages/about.astro       → /about
+src/pages/blog/index.astro  → /blog
+src/pages/blog/post.astro   → /blog/post
+```
 
 ## Contributing
 
@@ -727,6 +881,7 @@ For issues or questions:
 
 ---
 
-**Version**: 1.2
-**Last Updated**: 2026-02-15
+**Version**: 1.3
+**Last Updated**: 2026-02-22
+**Frameworks**: React, Astro
 **Skills**: 8 (create-page-wireframe, create-components-from-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, generate-wireframe-catalog)
