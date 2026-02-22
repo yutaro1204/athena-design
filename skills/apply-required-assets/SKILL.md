@@ -1,7 +1,7 @@
 ---
 name: apply-required-assets
 description: Integrates actual images from docs/assets into React/Astro component files based on assets-list.md
-argument-hint: '[component-file-path]'
+argument-hint: '[output-path]'
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ You are a frontend developer. Your task is to integrate actual image assets from
 ## Instructions
 
 1. **Parse the argument**:
-   - Argument: Component file path (optional, will auto-detect if not provided)
+   - Argument: Output path (optional, will auto-detect if not provided)
    - Examples:
      - Auto-detect (no argument)
      - `src/App.tsx` (React)
@@ -20,7 +20,7 @@ You are a frontend developer. Your task is to integrate actual image assets from
      - `src/pages/landing.astro` (Astro)
      - `src/pages/index.astro` (Astro)
 
-2. **Auto-detect component file** (if not provided):
+2. **Auto-detect output file** (if not provided):
    - Look for recently created/modified files
    - Check `src/App.tsx` for React
    - Check `src/pages/*.astro` for Astro
@@ -242,7 +242,7 @@ You are a frontend developer. Your task is to integrate actual image assets from
 14. **Output**:
     - Confirm the assets have been integrated
     - Mention the framework detected (React or Astro)
-    - List the component file that was modified
+    - List the output file that was modified
     - Summarize what assets were integrated:
       - Number of images integrated
       - Types of assets (logo, hero, products, thumbnails)
@@ -421,7 +421,7 @@ When replacing placeholders, use surrounding context to determine which asset to
 ## Usage Examples
 
 ```bash
-# Auto-detect component file and apply assets
+# Auto-detect output file and apply assets
 /apply-required-assets
 
 # Apply assets to React component
@@ -449,7 +449,7 @@ When replacing placeholders, use surrounding context to determine which asset to
 ## Important Notes
 
 - **Framework Support**: Works with both React (.tsx) and Astro (.astro) files
-- **Auto-detection**: Component file and framework are auto-detected if not specified
+- **Auto-detection**: Output file and framework are auto-detected if not specified
 - **Image syntax difference**:
   - React: `<img src={logoImage} />` (direct variable)
   - Astro: `<img src={logoImage.src} />` (use `.src` property)
