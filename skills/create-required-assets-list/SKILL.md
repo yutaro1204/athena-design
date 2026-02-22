@@ -1,7 +1,7 @@
 ---
 name: create-required-assets-list
 description: Analyzes a wireframe SVG to create comprehensive assets list in docs/assets-list.md
-argument-hint: "[wireframe-id]"
+argument-hint: '[wireframe-id]'
 disable-model-invocation: true
 ---
 
@@ -57,6 +57,7 @@ You are a frontend performance specialist. Your task is to analyze a wireframe S
    When analyzing wireframe SVG, extract dimensions and context:
 
    **From SVG Elements:**
+
    ```svg
    <!-- Example: Header logo -->
    <text x="60" y="50">TCG LOGO</text>
@@ -167,54 +168,64 @@ You are a frontend performance specialist. Your task is to analyze a wireframe S
    - Reference wireframe file for design guidance
 
 10. **Write the markdown document**:
-   Create a comprehensive document with the following structure:
+    Create a comprehensive document with the following structure:
 
-   ```markdown
-   # Assets List for [Page Name] (Page [ID])
+```markdown
+# Assets List for [Page Name] (Page [ID])
 
-   Introduction paragraph mentioning the wireframe source.
+Introduction paragraph mentioning the wireframe source.
 
-   ## Required Assets List
-   ### 1. [Asset Category]
-   - Location: [Where used / Section from wireframe]
-   - Wireframe Reference: [Section label or coordinates from SVG]
-   - Recommended Sizes: [Mobile/Desktop dimensions from wireframe]
-   - Format: [Format recommendations]
-   - File naming: [Naming examples]
-   - Estimated size: [Size estimate based on dimensions]
-   - Usage: [Purpose description from wireframe context]
+## Required Assets List
 
-   ## Performance Optimization Strategies
-   ### 1. [Strategy Name]
-   [Detailed explanation with code examples]
+### 1. [Asset Category]
 
-   ## Recommended Directory Structure
-   [Folder structure with files organized by section]
+- Location: [Where used / Section from wireframe]
+- Wireframe Reference: [Section label or coordinates from SVG]
+- Recommended Sizes: [Mobile/Desktop dimensions from wireframe]
+- Format: [Format recommendations]
+- File naming: [Naming examples]
+- Estimated size: [Size estimate based on dimensions]
+- Usage: [Purpose description from wireframe context]
 
-   ## Performance Budget & Metrics
-   [Table of assets with sizes and totals]
+## Performance Optimization Strategies
 
-   ## Implementation Checklist
-   - [ ] [Checklist items including wireframe review]
+### 1. [Strategy Name]
 
-   ## Summary
-   [Summary of requirements and next steps]
+[Detailed explanation with code examples]
 
-   ---
-   **Document Version**: 1.0
-   **Last Updated**: [Date]
-   **Related Files**: [Wireframe SVG file]
-   ```
+## Recommended Directory Structure
+
+[Folder structure with files organized by section]
+
+## Performance Budget & Metrics
+
+[Table of assets with sizes and totals]
+
+## Implementation Checklist
+
+- [ ] [Checklist items including wireframe review]
+
+## Summary
+
+[Summary of requirements and next steps]
+
+---
+
+**Document Version**: 1.0
+**Last Updated**: [Date]
+**Related Files**: [Wireframe SVG file]
+```
 
 11. **Output**:
-   - Confirm the document has been created at `docs/assets-list.md`
-   - Mention the wireframe file that was analyzed (e.g., `docs/wireframes/0001/tcg-landing-page-wireframe.svg`)
-   - Provide a brief summary:
-     - Total number of asset groups identified from wireframe
-     - Total estimated size of all assets
-     - Key recommendations for asset creation and optimization
-     - Wireframe dimensions (viewBox and overall page size)
-   - Suggest next steps for asset creation and implementation
+
+- Confirm the document has been created at `docs/assets-list.md`
+- Mention the wireframe file that was analyzed (e.g., `docs/wireframes/0001/tcg-landing-page-wireframe.svg`)
+- Provide a brief summary:
+  - Total number of asset groups identified from wireframe
+  - Total estimated size of all assets
+  - Key recommendations for asset creation and optimization
+  - Wireframe dimensions (viewBox and overall page size)
+- Suggest next steps for asset creation and implementation
 
 ## Asset Analysis Guidelines
 
@@ -223,6 +234,7 @@ You are a frontend performance specialist. Your task is to analyze a wireframe S
 When analyzing wireframe SVG files, look for these patterns:
 
 **Asset placeholder text:**
+
 ```svg
 <text>[Image]</text>
 <text>[Pack Image]</text>
@@ -232,6 +244,7 @@ When analyzing wireframe SVG files, look for these patterns:
 ```
 
 **Section labels (in italic or commented text):**
+
 ```svg
 <text font-style="italic">HEADER / NAV</text>
 <text font-style="italic">HERO SECTION</text>
@@ -241,6 +254,7 @@ When analyzing wireframe SVG files, look for these patterns:
 ```
 
 **Rectangle containers (asset dimensions):**
+
 ```svg
 <!-- Hero image container -->
 <rect x="680" y="180" width="420" height="340" fill="#16213e" stroke="#4a5568"/>
@@ -253,15 +267,16 @@ When analyzing wireframe SVG files, look for these patterns:
 ```
 
 **ViewBox for overall dimensions:**
+
 ```svg
 <svg viewBox="0 0 1200 2400" xmlns="http://www.w3.org/2000/svg">
 <!-- 1200px wide (desktop), 2400px tall -->
 ```
 
-
 ### Size Calculation Logic
 
 **From wireframe SVG rectangles:**
+
 ```svg
 <!-- Extract width and height attributes -->
 <rect x="680" y="180" width="420" height="340"/>
@@ -274,6 +289,7 @@ When analyzing wireframe SVG files, look for these patterns:
 ```
 
 **From wireframe viewBox:**
+
 ```svg
 <svg viewBox="0 0 1200 2400">
 <!-- Page width: 1200px (desktop reference) -->
@@ -281,11 +297,13 @@ When analyzing wireframe SVG files, look for these patterns:
 ```
 
 **Responsive calculation:**
+
 - Desktop size = wireframe dimensions
 - Mobile size = desktop × 0.6 to 0.7 (60-70%)
 - Retina @2x = desktop × 2 (for high-DPI displays)
 
 **General guidelines:**
+
 - Logos: 40-60px height (mobile), 50-80px (desktop)
 - Hero images: 240-340px height (mobile), 340-600px (desktop)
 - Thumbnails: 64-80px (mobile), 80-120px (desktop)
@@ -293,20 +311,21 @@ When analyzing wireframe SVG files, look for these patterns:
 - Icons: 24-48px (mobile), 48-96px (desktop)
 
 **Retina variants:**
+
 - Always provide @2x versions for raster images
 - 2x = double the dimensions
 - Example: 250×150px → 500×300px @2x
 
 ### Format Selection Matrix
 
-| Asset Type | Recommended Format | Fallback | Notes |
-|------------|-------------------|----------|-------|
-| Logo | SVG | PNG | Vector preferred |
-| Icons | SVG (inline) | SVG (external) | Scalable, small |
-| Photos | WebP | JPEG | Modern compression |
-| Illustrations | SVG | WebP/PNG | Vector if possible |
-| Complex Graphics | WebP | JPEG/PNG | Compression priority |
-| Animations | Lottie/SVG | GIF/Video | Performance friendly |
+| Asset Type       | Recommended Format | Fallback       | Notes                |
+| ---------------- | ------------------ | -------------- | -------------------- |
+| Logo             | SVG                | PNG            | Vector preferred     |
+| Icons            | SVG (inline)       | SVG (external) | Scalable, small      |
+| Photos           | WebP               | JPEG           | Modern compression   |
+| Illustrations    | SVG                | WebP/PNG       | Vector if possible   |
+| Complex Graphics | WebP               | JPEG/PNG       | Compression priority |
+| Animations       | Lottie/SVG         | GIF/Video      | Performance friendly |
 
 ### Compression Targets
 

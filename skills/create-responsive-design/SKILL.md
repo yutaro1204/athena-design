@@ -1,7 +1,7 @@
 ---
 name: create-responsive-design
 description: Creates an SVG wireframe showing mobile and desktop responsive design views
-argument-hint: "[wireframe-id] [breakpoint]"
+argument-hint: '[wireframe-id] [breakpoint]'
 disable-model-invocation: true
 ---
 
@@ -170,27 +170,32 @@ You are a UX/UI designer. Your task is to create an SVG wireframe that visualize
 ## Responsive Design Principles
 
 **Mobile-First Approach:**
+
 1. Start with mobile view (left side)
 2. Progressive enhancement for desktop (right side)
 3. Touch-friendly tap targets on mobile (min 44px)
 4. Readable text sizes on both views
 
 **Layout Adaptations:**
+
 - Vertical stacking on mobile → Horizontal layouts on desktop
 - Single column → Multi-column grids
 - Full-width elements → Constrained widths with margins
 
 **Typography Scaling:**
+
 - Mobile headings: 60-70% of desktop size
 - Mobile body text: 80-90% of desktop size
 - Maintain hierarchy and readability
 
 **Spacing Adjustments:**
+
 - Mobile padding: ~16px
 - Desktop padding: ~48-96px
 - Proportional gap reductions on mobile
 
 **Content Priority:**
+
 - Show essential content on both views
 - Hide decorative elements on mobile if space-constrained
 - Maintain functionality across breakpoints
@@ -265,6 +270,7 @@ You are a UX/UI designer. Your task is to create an SVG wireframe that visualize
 6. Implement responsive code following the wireframe design
 
 **Directory Structure After:**
+
 ```
 docs/
   wireframes/

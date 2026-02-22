@@ -1,7 +1,7 @@
 ---
 name: create-page-from-wireframe
 description: Creates an actual HTML/React/Astro page based on a wireframe SVG file
-argument-hint: "[wireframe-id] [framework] [output-path]"
+argument-hint: '[wireframe-id] [framework] [output-path]'
 disable-model-invocation: true
 ---
 
@@ -105,21 +105,17 @@ function Page0001() {
     <div className="min-h-screen flex flex-col bg-[#1a1a2e] text-[#e0e0e0]">
       <header className="px-4 md:px-12 py-4 md:py-6 border-b-2 border-[#0f3460] flex justify-between items-center">
         <h1 className="text-xl md:text-2xl font-bold text-[#e94560]">Logo</h1>
-        <nav className="flex gap-4 md:gap-8">
-          {/* Navigation items */}
-        </nav>
+        <nav className="flex gap-4 md:gap-8">{/* Navigation items */}</nav>
       </header>
-      <main className="flex-1">
-        {/* Main content sections */}
-      </main>
+      <main className="flex-1">{/* Main content sections */}</main>
       <footer className="px-4 md:px-12 py-6 md:py-8 bg-[#16213e] border-t-2 border-[#0f3460]">
         {/* Footer content */}
       </footer>
     </div>
-  );
+  )
 }
 
-export default Page0001;
+export default Page0001
 ```
 
 ### Astro Component (src/pages/landing-page.astro)
@@ -137,7 +133,9 @@ export default Page0001;
   </head>
   <body>
     <div class="min-h-screen flex flex-col bg-[#1a1a2e] text-[#e0e0e0]">
-      <header class="px-4 md:px-12 py-4 md:py-6 border-b-2 border-[#0f3460] flex justify-between items-center">
+      <header
+        class="px-4 md:px-12 py-4 md:py-6 border-b-2 border-[#0f3460] flex justify-between items-center"
+      >
         <h1 class="text-xl md:text-2xl font-bold text-[#e94560]">Logo</h1>
         <nav class="flex gap-4 md:gap-8">
           <!-- Navigation items -->
@@ -195,11 +193,11 @@ export default Page0001;
 
 ## Framework Differences
 
-| Feature | React | Astro |
-|---------|-------|-------|
-| File extension | `.tsx` | `.astro` |
-| Default path | `src/App.tsx` | `src/pages/[page-name].astro` |
-| Class attribute | `className` | `class` |
-| Comments | `{/* comment */}` | `<!-- comment -->` |
-| Structure | Function component | HTML with frontmatter |
-| Routing | Manual/library | File-based (automatic) |
+| Feature         | React              | Astro                         |
+| --------------- | ------------------ | ----------------------------- |
+| File extension  | `.tsx`             | `.astro`                      |
+| Default path    | `src/App.tsx`      | `src/pages/[page-name].astro` |
+| Class attribute | `className`        | `class`                       |
+| Comments        | `{/* comment */}`  | `<!-- comment -->`            |
+| Structure       | Function component | HTML with frontmatter         |
+| Routing         | Manual/library     | File-based (automatic)        |

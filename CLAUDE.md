@@ -9,6 +9,7 @@ This is a **wireframe-driven frontend development project** that supports both R
 ## Claude Code Skills Structure
 
 This project uses **custom Claude Code skills** for wireframe-driven development:
+
 - **skills/**: 8 custom commands for the workflow
 - **docs/**: Example artifacts (wireframes, assets, documentation) that skills reference
 - **.claude/**: Claude Code configuration (settings only)
@@ -73,17 +74,18 @@ project/
 
 **Key Differences**:
 
-| Feature | React | Astro |
-|---------|-------|-------|
-| File extension | `.tsx` | `.astro` |
-| Output path | `src/App.tsx` | `src/pages/{page-name}.astro` |
-| Class attribute | `className` | `class` |
-| Comments | `{/* comment */}` | `<!-- comment -->` |
-| Image imports | `<img src={img} />` | `<img src={img.src} />` |
-| Import location | Top of file | Frontmatter (`---`) |
-| Routing | Manual/library | File-based (automatic) |
+| Feature         | React               | Astro                         |
+| --------------- | ------------------- | ----------------------------- |
+| File extension  | `.tsx`              | `.astro`                      |
+| Output path     | `src/App.tsx`       | `src/pages/{page-name}.astro` |
+| Class attribute | `className`         | `class`                       |
+| Comments        | `{/* comment */}`   | `<!-- comment -->`            |
+| Image imports   | `<img src={img} />` | `<img src={img.src} />`       |
+| Import location | Top of file         | Frontmatter (`---`)           |
+| Routing         | Manual/library      | File-based (automatic)        |
 
 **Usage**:
+
 ```bash
 # Auto-detect framework (recommended)
 /create-page-from-wireframe 0001
@@ -98,6 +100,7 @@ project/
 ### Tailwind CSS v4 Configuration
 
 **Important**: Both React and Astro projects use Tailwind CSS v4, which differs from v3:
+
 - ✅ Use `@import "tailwindcss";` in CSS file
 - ❌ DO NOT create `tailwind.config.js`
 - ❌ DO NOT create `postcss.config.js`
@@ -130,6 +133,7 @@ The project has 8 custom Claude Code skills for frontend development (React and 
    - Or specify explicitly: `/create-page-from-wireframe {NNNN} react` or `/create-page-from-wireframe {NNNN} astro`
 
 **URL Reference Usage**:
+
 - User says: "Create a page like Stripe" → Use `/create-page-wireframe "" "https://stripe.com"`
 - User says: "Create a landing page inspired by Vercel" → Use `/create-page-wireframe "landing page" "https://vercel.com"`
 - User says: "Create a pricing page similar to Linear" → Use `/create-page-wireframe "pricing page" "https://linear.app/pricing"`
@@ -167,19 +171,22 @@ The project has 8 custom Claude Code skills for frontend development (React and 
 ### When User Asks to Update Styling
 
 **Mobile-First Approach**:
+
 - Base styles = mobile (no prefix)
 - Desktop styles = add breakpoint prefix (md:, lg:, xl:)
 
 **Example**:
+
 ```tsx
 // ✅ Correct: Mobile-first
-className="px-4 md:px-12 text-xl md:text-2xl"
+className = 'px-4 md:px-12 text-xl md:text-2xl'
 
 // ❌ Wrong: Desktop-first
-className="px-12 sm:px-4 text-2xl sm:text-xl"
+className = 'px-12 sm:px-4 text-2xl sm:text-xl'
 ```
 
 **Responsive Breakpoints**:
+
 - 640px → `sm:` prefix
 - 768px → `md:` prefix (most common)
 - 1024px → `lg:` prefix
@@ -336,6 +343,7 @@ create-page-wireframe (1)
 ### Common Patterns
 
 **Pattern 1: Creating a New Page**
+
 ```bash
 /create-page-wireframe "page description"
 /create-responsive-design {NNNN} 768
@@ -347,6 +355,7 @@ create-page-wireframe (1)
 ```
 
 **Pattern 2: Desktop-Only Page (Skip Responsive)**
+
 ```bash
 /create-page-wireframe "page description"
 /create-required-assets-list {NNNN}
@@ -356,12 +365,14 @@ create-page-wireframe (1)
 ```
 
 **Pattern 3: Simple Page (No Images, No Responsive)**
+
 ```bash
 /create-page-wireframe "page description"
 /create-page-from-wireframe {NNNN}
 ```
 
 **Pattern 4: Update Existing Page to be Responsive**
+
 ```bash
 /create-responsive-design {NNNN} 768
 /apply-responsive-design {NNNN} 768
@@ -445,6 +456,7 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 **Use case**: Maintaining up-to-date documentation of all wireframes, components, and implementation status. The catalog serves as a single source of truth for the design system.
 
 **Benefits**:
+
 - Automatic discovery of all wireframes
 - Tracks implementation progress
 - Documents design patterns
@@ -458,6 +470,7 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 
 **Claude should respond**:
 "I need to create the responsive wireframe first. Let me run:"
+
 ```bash
 /create-responsive-design 0001 768
 /apply-responsive-design 0001 768
@@ -474,6 +487,7 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 
 **Claude should respond**:
 "I couldn't find a wireframe for ID 0001. Let's create one first:"
+
 ```bash
 /create-page-wireframe "what kind of page would you like?"
 ```
@@ -491,6 +505,7 @@ When reading wireframe SVGs:
 ### Responsive Wireframe Analysis
 
 When reading responsive wireframes:
+
 - **Left side** (smaller width, ~375px): Mobile view
 - **Right side** (larger width, ~1200px): Desktop view
 - **Key differences**: Layout direction, grid columns, typography sizes, spacing
@@ -549,6 +564,7 @@ import logoImage from '/docs/assets/logo.png'
 **Error**: User reports Tailwind styles not applying
 
 **Check**:
+
 1. Verify `src/index.css` has `@import "tailwindcss";`
 2. Ensure no `tailwind.config.js` exists
 3. Confirm dev server is running
@@ -582,6 +598,7 @@ npm run dev
 ### Project-Specific Colors
 
 This project uses a **dark theme**:
+
 - Background: `#1a1a2e`
 - Secondary: `#16213e`
 - Accent: `#e94560`
@@ -602,14 +619,17 @@ When user request matches multiple approaches:
 ### Example Scenarios
 
 **Scenario**: "Make the page responsive"
+
 - ✅ Use: `/apply-responsive-design {NNNN} 768`
 - ❌ Don't: Manually edit all classes
 
 **Scenario**: "Add this specific image"
+
 - ✅ Use: Edit tool to add image import
 - ❌ Don't: Use skill for single image
 
 **Scenario**: "Create a landing page"
+
 - ✅ Use: `/create-page-wireframe` → `/create-page-from-wireframe`
 - ❌ Don't: Write component from scratch without wireframe
 
@@ -626,9 +646,11 @@ When working with users:
 ### Example Responses
 
 **Good**:
+
 > "I'll create a responsive design for wireframe 0001 with a 768px breakpoint, then apply it to src/App.tsx."
 
 **Too verbose**:
+
 > "Thank you for that request! I'm going to start by creating a comprehensive responsive design wireframe that will show both mobile and desktop layouts side-by-side. This will help visualize how the page adapts across different screen sizes. After creating this visualization, I'll then proceed to apply the responsive design patterns to your React component using Tailwind CSS's mobile-first approach with the md: prefix for desktop styles..."
 
 ## Version Control Best Practices
@@ -641,6 +663,7 @@ Suggest git commits at key milestones:
 4. After integrating assets
 
 **Commit message format**:
+
 ```
 {action}: {description}
 

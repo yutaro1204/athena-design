@@ -1,7 +1,7 @@
 ---
 name: create-components-from-wireframe
 description: Extracts reusable component SVGs from a complete wireframe design
-argument-hint: "[wireframe-id]"
+argument-hint: '[wireframe-id]'
 disable-model-invocation: true
 ---
 
@@ -63,32 +63,32 @@ You are a frontend designer. Your task is to analyze a wireframe SVG and extract
    For each identified section:
 
    a. **Determine coordinates**:
-      - Find the y-start and y-end of the section
-      - Use section labels and visual boundaries as guides
-      - Include all elements within that vertical range
+   - Find the y-start and y-end of the section
+   - Use section labels and visual boundaries as guides
+   - Include all elements within that vertical range
 
    b. **Calculate new viewBox**:
-      - Keep original width (usually 1200)
-      - Calculate height: `y-end - y-start`
-      - New viewBox: `0 0 {width} {height}`
+   - Keep original width (usually 1200)
+   - Calculate height: `y-end - y-start`
+   - New viewBox: `0 0 {width} {height}`
 
    c. **Extract SVG elements**:
-      - Copy all SVG elements within the coordinate range
-      - Adjust y-coordinates by subtracting the section's y-start
-      - Keep x-coordinates as-is
-      - Preserve all styling (fill, stroke, font properties)
+   - Copy all SVG elements within the coordinate range
+   - Adjust y-coordinates by subtracting the section's y-start
+   - Keep x-coordinates as-is
+   - Preserve all styling (fill, stroke, font properties)
 
    d. **Generalize content**:
-      - Replace specific text with placeholder text:
-        - Brand names → "LOGO", "Company Name"
-        - Product names → "Product Name 1", "Feature Title 1"
-        - Prices → "$XX.XX"
-        - Dates → "Date / Time"
-      - Keep layout and structure intact
-      - Preserve design system colors
+   - Replace specific text with placeholder text:
+     - Brand names → "LOGO", "Company Name"
+     - Product names → "Product Name 1", "Feature Title 1"
+     - Prices → "$XX.XX"
+     - Dates → "Date / Time"
+   - Keep layout and structure intact
+   - Preserve design system colors
 
    e. **Add component label**:
-      - Add a label in bottom-left corner: `<text x="20" y="25" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">{COMPONENT TYPE}</text>`
+   - Add a label in bottom-left corner: `<text x="20" y="25" font-family="Arial, sans-serif" font-size="11" fill="#666" font-style="italic">{COMPONENT TYPE}</text>`
 
 6. **Name components descriptively**:
 
@@ -110,6 +110,7 @@ You are a frontend designer. Your task is to analyze a wireframe SVG and extract
 7. **Create directory structure**:
 
    Create components under the wireframe directory:
+
    ```
    docs/wireframes/{NNNN}/components/
      ├── headers/
@@ -182,6 +183,7 @@ You are a frontend designer. Your task is to analyze a wireframe SVG and extract
 Look for these indicators in the SVG:
 
 1. **Section labels** (most reliable):
+
    ```svg
    <text ... font-style="italic" fill="#666">HEADER / NAV</text>
    <text ... font-style="italic" fill="#666">HERO SECTION</text>
@@ -189,6 +191,7 @@ Look for these indicators in the SVG:
    ```
 
 2. **Background rectangles** that span full width:
+
    ```svg
    <rect x="0" y="{start}" width="1200" height="{height}" fill="{bg-color}" />
    ```
@@ -203,24 +206,28 @@ Look for these indicators in the SVG:
 ### Typical Section Patterns
 
 **Header Section**:
+
 - y-start: 0
 - Height: 60-100px
 - Contains: logo, navigation links, possibly search
 - Full-width background rect
 
 **Hero Section**:
+
 - Follows header
 - Height: 400-600px
 - Contains: large heading, description, CTA buttons, hero image
 - Often has distinct background color
 
 **Feature/Content Sections**:
+
 - Multiple sections possible
 - Height: 300-600px each
 - Contains: section title, cards/grid items
 - May alternate background colors
 
 **Footer Section**:
+
 - At bottom (largest y-value)
 - Height: 60-120px
 - Contains: copyright, links, sometimes multi-column
@@ -228,6 +235,7 @@ Look for these indicators in the SVG:
 ## Component Extraction Example
 
 ### Original Wireframe Section
+
 ```svg
 <!-- Hero Section at y=100 to y=600 -->
 <rect x="0" y="100" width="1200" height="500" fill="#0f3460"/>
@@ -238,6 +246,7 @@ Look for these indicators in the SVG:
 ```
 
 ### Extracted Component SVG
+
 ```svg
 <svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg">
   <!-- Background -->
@@ -259,18 +268,22 @@ Look for these indicators in the SVG:
 ## Handling Edge Cases
 
 ### Overlapping Sections
+
 - If sections visually overlap, use section labels as authoritative boundaries
 - Prefer clean separation over exact element capture
 
 ### Decorative Elements
+
 - Include decorative elements (lines, shapes) if they define the component's visual style
 - Exclude global decorative elements that span multiple sections
 
 ### Responsive Variations
+
 - Extract from the base wireframe (not responsive versions)
 - The responsive wireframes can be created separately with `/create-responsive-design`
 
 ### Missing Section Labels
+
 - If no section labels exist, infer sections from:
   - Visual hierarchy (size, position)
   - Background color changes
@@ -290,12 +303,14 @@ Extract the color palette from the wireframe by finding unique fill and stroke v
 ```
 
 Document as:
+
 ```markdown
 ### Color Palette
+
 - **Background**: `#1a1a2e` (dark navy)
 - **Accent**: `#e94560` (bright red)
 - **Text Primary**: `#e0e0e0` (light gray)
-...
+  ...
 ```
 
 ## Typography Extraction
@@ -304,6 +319,7 @@ Find font properties used throughout:
 
 ```markdown
 ### Typography
+
 - **Headings**: Arial, sans-serif, bold, 24px-42px
 - **Body**: Arial, sans-serif, regular, 13px-18px
 - **Labels**: Arial, sans-serif, italic, 11px-12px

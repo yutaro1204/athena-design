@@ -1,7 +1,7 @@
 ---
 name: create-page-wireframe
 description: Creates SVG wireframe images for page designs based on specifications or existing web pages
-argument-hint: "[specification] [url]"
+argument-hint: '[specification] [url]'
 disable-model-invocation: true
 ---
 
@@ -23,36 +23,36 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
 2. **If URL is provided**:
 
    a. **Fetch the web page**:
-      - Use the WebFetch tool to retrieve the web page content
-      - Prompt: "Analyze this web page's layout, structure, sections, colors, typography, and key design elements. Provide a detailed breakdown of the page structure from top to bottom."
+   - Use the WebFetch tool to retrieve the web page content
+   - Prompt: "Analyze this web page's layout, structure, sections, colors, typography, and key design elements. Provide a detailed breakdown of the page structure from top to bottom."
 
    b. **Analyze the page structure**:
-      - Identify main sections (header, hero, features, content sections, footer)
-      - Note layout patterns (single column, multi-column, grid, flex)
-      - Observe section order from top to bottom
-      - Identify navigation patterns
-      - Note content hierarchy
+   - Identify main sections (header, hero, features, content sections, footer)
+   - Note layout patterns (single column, multi-column, grid, flex)
+   - Observe section order from top to bottom
+   - Identify navigation patterns
+   - Note content hierarchy
 
    c. **Extract design elements**:
-      - **Colors**: Extract primary background, text, and accent colors from the analysis
-      - **Typography**: Note font families, sizes, and weights used
-      - **Spacing**: Observe padding and margins between sections
-      - **Components**: Identify cards, buttons, forms, images, icons
-      - **Grid systems**: Note column counts and layouts
+   - **Colors**: Extract primary background, text, and accent colors from the analysis
+   - **Typography**: Note font families, sizes, and weights used
+   - **Spacing**: Observe padding and margins between sections
+   - **Components**: Identify cards, buttons, forms, images, icons
+   - **Grid systems**: Note column counts and layouts
 
    d. **Create wireframe based on the page**:
-      - Replicate the section structure and order
-      - Use similar layout patterns (grid columns, flex direction)
-      - Apply similar color scheme to the wireframe
-      - Match the visual hierarchy
-      - Keep section proportions similar
-      - Include the same types of components (cards, buttons, forms, etc.)
-      - Add section labels that match the actual page sections
+   - Replicate the section structure and order
+   - Use similar layout patterns (grid columns, flex direction)
+   - Apply similar color scheme to the wireframe
+   - Match the visual hierarchy
+   - Keep section proportions similar
+   - Include the same types of components (cards, buttons, forms, etc.)
+   - Add section labels that match the actual page sections
 
    e. **Combine with specification** (if provided):
-      - Use the URL page as the base structure
-      - Modify according to specification requirements
-      - Keep the layout structure but adapt content/sections as specified
+   - Use the URL page as the base structure
+   - Modify according to specification requirements
+   - Keep the layout structure but adapt content/sections as specified
 
 3. **If URL is NOT provided**:
 
@@ -101,6 +101,7 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
 ## Example Wireframe Structure
 
 A typical wireframe should include:
+
 - Header with logo and navigation
 - Main content area with clear sections
 - Sidebar (if applicable)
@@ -154,12 +155,14 @@ A typical wireframe should include:
 ## When to Use URL Reference
 
 **Use URL reference when**:
+
 - You want to replicate an existing page's structure
 - You want to use a similar design system (colors, spacing)
 - You're creating a page inspired by an existing site
 - You want to see how a well-designed page handles similar content
 
 **Don't use URL reference when**:
+
 - You want complete creative freedom
 - The referenced page is significantly different from your needs
 - You prefer standard wireframe conventions
@@ -178,6 +181,7 @@ When a URL is provided, the skill will:
 7. **Create wireframe**: Replicate the structure with extracted design elements
 
 **Important Notes**:
+
 - The wireframe is a simplified representation, not an exact copy
 - Focus is on structure and layout patterns
 - Content is generalized (text becomes placeholders)
@@ -189,6 +193,7 @@ When a URL is provided, the skill will:
 From analyzing a URL like `https://tailwindcss.com`:
 
 **Structure**:
+
 - Header with logo and navigation
 - Hero section with headline and CTAs
 - Feature grid (3 columns)
@@ -196,15 +201,18 @@ From analyzing a URL like `https://tailwindcss.com`:
 - Footer with links
 
 **Colors**:
+
 - Background: `#0f172a` (dark)
 - Accent: `#38bdf8` (cyan)
 - Text: `#f1f5f9` (light)
 
 **Typography**:
+
 - Headings: System fonts, bold, 36-48px
 - Body: System fonts, regular, 16-18px
 
 **Layouts**:
+
 - 3-column grid for features
 - 2-column split for hero
 - Full-width sections

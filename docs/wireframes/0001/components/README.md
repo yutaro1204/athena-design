@@ -5,6 +5,7 @@ This directory contains reusable wireframe components that can be used across mu
 ## Design System
 
 ### Color Palette
+
 - **Background**: `#1a1a2e` (dark navy)
 - **Secondary Background**: `#16213e` (lighter navy)
 - **Section Background**: `#0f3460` (deep blue)
@@ -15,6 +16,7 @@ This directory contains reusable wireframe components that can be used across mu
 - **Text Muted**: `#666` (dark gray)
 
 ### Typography
+
 - **Headings**: Arial, sans-serif, bold
 - **Body**: Arial, sans-serif, regular
 - **Font Sizes**: 11px-42px range
@@ -22,9 +24,11 @@ This directory contains reusable wireframe components that can be used across mu
 ## Component Categories
 
 ### Headers
+
 Components for navigation and branding.
 
 #### `headers/header-logo-nav.svg`
+
 - **Size**: 1200×80px
 - **Layout**: Logo on left, navigation links on right
 - **Use Cases**: Main site header, app navigation bar
@@ -33,9 +37,11 @@ Components for navigation and branding.
 ---
 
 ### Heroes
+
 Large banner sections for page introductions.
 
 #### `heroes/hero-split-cta.svg`
+
 - **Size**: 1200×500px
 - **Layout**: Split layout with content on left, visual on right
 - **Features**:
@@ -52,6 +58,7 @@ Large banner sections for page introductions.
 ### Sections
 
 #### `sections/feature-grid-3col.svg`
+
 - **Size**: 1200×480px
 - **Layout**: Section title with 3-column grid of feature cards
 - **Features**:
@@ -62,6 +69,7 @@ Large banner sections for page introductions.
 - **Customization**: Update section title, icons (emoji), card titles, and descriptions
 
 #### `sections/product-cards-3col.svg`
+
 - **Size**: 1200×420px
 - **Layout**: Section title with 3 product cards + "more" indicator
 - **Features**:
@@ -72,6 +80,7 @@ Large banner sections for page introductions.
 - **Customization**: Update section title, product names, prices
 
 #### `sections/timeline-cards-3col.svg`
+
 - **Size**: 1200×380px
 - **Layout**: Section title with 3 horizontal timeline cards
 - **Features**:
@@ -82,6 +91,7 @@ Large banner sections for page introductions.
 - **Customization**: Update section title, event titles, dates, descriptions, button labels
 
 #### `sections/info-grid-4col-newsletter.svg`
+
 - **Size**: 1200×240px
 - **Layout**: 4-column grid with newsletter signup in last column
 - **Features**:
@@ -95,6 +105,7 @@ Large banner sections for page introductions.
 ### Footers
 
 #### `footers/footer-copyright-links.svg`
+
 - **Size**: 1200×80px
 - **Layout**: Copyright text on left, legal links on right
 - **Features**:
@@ -108,15 +119,18 @@ Large banner sections for page introductions.
 ## Usage Guidelines
 
 ### 1. Viewing Components
+
 Open SVG files directly in a browser or SVG editor (Figma, Sketch, Illustrator, Inkscape) to view and edit.
 
 ### 2. Customizing Components
+
 - **Text Content**: Replace placeholder text with your content
 - **Colors**: Maintain the dark theme or adjust colors consistently
 - **Icons**: Replace emoji placeholders with actual SVG icons or keep as is
 - **Images**: Replace `[Image]` placeholders with actual image references
 
 ### 3. Combining Components
+
 Stack components vertically to create complete page wireframes:
 
 ```
@@ -130,7 +144,9 @@ Stack components vertically to create complete page wireframes:
 ```
 
 ### 4. Creating New Components
+
 When creating new reusable components:
+
 - Use the same color palette
 - Follow the naming convention: `{category}/{component-name}.svg`
 - Include component label in bottom-left corner
@@ -138,6 +154,7 @@ When creating new reusable components:
 - Document in this README
 
 ### 5. Integration with Skills
+
 These components can be used with the custom Claude Code skills:
 
 ```bash
@@ -149,19 +166,20 @@ These components can be used with the custom Claude Code skills:
 
 ## Component Matrix
 
-| Category | Component | Width | Height | Use Case |
-|----------|-----------|-------|--------|----------|
-| Headers | header-logo-nav | 1200px | 80px | Navigation bar |
-| Heroes | hero-split-cta | 1200px | 500px | Landing page banner |
-| Sections | feature-grid-3col | 1200px | 480px | Feature highlights |
-| Sections | product-cards-3col | 1200px | 420px | Product listings |
-| Sections | timeline-cards-3col | 1200px | 380px | Event schedules |
-| Sections | info-grid-4col-newsletter | 1200px | 240px | Company info + newsletter |
-| Footers | footer-copyright-links | 1200px | 80px | Legal footer |
+| Category | Component                 | Width  | Height | Use Case                  |
+| -------- | ------------------------- | ------ | ------ | ------------------------- |
+| Headers  | header-logo-nav           | 1200px | 80px   | Navigation bar            |
+| Heroes   | hero-split-cta            | 1200px | 500px  | Landing page banner       |
+| Sections | feature-grid-3col         | 1200px | 480px  | Feature highlights        |
+| Sections | product-cards-3col        | 1200px | 420px  | Product listings          |
+| Sections | timeline-cards-3col       | 1200px | 380px  | Event schedules           |
+| Sections | info-grid-4col-newsletter | 1200px | 240px  | Company info + newsletter |
+| Footers  | footer-copyright-links    | 1200px | 80px   | Legal footer              |
 
 ## Examples
 
 ### Landing Page Layout
+
 ```
 Total height: 2080px
 
@@ -174,6 +192,7 @@ Total height: 2080px
 ```
 
 ### Product Page Layout
+
 ```
 Total height: 1760px
 
@@ -208,6 +227,7 @@ These wireframes are designed for desktop (1200px width). When creating responsi
 ## Maintenance
 
 When updating components:
+
 1. Update the component SVG file
 2. Update this README with any changes
 3. Consider backward compatibility with existing pages

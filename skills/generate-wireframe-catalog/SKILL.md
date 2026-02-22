@@ -20,51 +20,52 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    a. **Wireframe ID**: Extract from directory name (e.g., `0001`)
 
    b. **Main wireframe file**:
-      - Find the base wireframe SVG: `docs/wireframes/{NNNN}/*-wireframe.svg`
-      - Extract the file name (e.g., `tcg-landing-page-wireframe.svg`)
-      - Parse the page name from filename (remove `-wireframe.svg`)
-      - Read the SVG to get dimensions from viewBox attribute
+   - Find the base wireframe SVG: `docs/wireframes/{NNNN}/*-wireframe.svg`
+   - Extract the file name (e.g., `tcg-landing-page-wireframe.svg`)
+   - Parse the page name from filename (remove `-wireframe.svg`)
+   - Read the SVG to get dimensions from viewBox attribute
 
    c. **Responsive versions**:
-      - Check for subdirectories with numeric names (768, 1024, 1280, etc.)
-      - For each breakpoint directory, check if responsive wireframe exists
-      - List all available breakpoints
+   - Check for subdirectories with numeric names (768, 1024, 1280, etc.)
+   - For each breakpoint directory, check if responsive wireframe exists
+   - List all available breakpoints
 
    d. **Components**:
-      - Check if `components/` directory exists
-      - Count subdirectories: headers/, heroes/, sections/, footers/
-      - Count total SVG files across all component categories
-      - Read `components/README.md` if it exists
+   - Check if `components/` directory exists
+   - Count subdirectories: headers/, heroes/, sections/, footers/
+   - Count total SVG files across all component categories
+   - Read `components/README.md` if it exists
 
    e. **Design system**:
-      - Read the main wireframe SVG
-      - Extract unique fill colors (for background, accent, text)
-      - Extract unique stroke colors (for borders)
-      - Extract font-family, font-size, font-weight values
-      - Create color palette documentation
-      - Create typography documentation
+   - Read the main wireframe SVG
+   - Extract unique fill colors (for background, accent, text)
+   - Extract unique stroke colors (for borders)
+   - Extract font-family, font-size, font-weight values
+   - Create color palette documentation
+   - Create typography documentation
 
    f. **Sections**:
-      - Look for section labels in the SVG (text elements with font-style="italic")
-      - Extract section names (e.g., "HEADER / NAV", "HERO SECTION")
-      - Calculate section heights from y-coordinate ranges
-      - List sections with their heights
+   - Look for section labels in the SVG (text elements with font-style="italic")
+   - Extract section names (e.g., "HEADER / NAV", "HERO SECTION")
+   - Calculate section heights from y-coordinate ranges
+   - List sections with their heights
 
    g. **Related files**:
-      - Check if `docs/assets-list.md` exists and references this wireframe
-      - Check if React component exists in `src/App.tsx` or `src/components/`
+   - Check if `docs/assets-list.md` exists and references this wireframe
+   - Check if React component exists in `src/App.tsx` or `src/components/`
 
    h. **Implementation status**:
-      - Determine status based on available artifacts:
-        - ✅ Complete: Has main wireframe + components + responsive + implementation
-        - 🔄 In Progress: Has main wireframe + some artifacts
-        - ⏳ Planned: Only has directory or placeholder
+   - Determine status based on available artifacts:
+     - ✅ Complete: Has main wireframe + components + responsive + implementation
+     - 🔄 In Progress: Has main wireframe + some artifacts
+     - ⏳ Planned: Only has directory or placeholder
 
 3. **Generate catalog structure**:
 
    Create `docs/wireframes/README.md` with the following sections:
 
    ### Header
+
    ```markdown
    # Wireframe Catalog
 
@@ -85,6 +86,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - Last updated date (current date)
 
    ### Wireframes Section
+
    For each wireframe (sorted by ID), create a detailed entry:
 
    **Subsections**:
@@ -187,7 +189,6 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - Catalog version
 
 4. **Calculate statistics**:
-
    - Total wireframes: Count of {NNNN} directories
    - Total sections: Sum of sections across all wireframes
    - Total components: Sum of component SVG files
@@ -255,43 +256,54 @@ You are a technical documentation specialist. Your task is to scan all wireframe
 ### From SVG Files
 
 **ViewBox extraction**:
+
 ```xml
 <svg viewBox="0 0 1200 2400" xmlns="http://www.w3.org/2000/svg">
 ```
+
 → Width: 1200px, Height: 2400px
 
 **Color extraction**:
+
 ```xml
 <rect fill="#1a1a2e" />
 <text fill="#e0e0e0" />
 <rect stroke="#e94560" />
 ```
+
 → Colors: #1a1a2e, #e0e0e0, #e94560
 
 **Typography extraction**:
+
 ```xml
 <text font-family="Arial, sans-serif" font-size="42" font-weight="bold" />
 ```
+
 → Font: Arial, Size: 42px, Weight: bold
 
 **Section labels**:
+
 ```xml
 <text font-style="italic" fill="#666">HEADER / NAV</text>
 ```
+
 → Section: Header/Nav
 
 ### From Directory Structure
 
 **Breakpoints**:
+
 ```
 docs/wireframes/0001/
   768/
   1024/
   1280/
 ```
+
 → Breakpoints: 768px, 1024px, 1280px
 
 **Components**:
+
 ```
 docs/wireframes/0001/components/
   headers/
@@ -302,15 +314,18 @@ docs/wireframes/0001/components/
     feature-grid-3col.svg
     product-cards-3col.svg
 ```
+
 → 4 components (1 header, 1 hero, 2 sections)
 
 ### From File Metadata
 
 **Creation date**:
+
 - Use file system creation timestamp
 - Format: YYYY-MM-DD
 
 **Last modified**:
+
 - Use file system modification timestamp
 - Format: YYYY-MM-DD
 
@@ -319,12 +334,14 @@ docs/wireframes/0001/components/
 Use these formatting patterns:
 
 **Status badges**:
+
 - ✅ Complete
 - 🔄 In Progress
 - ⏳ Planned
 - ❌ Blocked
 
 **File links**:
+
 ```markdown
 - 📄 **Wireframe**: [`0001/tcg-landing-page-wireframe.svg`](0001/tcg-landing-page-wireframe.svg)
 - 📱 **Responsive (768px)**: [`0001/768/tcg-landing-page-responsive-wireframe.svg`](0001/768/tcg-landing-page-responsive-wireframe.svg)
@@ -332,32 +349,39 @@ Use these formatting patterns:
 ```
 
 **Tables**:
+
 ```markdown
-| ID | Name | Type | Status | Desktop | Mobile | Components | Updated |
-|----|------|------|--------|---------|--------|------------|---------|
-| 0001 | TCG Landing Page | Landing | ✅ Complete | 1200×2400 | 768, 1024 | 7 | 2026-02-14 |
+| ID   | Name             | Type    | Status      | Desktop   | Mobile    | Components | Updated    |
+| ---- | ---------------- | ------- | ----------- | --------- | --------- | ---------- | ---------- |
+| 0001 | TCG Landing Page | Landing | ✅ Complete | 1200×2400 | 768, 1024 | 7          | 2026-02-14 |
 ```
 
 **Code blocks**:
-```markdown
+
+````markdown
 ```bash
 /create-page-wireframe "description"
 /create-components-from-wireframe 0001
 ```
+````
+
 ```
 
 ## Example Output
 
 ```
+
 I've generated a comprehensive wireframe catalog at docs/wireframes/README.md
 
 Statistics:
+
 - Wireframes cataloged: 3
 - Total components: 15
 - Total sections: 21
 - Responsive breakpoints: 768px, 1024px, 1280px
 
 Wireframes:
+
 - 0001: TCG Landing Page (✅ Complete)
 - 0002: Dashboard (🔄 In Progress)
 - 0003: Profile Page (⏳ Planned)
@@ -374,7 +398,8 @@ You can view the catalog at: docs/wireframes/README.md
 
 To update this catalog after adding new wireframes, run:
 /generate-wireframe-catalog
-```
+
+````
 
 ## Edge Cases
 
@@ -425,7 +450,7 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 # Regenerate after extracting components
 /create-components-from-wireframe 0002
 /generate-wireframe-catalog
-```
+````
 
 ## Important Notes
 

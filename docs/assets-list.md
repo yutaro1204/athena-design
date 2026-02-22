@@ -5,6 +5,7 @@ This document provides a comprehensive list of all required assets for the TCG (
 ## Required Assets List
 
 ### 1. **Logo** (Header)
+
 - **Location**: Header / Navigation section
 - **Wireframe Reference**: Line 7, coordinates (x="60" y="50")
 - **Recommended Sizes**:
@@ -16,6 +17,7 @@ This document provides a comprehensive list of all required assets for the TCG (
 - **Usage**: Primary brand logo displayed in header navigation
 
 ### 2. **Hero Image/Card Animation** (Hero Section)
+
 - **Location**: Hero section, right side
 - **Wireframe Reference**: Lines 35-37, rect (x="680" y="180" width="420" height="340")
 - **Recommended Sizes**:
@@ -30,6 +32,7 @@ This document provides a comprehensive list of all required assets for the TCG (
 - **Usage**: Main hero visual showcasing trading card game cards or animation
 
 ### 3. **Feature Icons** (Features Section)
+
 - **Location**: Game Features section
 - **Wireframe Reference**: Lines 51-69, circles (r="35") with emoji placeholders
 - **Quantity**: 3 icons
@@ -48,6 +51,7 @@ This document provides a comprehensive list of all required assets for the TCG (
 - **Usage**: Visual representations for three main game features
 
 ### 4. **Product Pack Images** (Available Packs Section)
+
 - **Location**: Currently Available Packs section
 - **Wireframe Reference**: Lines 83-98, three packs at different positions
 - **Quantity**: 3 product pack images
@@ -66,6 +70,7 @@ This document provides a comprehensive list of all required assets for the TCG (
 - **Usage**: Product showcase images for purchasable card packs
 
 ### 5. **Expansion Thumbnails** (Upcoming Releases Section)
+
 - **Location**: Upcoming Releases / Schedule section
 - **Wireframe Reference**: Lines 115-142, three expansion cards
 - **Quantity**: 3 thumbnail images
@@ -101,11 +106,13 @@ Use modern image formats with progressive fallbacks for optimal compression and 
 ```
 
 **Format Priority:**
+
 1. AVIF (best compression, 50% smaller than JPEG, newer browser support)
 2. WebP (excellent compression, 25-35% smaller than JPEG, wide support)
 3. JPEG (universal fallback)
 
 **Format Selection:**
+
 - Logos & Icons: SVG (vector, infinitely scalable)
 - Photos & Complex Images: WebP → JPEG
 - Animations: Lottie JSON or animated SVG
@@ -123,6 +130,7 @@ Implement strategic lazy loading to optimize initial page load time.
 ```
 
 **Loading Strategy:**
+
 - **Hero Image**: `loading="eager"` (above the fold, critical)
 - **Logo**: Load immediately (critical for branding)
 - **Feature Icons**: Load immediately (above the fold)
@@ -145,6 +153,7 @@ Deliver device-appropriate image sizes using srcset and sizes attributes.
 ```
 
 **Benefits:**
+
 - Reduces bandwidth on mobile devices
 - Improves load times
 - Maintains quality on retina displays
@@ -154,6 +163,7 @@ Deliver device-appropriate image sizes using srcset and sizes attributes.
 Apply appropriate compression settings for each format.
 
 **Compression Targets:**
+
 - **JPEG**: 75-85% quality (good balance for photos)
 - **PNG**: Use TinyPNG or ImageOptim with lossy compression
 - **WebP**: 75-80% quality (typically 25-35% smaller than JPEG)
@@ -161,6 +171,7 @@ Apply appropriate compression settings for each format.
 - **SVG**: Minify with SVGO, remove unnecessary metadata
 
 **Tools:**
+
 - [Squoosh](https://squoosh.app/) - Web-based compression
 - [ImageOptim](https://imageoptim.com/) - Desktop app (Mac)
 - [TinyPNG](https://tinypng.com/) - Online PNG/JPEG compression
@@ -171,16 +182,19 @@ Apply appropriate compression settings for each format.
 Optimize delivery and caching for static assets.
 
 **CDN Recommendations:**
+
 - Use a CDN (Cloudflare, AWS CloudFront, Vercel Edge)
 - Enable automatic format conversion (WebP/AVIF)
 - Geographic distribution for global users
 
 **Cache Headers:**
+
 ```
 Cache-Control: public, max-age=31536000, immutable
 ```
 
 **Asset Versioning:**
+
 - Use content hashing for cache busting
 - Example: `hero-card.a1b2c3d4.webp`
 - Vite/Webpack handle this automatically in build
@@ -190,6 +204,7 @@ Cache-Control: public, max-age=31536000, immutable
 Implement blur placeholders for improved perceived performance.
 
 **Implementation:**
+
 1. Generate tiny 20×20px blurred version of each image
 2. Encode as base64 or ultra-low-quality WebP
 3. Display while full image loads
@@ -200,7 +215,7 @@ Implement blur placeholders for improved perceived performance.
   src="pack-starter.webp"
   style={{
     backgroundImage: 'url(data:image/webp;base64,UklGRiQAAABXRUJQVlA4...)',
-    backgroundSize: 'cover'
+    backgroundSize: 'cover',
   }}
   alt="Starter Pack"
   loading="lazy"
@@ -218,6 +233,7 @@ Preload above-the-fold images for faster initial render.
 ```
 
 **Preload Priority:**
+
 - Logo (critical for branding)
 - Hero image (largest contentful paint)
 - Feature icons (above the fold)
@@ -228,10 +244,10 @@ Consider using React image libraries for automatic optimization.
 
 ```tsx
 // Example with react-lazy-load-image-component
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
-<LazyLoadImage
+;<LazyLoadImage
   src="pack-starter.webp"
   placeholderSrc="pack-starter-placeholder.webp"
   effect="blur"
@@ -257,6 +273,7 @@ sharp input.jpg
 ```
 
 **Build Integration:**
+
 - Vite: `vite-imagetools` or `vite-plugin-image-optimizer`
 - Webpack: `image-webpack-loader`
 - Next.js: Built-in Image Optimization
@@ -315,14 +332,14 @@ src/
 
 ### Asset Size Summary
 
-| Asset Type | Count | Size per Asset (WebP) | Size per Asset (JPEG) | Total Size (WebP) | Total Size (JPEG) |
-|------------|-------|----------------------|-----------------------|-------------------|-------------------|
-| Logo | 1 | ~5KB (SVG) | N/A | ~5KB | N/A |
-| Hero Image | 1 | ~40KB | ~70KB | ~40KB | ~70KB |
-| Feature Icons | 3 | ~2KB (SVG) | N/A | ~6KB | N/A |
-| Pack Images | 3 | ~20KB | ~35KB | ~60KB | ~105KB |
-| Expansion Thumbnails | 3 | ~7KB | ~12KB | ~21KB | ~36KB |
-| **TOTAL** | **11** | - | - | **~132KB** | **~211KB** |
+| Asset Type           | Count  | Size per Asset (WebP) | Size per Asset (JPEG) | Total Size (WebP) | Total Size (JPEG) |
+| -------------------- | ------ | --------------------- | --------------------- | ----------------- | ----------------- |
+| Logo                 | 1      | ~5KB (SVG)            | N/A                   | ~5KB              | N/A               |
+| Hero Image           | 1      | ~40KB                 | ~70KB                 | ~40KB             | ~70KB             |
+| Feature Icons        | 3      | ~2KB (SVG)            | N/A                   | ~6KB              | N/A               |
+| Pack Images          | 3      | ~20KB                 | ~35KB                 | ~60KB             | ~105KB            |
+| Expansion Thumbnails | 3      | ~7KB                  | ~12KB                 | ~21KB             | ~36KB             |
+| **TOTAL**            | **11** | -                     | -                     | **~132KB**        | **~211KB**        |
 
 ### Performance Targets
 
@@ -336,12 +353,14 @@ src/
 ### Testing & Validation
 
 **Tools:**
+
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse) - Performance auditing
 - [WebPageTest](https://www.webpagetest.org/) - Real-world performance testing
 - [PageSpeed Insights](https://pagespeed.web.dev/) - Google's performance analysis
 - Chrome DevTools - Network tab and Performance panel
 
 **Test Scenarios:**
+
 - Desktop (1920×1080) - Fast 4G
 - Mobile (375×667) - Slow 3G
 - Tablet (768×1024) - Fast 4G
@@ -351,6 +370,7 @@ src/
 ## Implementation Checklist
 
 ### Asset Creation
+
 - [ ] Design logo in vector format (SVG preferred)
 - [ ] Create or source hero card image/animation
 - [ ] Design 3 custom feature icons (combat, art, ranked)
@@ -358,6 +378,7 @@ src/
 - [ ] Design 3 expansion thumbnail images (shadow realm, crystal warriors, cyber age)
 
 ### Image Optimization
+
 - [ ] Export all raster images in original quality
 - [ ] Generate WebP versions of all raster images
 - [ ] Generate 2x retina versions of all raster images
@@ -367,6 +388,7 @@ src/
 - [ ] Validate file sizes against performance budget
 
 ### Implementation
+
 - [ ] Set up image directory structure in `src/assets/images/`
 - [ ] Import and reference all assets in React components
 - [ ] Implement responsive image markup with srcset
@@ -376,6 +398,7 @@ src/
 - [ ] Add proper alt text for accessibility
 
 ### Testing & Validation
+
 - [ ] Test on desktop browsers (Chrome, Firefox, Safari)
 - [ ] Test on mobile devices (iOS Safari, Chrome Mobile)
 - [ ] Verify responsive images load correct sizes
@@ -386,6 +409,7 @@ src/
 - [ ] Validate accessibility with screen readers
 
 ### Documentation
+
 - [ ] Document asset naming conventions for team
 - [ ] Create asset source files backup
 - [ ] Document optimization settings used
@@ -398,6 +422,7 @@ src/
 **Total Assets Required**: 10 image groups (25+ files including responsive variants)
 
 **Asset Breakdown**:
+
 - 1 logo (SVG)
 - 1 hero image (with 2x variants)
 - 3 feature icons (SVG)
@@ -405,17 +430,20 @@ src/
 - 3 expansion thumbnails (with 2x variants)
 
 **Estimated Total Size**:
+
 - Optimized (WebP): ~132KB
 - Fallback (JPEG): ~211KB
 
 **Wireframe Dimensions**: 1200×2400px (desktop reference)
 
 **Target Performance**:
+
 - Load time <1.5s on 3G
 - LCP <2.5s
 - Performance budget <200KB
 
 **Key Recommendations**:
+
 1. Use SVG for logos and icons (infinitely scalable, tiny file size)
 2. Implement WebP with JPEG fallbacks for all photos
 3. Provide 2x retina variants for crisp display on high-DPI screens
@@ -425,6 +453,7 @@ src/
 7. Test on real devices with slow connections
 
 **Next Steps**:
+
 1. Review wireframe with design team to finalize visual direction
 2. Create or source all required assets based on specifications
 3. Optimize images using recommended tools and settings

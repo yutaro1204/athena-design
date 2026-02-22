@@ -67,6 +67,7 @@ project/
 **Purpose**: Creates SVG wireframe designs for pages based on specifications or existing web pages
 
 **Usage**:
+
 ```bash
 # From specification only
 /create-page-wireframe
@@ -80,18 +81,21 @@ project/
 ```
 
 **Input**:
+
 - Specification (optional): Text description of page to create
 - URL (optional): Reference to existing web page for design inspiration
 
 **Output**: `docs/wireframes/{NNNN}/{page-name}-wireframe.svg`
 
 **Features**:
+
 - Auto-extracts design system from URL (colors, typography, spacing)
 - Replicates section structure from analyzed pages
 - Combines URL structure with custom specifications
 - Uses WebFetch to analyze live web pages
 
 **When to use**:
+
 - Start of every new page design
 - When you want to replicate an existing page's structure
 - When you need design system inspiration from real websites
@@ -103,6 +107,7 @@ project/
 **Purpose**: Extracts reusable component SVGs from a complete wireframe design
 
 **Usage**:
+
 ```bash
 /create-components-from-wireframe 0001
 /create-components-from-wireframe 0002
@@ -111,6 +116,7 @@ project/
 **Input**: Wireframe ID (4-digit number)
 
 **Output**:
+
 - Component SVG files in `docs/wireframes/{NNNN}/components/{headers,heroes,sections,footers}/`
 - Component documentation in `docs/wireframes/{NNNN}/components/README.md`
 
@@ -123,6 +129,7 @@ project/
 **Purpose**: Implements React components from wireframe designs
 
 **Usage**:
+
 ```bash
 /create-page-from-wireframe 0001
 /create-page-from-wireframe 0002
@@ -141,6 +148,7 @@ project/
 **Purpose**: Creates side-by-side visualization of mobile and desktop layouts
 
 **Usage**:
+
 ```bash
 /create-responsive-design 0001           # Uses 768px breakpoint (default)
 /create-responsive-design 0001 1024      # Uses 1024px breakpoint
@@ -148,6 +156,7 @@ project/
 ```
 
 **Input**:
+
 - Wireframe ID (required)
 - Breakpoint in pixels (optional, default: 768)
 
@@ -162,6 +171,7 @@ project/
 **Purpose**: Applies responsive design from wireframe to React component code
 
 **Usage**:
+
 ```bash
 /apply-responsive-design 0001                          # Default: 768px, src/App.tsx
 /apply-responsive-design 0001 1024                     # 1024px breakpoint
@@ -169,6 +179,7 @@ project/
 ```
 
 **Input**:
+
 - Wireframe ID (required)
 - Breakpoint in pixels (optional, default: 768)
 - Component path (optional, default: src/App.tsx)
@@ -184,6 +195,7 @@ project/
 **Purpose**: Analyzes wireframe and generates comprehensive asset requirements
 
 **Usage**:
+
 ```bash
 /create-required-assets-list 0001
 /create-required-assets-list 0002
@@ -192,6 +204,7 @@ project/
 **Input**: Wireframe ID (4-digit number)
 
 **Output**: `docs/assets-list.md` with:
+
 - Required assets list (images, icons, logos)
 - Recommended sizes and formats
 - Performance optimization strategies
@@ -207,6 +220,7 @@ project/
 **Purpose**: Integrates actual image assets into React components
 
 **Usage**:
+
 ```bash
 /apply-required-assets                    # Default: src/App.tsx
 /apply-required-assets src/components/Page.tsx
@@ -217,6 +231,7 @@ project/
 **Output**: Updated React component with image imports and proper usage
 
 **Prerequisites**:
+
 - Assets must exist in `docs/assets/` directory
 - `docs/assets-list.md` should exist for reference
 
@@ -229,6 +244,7 @@ project/
 **Purpose**: Automatically generates a comprehensive wireframe catalog
 
 **Usage**:
+
 ```bash
 /generate-wireframe-catalog
 ```
@@ -236,16 +252,19 @@ project/
 **Input**: None (auto-discovers all wireframes)
 
 **Output**:
+
 - Comprehensive catalog at `docs/wireframes/README.md`
 - Includes all wireframes, components, statistics, and usage guide
 
 **When to use**:
+
 - After creating new wireframes
 - After extracting components
 - After implementing wireframes
 - To update documentation
 
 **Features**:
+
 - Auto-discovers all wireframes in `docs/wireframes/`
 - Extracts design system from SVG files
 - Catalogs all components across wireframes
@@ -299,20 +318,21 @@ When creating a new page from scratch, follow this order:
 
 ### Quick Reference Chart
 
-| Step | Skill | Input | Output | Can Skip? |
-|------|-------|-------|--------|-----------|
-| 1 | create-page-wireframe | Specification | Wireframe SVG | ❌ No |
-| 2 | create-responsive-design | Wireframe ID + Breakpoint | Responsive wireframe | ✅ If desktop-only |
-| 3 | create-required-assets-list | Wireframe ID | assets-list.md | ✅ If no images |
-| 4 | create-page-from-wireframe | Wireframe ID | React component | ❌ No |
-| 5 | apply-responsive-design | Wireframe ID + Breakpoint | Responsive component | ✅ If desktop-only |
-| 6 | [Manual] | assets-list.md | Image files | ✅ If no images |
-| 7 | apply-required-assets | Component path | Component with images | ✅ If no images |
-| 8 | npm run dev | - | Running dev server | ❌ No (for testing) |
+| Step | Skill                       | Input                     | Output                | Can Skip?           |
+| ---- | --------------------------- | ------------------------- | --------------------- | ------------------- |
+| 1    | create-page-wireframe       | Specification             | Wireframe SVG         | ❌ No               |
+| 2    | create-responsive-design    | Wireframe ID + Breakpoint | Responsive wireframe  | ✅ If desktop-only  |
+| 3    | create-required-assets-list | Wireframe ID              | assets-list.md        | ✅ If no images     |
+| 4    | create-page-from-wireframe  | Wireframe ID              | React component       | ❌ No               |
+| 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive component  | ✅ If desktop-only  |
+| 6    | [Manual]                    | assets-list.md            | Image files           | ✅ If no images     |
+| 7    | apply-required-assets       | Component path            | Component with images | ✅ If no images     |
+| 8    | npm run dev                 | -                         | Running dev server    | ❌ No (for testing) |
 
 ### Minimal Workflows
 
 **Simple Page (No responsive, no images):**
+
 ```bash
 /create-page-wireframe
 /create-page-from-wireframe 0001
@@ -320,6 +340,7 @@ npm run dev
 ```
 
 **Responsive Page (No images):**
+
 ```bash
 /create-page-wireframe
 /create-responsive-design 0001 768
@@ -329,6 +350,7 @@ npm run dev
 ```
 
 **Complete Page (Everything):**
+
 ```bash
 /create-page-wireframe
 /create-responsive-design 0001 768
@@ -351,6 +373,7 @@ npm run dev
 ### Iterative Updates
 
 **Update design:**
+
 ```bash
 [Edit wireframe manually]
 /create-responsive-design 0001 768
@@ -359,12 +382,14 @@ npm run dev
 ```
 
 **Change breakpoint:**
+
 ```bash
 /create-responsive-design 0001 1024  # lg: prefix
 /apply-responsive-design 0001 1024
 ```
 
 **Add/update assets:**
+
 ```bash
 [Update assets in docs/assets/]
 /apply-required-assets
@@ -480,6 +505,7 @@ You can create multiple responsive designs for different breakpoints:
 ```
 
 **Tailwind CSS Breakpoint Mapping:**
+
 - 640px → `sm:` prefix
 - 768px → `md:` prefix (most common)
 - 1024px → `lg:` prefix
@@ -520,6 +546,7 @@ docs/assets/
 - **Usage**: Consistent across all skills for easy reference
 
 **Examples:**
+
 - `0001` - Landing page
 - `0002` - Dashboard page
 - `0003` - Profile page
@@ -530,6 +557,7 @@ docs/assets/
 ### 1. Design First, Code Second
 
 Always create and approve wireframes before implementing code. This ensures:
+
 - Clear design intent
 - Consistent user experience
 - Reduced implementation changes
@@ -538,6 +566,7 @@ Always create and approve wireframes before implementing code. This ensures:
 ### 2. Use Responsive Wireframes
 
 Create responsive wireframes to visualize layouts before coding:
+
 - Prevents layout surprises
 - Ensures mobile-friendly designs
 - Guides implementation decisions
@@ -546,6 +575,7 @@ Create responsive wireframes to visualize layouts before coding:
 ### 3. Plan Assets Early
 
 Generate asset requirements early in the process:
+
 - Parallel workflow (design + asset creation)
 - Performance optimization from the start
 - Clear specifications for designers/vendors
@@ -554,6 +584,7 @@ Generate asset requirements early in the process:
 ### 4. Mobile-First Approach
 
 When applying responsive design:
+
 - Default styles target mobile
 - Use breakpoint prefixes for larger screens
 - Test on actual devices
@@ -562,6 +593,7 @@ When applying responsive design:
 ### 5. Optimize Images
 
 Follow asset-list.md recommendations:
+
 - Use WebP format with JPEG fallback
 - Provide 2x retina variants
 - Implement lazy loading for below-the-fold images
@@ -571,6 +603,7 @@ Follow asset-list.md recommendations:
 ### 6. Consistent Naming
 
 Use descriptive, kebab-case names:
+
 - Wireframes: `{page-name}-wireframe.svg`
 - Assets: `{category}-{name}.{ext}`
 - Components: `Page{ID}` or descriptive names
@@ -578,6 +611,7 @@ Use descriptive, kebab-case names:
 ### 7. Version Control
 
 Commit wireframes and asset lists:
+
 - Track design evolution
 - Enable design rollback
 - Share with team members
@@ -586,6 +620,7 @@ Commit wireframes and asset lists:
 ### 8. Iterative Refinement
 
 The workflow supports iteration:
+
 1. Update wireframe
 2. Regenerate responsive designs
 3. Update component code
@@ -599,6 +634,7 @@ The workflow supports iteration:
 **Error**: "Wireframe not found for ID 0001"
 
 **Solution**:
+
 ```bash
 # Check if wireframe exists
 ls docs/wireframes/0001/
@@ -612,6 +648,7 @@ ls docs/wireframes/0001/
 **Error**: "Responsive wireframe not found"
 
 **Solution**:
+
 ```bash
 # Create responsive wireframe first
 /create-responsive-design 0001 768
@@ -625,6 +662,7 @@ ls docs/wireframes/0001/
 **Error**: "Assets not found in docs/assets/"
 
 **Solution**:
+
 1. Check assets-list.md for required assets
 2. Create/collect assets
 3. Place assets in `docs/assets/` directory
@@ -635,6 +673,7 @@ ls docs/wireframes/0001/
 **Error**: Styles not applying
 
 **Solution**:
+
 1. Ensure Tailwind CSS v4 is installed
 2. Check `src/index.css` has `@import "tailwindcss";`
 3. Verify `npm run dev` is running
@@ -645,6 +684,7 @@ ls docs/wireframes/0001/
 ### Tailwind CSS v4
 
 This project uses Tailwind CSS v4, which has a different configuration:
+
 - No `tailwind.config.js` needed
 - Use `@import "tailwindcss";` in CSS
 - All utility classes available by default
@@ -652,6 +692,7 @@ This project uses Tailwind CSS v4, which has a different configuration:
 ### Vite Configuration
 
 The project uses Vite as the build tool:
+
 - Fast development server
 - Automatic image optimization
 - TypeScript support
@@ -660,6 +701,7 @@ The project uses Vite as the build tool:
 ### React + TypeScript
 
 Components are written in TypeScript:
+
 - Type safety for props
 - Better IDE support
 - Fewer runtime errors
@@ -678,6 +720,7 @@ To add new skills:
 ## Support
 
 For issues or questions:
+
 - Review skill documentation in `skills/{skill-name}/SKILL.md`
 - Check this README for workflow guidance
 - Refer to CLAUDE.md for AI-specific instructions
