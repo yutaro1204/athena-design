@@ -186,10 +186,10 @@ project/
 /apply-responsive-design 0001                          # Default: 768px
 /apply-responsive-design 0001 1024                     # 1024px breakpoint
 
-# Specify custom component path (React)
+# Specify custom output path (React)
 /apply-responsive-design 0001 768 src/components/Page.tsx
 
-# Specify custom page path (Astro)
+# Specify custom output path (Astro)
 /apply-responsive-design 0001 768 src/pages/landing.astro
 ```
 
@@ -197,7 +197,7 @@ project/
 
 - Wireframe ID (required)
 - Breakpoint in pixels (optional, default: 768)
-- Component path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
+- Output path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
 
 **Output**:
 - React: Updated component with responsive Tailwind CSS classes (using `className`)
