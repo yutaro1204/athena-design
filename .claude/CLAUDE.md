@@ -68,7 +68,15 @@ The project has 8 custom Claude Code skills for frontend development:
 
 1. **Check if wireframe exists**: Look in `docs/wireframes/{NNNN}/`
 2. **If no wireframe**: Suggest creating one with `/create-page-wireframe`
+   - **If user mentions a specific website**: Ask if they want to reference it: `/create-page-wireframe "spec" "https://example.com"`
+   - **If user says "like [website]"**: Use URL parameter: `/create-page-wireframe "description" "https://website.com"`
+   - **If user provides URL**: Use it to analyze and extract design system
 3. **If wireframe exists**: Use `/create-page-from-wireframe {NNNN}`
+
+**URL Reference Usage**:
+- User says: "Create a page like Stripe" → Use `/create-page-wireframe "" "https://stripe.com"`
+- User says: "Create a landing page inspired by Vercel" → Use `/create-page-wireframe "landing page" "https://vercel.com"`
+- User says: "Create a pricing page similar to Linear" → Use `/create-page-wireframe "pricing page" "https://linear.app/pricing"`
 
 ### When User Asks to Extract Components
 
@@ -135,6 +143,7 @@ className="px-12 sm:px-4 text-2xl sm:text-xl"
 ### DO
 
 ✅ **Use skills proactively**: If a task matches a skill's purpose, use it
+✅ **Use URL references**: When user mentions existing websites, offer to reference them for wireframe creation
 ✅ **Follow mobile-first approach**: Default styles for mobile, prefixes for desktop
 ✅ **Read files before editing**: Understand context before making changes
 ✅ **Suggest workflow**: Guide users through the design → implementation flow

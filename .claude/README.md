@@ -63,17 +63,37 @@ project/
 
 ### 1. create-page-wireframe
 
-**Purpose**: Creates SVG wireframe designs for pages
+**Purpose**: Creates SVG wireframe designs for pages based on specifications or existing web pages
 
 **Usage**:
 ```bash
+# From specification only
 /create-page-wireframe
 /create-page-wireframe "Create a landing page for a TCG with hero section, features, and product cards"
+
+# From existing web page URL
+/create-page-wireframe "" "https://stripe.com"
+
+# From specification with URL reference
+/create-page-wireframe "Create a SaaS landing page with pricing" "https://vercel.com"
 ```
+
+**Input**:
+- Specification (optional): Text description of page to create
+- URL (optional): Reference to existing web page for design inspiration
 
 **Output**: `docs/wireframes/{NNNN}/{page-name}-wireframe.svg`
 
-**When to use**: Start of every new page design
+**Features**:
+- Auto-extracts design system from URL (colors, typography, spacing)
+- Replicates section structure from analyzed pages
+- Combines URL structure with custom specifications
+- Uses WebFetch to analyze live web pages
+
+**When to use**:
+- Start of every new page design
+- When you want to replicate an existing page's structure
+- When you need design system inspiration from real websites
 
 ---
 
