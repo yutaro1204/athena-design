@@ -58,7 +58,7 @@ The standard wireframe-to-code path is still available but involves more manual 
 project/
 ├── .claude/                                  # Claude Code configuration
 │   └── settings.json                         # Claude Code settings
-├── skills/                                   # Custom Claude Code skills (10 skills)
+├── skills/                                   # Custom Claude Code skills (11 skills)
 │   ├── create-page-wireframe/
 │   ├── create-page-from-wireframe/
 │   ├── create-responsive-design/
@@ -68,7 +68,8 @@ project/
 │   ├── create-components-from-wireframe/
 │   ├── generate-wireframe-catalog/
 │   ├── create-pencil-design/
-│   └── create-page-from-pencil/
+│   ├── create-page-from-pencil/
+│   └── convert-images-to-webp/
 ├── docs/                                     # Example artifacts and assets
 │   ├── wireframes/{NNNN}/                    # Wireframe ID directory
 │   │   ├── {page-name}-wireframe.svg         # Original wireframe design
@@ -129,7 +130,7 @@ project/
 
 ## Available Skills
 
-The project has 10 custom Claude Code skills for frontend development (React and Astro):
+The project has 11 custom Claude Code skills for frontend development (React and Astro):
 
 1. **create-page-wireframe**: Creates SVG wireframe designs
 2. **create-components-from-wireframe**: Extracts reusable component SVGs from wireframes
@@ -141,6 +142,7 @@ The project has 10 custom Claude Code skills for frontend development (React and
 8. **generate-wireframe-catalog**: Generates comprehensive wireframe catalog documentation
 9. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
 10. **create-page-from-pencil**: Implements responsive React or Astro pages from Pencil (.pen) design files
+11. **convert-images-to-webp**: Converts PNG and JPEG images to WebP format for optimized file sizes
 
 ## Working with This Project
 
@@ -663,7 +665,7 @@ import logoImage from '/docs/assets/logo.png'
 **Error**: User mentions a skill that doesn't exist
 
 **Response**:
-"That skill doesn't exist yet. Available skills are: create-page-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, create-components-from-wireframe, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil. Which would you like to use?"
+"That skill doesn't exist yet. Available skills are: create-page-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, create-components-from-wireframe, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil, convert-images-to-webp. Which would you like to use?"
 
 ### Tailwind Not Working
 

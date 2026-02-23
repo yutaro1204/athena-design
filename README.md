@@ -51,7 +51,7 @@ All skills work together in a seamless workflow, ensuring consistency from desig
 project/
 ├── .claude/
 │   └── settings.json              # Claude Code settings
-├── skills/                        # Custom Claude Code skills (10 skills)
+├── skills/                        # Custom Claude Code skills (11 skills)
 │   ├── create-page-wireframe/
 │   ├── create-components-from-wireframe/
 │   ├── create-page-from-wireframe/
@@ -61,7 +61,8 @@ project/
 │   ├── apply-required-assets/
 │   ├── generate-wireframe-catalog/
 │   ├── create-pencil-design/
-│   └── create-page-from-pencil/
+│   ├── create-page-from-pencil/
+│   └── convert-images-to-webp/
 ├── docs/                          # Example artifacts and documentation
 │   ├── wireframes/                # Wireframe files
 │   │   ├── README.md              # Wireframe catalog (auto-generated)
@@ -406,6 +407,47 @@ project/
 - Pencil MCP server available for reading .pen files
 
 **When to use**: After Pencil designs are approved and ready for implementation
+
+---
+
+### 11. convert-images-to-webp
+
+**Purpose**: Converts PNG and JPEG images to WebP format for significantly reduced file sizes
+
+**Usage**:
+
+```bash
+# Convert images in current directory with default quality (80)
+/convert-images-to-webp
+
+# Convert images in a specific directory
+/convert-images-to-webp public/images
+
+# Convert with custom quality (0-100)
+/convert-images-to-webp public/images 90
+/convert-images-to-webp images 75
+```
+
+**Input**:
+
+- Directory path (optional, defaults to current working directory)
+- Quality level 0-100 (optional, defaults to 80)
+
+**Output**: WebP files created alongside original images in the same directory
+
+**Features**:
+
+- Converts both PNG and JPEG (`.jpg`, `.jpeg`) formats
+- Reports size comparison with reduction percentage
+- Removes original PNG/JPEG files after successful conversion
+- Uses `cwebp` for high-quality conversion
+- Batch processes all images efficiently
+
+**Prerequisites**:
+
+- `cwebp` tool must be installed (`brew install webp` on macOS)
+
+**When to use**: After generating or collecting images, to optimize them for web delivery
 
 ---
 
@@ -1083,4 +1125,4 @@ For issues or questions:
 **Version**: 1.4
 **Last Updated**: 2026-02-23
 **Frameworks**: React, Astro
-**Skills**: 10 (create-page-wireframe, create-components-from-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil)
+**Skills**: 11 (create-page-wireframe, create-components-from-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil, convert-images-to-webp)
