@@ -12,14 +12,14 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
 ## Instructions
 
 1. **Parse the arguments**:
-   - First argument: path to .pen file (optional, defaults to `design.pen`)
+   - First argument: path to .pen file (optional, defaults to `pencil/design.pen`)
    - Second argument: framework - "react" or "astro" (optional, will auto-detect if not provided)
    - Third argument: output file path (optional, uses framework defaults if not provided)
    - Examples:
-     - (no args): Uses `design.pen`, auto-detect framework, default output
-     - `design.pen`: Explicit pen file, auto-detect framework
-     - `design.pen astro`: Pen file with Astro framework
-     - `design.pen react src/App.tsx`: Pen file, React, custom output path
+     - (no args): Uses `pencil/design.pen`, auto-detect framework, default output
+     - `pencil/design.pen`: Explicit pen file, auto-detect framework
+     - `pencil/design.pen astro`: Pen file with Astro framework
+     - `pencil/design.pen react src/App.tsx`: Pen file, React, custom output path
    - If the pen file does not exist, inform the user and stop
 
 2. **Auto-detect framework** (if not explicitly provided):
@@ -396,17 +396,17 @@ export default function Page() {
 ## Usage Examples
 
 ```bash
-# Auto-detect framework, use design.pen
+# Auto-detect framework, use pencil/design.pen
 /create-page-from-pencil
 
 # Explicit pen file
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 
 # Astro framework
-/create-page-from-pencil design.pen astro
+/create-page-from-pencil pencil/design.pen astro
 
 # React with custom output
-/create-page-from-pencil design.pen react src/App.tsx
+/create-page-from-pencil pencil/design.pen react src/App.tsx
 
 # Custom pen file path
 /create-page-from-pencil designs/landing.pen astro src/pages/landing.astro
@@ -418,7 +418,7 @@ export default function Page() {
 2. Run `/create-pencil-design 0001 1200` to generate desktop Pencil frame
 3. Run `/create-pencil-design 0001 375` to generate mobile Pencil frame
 4. Refine design in Pencil editor (add images, adjust layout, etc.)
-5. **Run `/create-page-from-pencil design.pen astro`** to implement the page
+5. **Run `/create-page-from-pencil pencil/design.pen astro`** to implement the page
 6. Review at `http://localhost:4321/` and iterate
 
 **Typical file output:**

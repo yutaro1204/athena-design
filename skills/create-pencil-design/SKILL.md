@@ -41,9 +41,19 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
    - **Content**: Collect all text labels, titles, descriptions, and placeholder text
    - **Icons/Symbols**: Note any special characters (checkmarks, lightning bolts, infinity symbols) for icon mapping
 
-4. **Set up the Pencil editor**:
+4. **Set up the Pencil directory and editor**:
+   - Create the `pencil/` directory in the project root if it does not exist:
+     ```bash
+     mkdir -p pencil
+     ```
+   - This directory stores all Pencil design artifacts:
+     ```
+     pencil/
+     ├── design.pen          # Pencil design file
+     └── images/             # AI-generated images referenced by design.pen
+     ```
    - Call `get_editor_state` to identify the active `.pen` file and any existing content
-   - If no `.pen` file is open, open `design.pen` using `open_document`
+   - If no `.pen` file is open, open `pencil/design.pen` using `open_document`
    - Call `get_guidelines("landing-page")` for design rules and best practices
    - Call `find_empty_space_on_canvas` to find a clear area for the new frame, using the breakpoint as width and an estimated height (e.g., 3200px for desktop, 4000px for mobile)
 
