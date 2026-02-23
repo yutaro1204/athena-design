@@ -28,7 +28,7 @@ The **recommended workflow** uses Pencil (.pen) designs as a high-fidelity desig
 /create-page-wireframe "page description"
 /create-pencil-design 0001 1200   # Desktop
 /create-pencil-design 0001 375    # Mobile
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 npm run dev
 ```
 
@@ -51,7 +51,7 @@ All skills work together in a seamless workflow, ensuring consistency from desig
 project/
 ├── .claude/
 │   └── settings.json              # Claude Code settings
-├── skills/                        # Custom Claude Code skills (11 skills)
+├── skills/                        # Custom Claude Code skills (12 skills)
 │   ├── create-page-wireframe/
 │   ├── create-components-from-wireframe/
 │   ├── create-page-from-wireframe/
@@ -62,7 +62,8 @@ project/
 │   ├── generate-wireframe-catalog/
 │   ├── create-pencil-design/
 │   ├── create-page-from-pencil/
-│   └── convert-images-to-webp/
+│   ├── convert-images-to-webp/
+│   └── generate-pencil-images/
 ├── docs/                          # Example artifacts and documentation
 │   ├── wireframes/                # Wireframe files
 │   │   ├── README.md              # Wireframe catalog (auto-generated)
@@ -78,6 +79,9 @@ project/
 │   │           └── footers/*.svg
 │   ├── assets/                    # Image assets
 │   └── assets-list.md             # Asset requirements document
+├── pencil/                        # Pencil design artifacts
+│   ├── design.pen                 # Pencil design file
+│   └── images/                    # AI-generated images referenced by design.pen
 ├── src/                           # Application source code
 │   ├── App.tsx                    # React: Main component
 │   └── pages/{page-name}.astro    # Astro: Page files
@@ -372,14 +376,14 @@ project/
 
 ```bash
 # Auto-detect framework
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 
 # Specify framework
-/create-page-from-pencil design.pen astro
-/create-page-from-pencil design.pen react
+/create-page-from-pencil pencil/design.pen astro
+/create-page-from-pencil pencil/design.pen react
 
 # Specify output path
-/create-page-from-pencil design.pen astro src/pages/landing.astro
+/create-page-from-pencil pencil/design.pen astro src/pages/landing.astro
 ```
 
 **Input**:
@@ -452,6 +456,43 @@ project/
 
 ---
 
+### 12. generate-pencil-images
+
+**Purpose**: Generates or regenerates AI images for image nodes within the currently selected Pencil (.pen) design frame
+
+**Usage**:
+
+```bash
+# Select a frame in the Pencil editor, then run:
+/generate-pencil-images
+```
+
+**Input**: None (uses the currently selected frame in the Pencil editor)
+
+**Output**: AI-generated WebP images in `pencil/images/` applied as fills to all image nodes within the selected frame
+
+**Features**:
+
+- Discovers all image nodes within a frame automatically
+- Derives descriptive prompts from node names, surrounding text, and design context
+- Generates images one by one to avoid timeouts
+- Converts generated images to WebP format in `pencil/images/` and removes PNG originals
+- Updates image references in `design.pen` from `.png` to `.webp`
+- Supports nodes inside component instances (slash-separated paths)
+- Verifies results via screenshot after generation
+- Reports generation status for each image
+
+**Prerequisites**:
+
+- A `.pen` file must be open with at least one design frame
+- A frame must be selected in the Pencil editor
+- Pencil MCP server must be available
+- `cwebp` tool must be installed (`brew install webp` on macOS)
+
+**When to use**: After creating a Pencil design frame, to generate or regenerate AI images for all image placeholder nodes
+
+---
+
 ## Skill Execution Order
 
 ### Recommended Order: Pencil Design Path
@@ -478,7 +519,7 @@ When creating a new page from scratch, the **Pencil design path is recommended**
 
 # 💻 PHASE 4: IMPLEMENTATION
 # ────────────────────────────────────────
-5️⃣ /create-page-from-pencil design.pen
+5️⃣ /create-page-from-pencil pencil/design.pen
    → Creates: Responsive page with images (React or Astro, auto-detected)
    → Handles responsive design and image integration in one step
 
@@ -567,7 +608,7 @@ The standard wireframe-to-code path is still available:
 /create-pencil-design 0001 1200   # Desktop design frame
 /create-pencil-design 0001 375    # Mobile design frame
 # Review and refine in Pencil editor
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 npm run dev
 ```
 
@@ -672,7 +713,7 @@ npm run dev
 │                3. IMPLEMENTATION PHASE                          │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
-               /create-page-from-pencil design.pen
+               /create-page-from-pencil pencil/design.pen
                               ↓
       Responsive page with images (React or Astro)
                               ↓
@@ -744,15 +785,15 @@ npm run dev
 
 # 2. Create Pencil design frames
 /create-pencil-design 0001 1200
-# Output: Desktop design frame in design.pen with AI-generated images
+# Output: Desktop design frame in pencil/design.pen with AI-generated images
 
 /create-pencil-design 0001 375
-# Output: Mobile design frame in design.pen with AI-generated images
+# Output: Mobile design frame in pencil/design.pen with AI-generated images
 
 # 3. (Optional) Review and refine designs in Pencil editor
 
 # 4. Implement the page from Pencil design (auto-detects framework)
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 # Output: src/pages/tcg-landing-page.astro (Astro) or src/App.tsx (React)
 # Includes: responsive design, extracted images, mobile-first Tailwind
 
@@ -786,8 +827,8 @@ npm run dev
 
 ```bash
 # Pencil path (recommended)
-/create-page-from-pencil design.pen astro
-/create-page-from-pencil design.pen react
+/create-page-from-pencil pencil/design.pen astro
+/create-page-from-pencil pencil/design.pen react
 
 # Legacy path
 /create-page-from-wireframe 0001 react
@@ -1123,7 +1164,7 @@ For issues or questions:
 
 ---
 
-**Version**: 1.4
+**Version**: 1.5
 **Last Updated**: 2026-02-23
 **Frameworks**: React, Astro
-**Skills**: 11 (create-page-wireframe, create-components-from-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil, convert-images-to-webp)
+**Skills**: 12 (create-page-wireframe, create-components-from-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil, convert-images-to-webp, generate-pencil-images)

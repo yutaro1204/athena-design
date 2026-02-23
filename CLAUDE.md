@@ -39,7 +39,7 @@ The **recommended workflow** uses Pencil (.pen) designs as an intermediate high-
 /create-page-wireframe "page description"
 /create-pencil-design {NNNN} 1200   # Desktop
 /create-pencil-design {NNNN} 375    # Mobile
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 npm run dev
 ```
 
@@ -58,7 +58,7 @@ The standard wireframe-to-code path is still available but involves more manual 
 project/
 ├── .claude/                                  # Claude Code configuration
 │   └── settings.json                         # Claude Code settings
-├── skills/                                   # Custom Claude Code skills (11 skills)
+├── skills/                                   # Custom Claude Code skills (12 skills)
 │   ├── create-page-wireframe/
 │   ├── create-page-from-wireframe/
 │   ├── create-responsive-design/
@@ -69,7 +69,8 @@ project/
 │   ├── generate-wireframe-catalog/
 │   ├── create-pencil-design/
 │   ├── create-page-from-pencil/
-│   └── convert-images-to-webp/
+│   ├── convert-images-to-webp/
+│   └── generate-pencil-images/
 ├── docs/                                     # Example artifacts and assets
 │   ├── wireframes/{NNNN}/                    # Wireframe ID directory
 │   │   ├── {page-name}-wireframe.svg         # Original wireframe design
@@ -83,6 +84,9 @@ project/
 │   │       └── footers/*.svg                 # Footer components
 │   ├── assets/                               # Example image assets
 │   └── assets-list.md                        # Asset requirements document
+├── pencil/                                   # Pencil design artifacts
+│   ├── design.pen                            # Pencil design file
+│   └── images/                               # AI-generated images referenced by design.pen
 ├── src/                                      # Application source code
 │   ├── App.tsx                               # React: Main component
 │   └── pages/{page-name}.astro               # Astro: Page files (file-based routing)
@@ -143,6 +147,7 @@ The project has 11 custom Claude Code skills for frontend development (React and
 9. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
 10. **create-page-from-pencil**: Implements responsive React or Astro pages from Pencil (.pen) design files
 11. **convert-images-to-webp**: Converts PNG and JPEG images to WebP format for optimized file sizes
+12. **generate-pencil-images**: Generates or regenerates AI images (WebP) in `pencil/images/` for nodes in the selected Pencil (.pen) design frame
 
 ## Working with This Project
 
@@ -159,7 +164,7 @@ The project has 11 custom Claude Code skills for frontend development (React and
    - `/create-pencil-design {NNNN} 1200` (desktop frame)
    - `/create-pencil-design {NNNN} 375` (mobile frame)
    - Review and refine designs in Pencil editor
-   - `/create-page-from-pencil design.pen`
+   - `/create-page-from-pencil pencil/design.pen`
 4. **Alternative (legacy path)**: Use `/create-page-from-wireframe {NNNN}` followed by apply-responsive-design and apply-required-assets
 
 **URL Reference Usage**:
@@ -199,10 +204,10 @@ The project has 11 custom Claude Code skills for frontend development (React and
 
 ### When User Asks to Implement a Pencil Design as Code
 
-1. **Check if .pen file exists**: Look for `design.pen` or the specified `.pen` file
-2. **If .pen file exists**: Use `/create-page-from-pencil design.pen`
+1. **Check if .pen file exists**: Look for `pencil/design.pen` or the specified `.pen` file
+2. **If .pen file exists**: Use `/create-page-from-pencil pencil/design.pen`
    - Framework will be auto-detected (Astro or React)
-   - Or specify explicitly: `/create-page-from-pencil design.pen astro` or `/create-page-from-pencil design.pen react`
+   - Or specify explicitly: `/create-page-from-pencil pencil/design.pen astro` or `/create-page-from-pencil pencil/design.pen react`
 3. **Process**: Analyzes desktop and mobile screens in the `.pen` file, extracts images, implements responsive page
 4. **Output**: Responsive page with actual images from the design
 
@@ -538,7 +543,7 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 # (Manual step: adjust layouts, add images, tweak styling)
 
 # 4. Implement page from Pencil design
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 ```
 
 **This is the recommended workflow for new pages.** The Pencil design path produces better results because:
@@ -551,14 +556,14 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 
 ```bash
 # If .pen file already exists with designs
-/create-page-from-pencil design.pen
+/create-page-from-pencil pencil/design.pen
 
 # Specify framework explicitly
-/create-page-from-pencil design.pen astro
-/create-page-from-pencil design.pen react
+/create-page-from-pencil pencil/design.pen astro
+/create-page-from-pencil pencil/design.pen react
 
 # Specify output path
-/create-page-from-pencil design.pen astro src/pages/landing.astro
+/create-page-from-pencil pencil/design.pen astro src/pages/landing.astro
 ```
 
 **Use case**: When a Pencil design already exists (created manually or by another team member) and you need to implement it as a responsive page.
@@ -665,7 +670,7 @@ import logoImage from '/docs/assets/logo.png'
 **Error**: User mentions a skill that doesn't exist
 
 **Response**:
-"That skill doesn't exist yet. Available skills are: create-page-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, create-components-from-wireframe, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil, convert-images-to-webp. Which would you like to use?"
+"That skill doesn't exist yet. Available skills are: create-page-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, create-components-from-wireframe, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil, convert-images-to-webp, generate-pencil-images. Which would you like to use?"
 
 ### Tailwind Not Working
 
