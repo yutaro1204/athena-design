@@ -10,7 +10,7 @@ This is a **wireframe-driven frontend development project** that supports both R
 
 This project uses **custom Claude Code skills** for wireframe-driven development:
 
-- **skills/**: 8 custom commands for the workflow
+- **skills/**: 10 custom commands for the workflow
 - **docs/**: Example artifacts (wireframes, assets, documentation) that skills reference
 - **.claude/**: Claude Code configuration (settings only)
 - **CLAUDE.md**: This file - project instructions for Claude
@@ -21,16 +21,35 @@ This project uses **custom Claude Code skills** for wireframe-driven development
 - **Framework**: React 18 or Astro (auto-detected or specified)
 - **Build Tool**: Vite (React) or Astro
 - **Styling**: Tailwind CSS v4
-- **Design Format**: SVG wireframes
+- **Design Format**: SVG wireframes, Pencil (.pen) design files
 - **Asset Format**: WebP (with JPEG fallback), SVG for icons/logos
 
 ## Key Concepts
 
-### Wireframe-Driven Development
+### Recommended Workflow: Pencil Design Path
+
+The **recommended workflow** uses Pencil (.pen) designs as an intermediate high-fidelity design step between wireframes and code. This path produces better results because it includes AI-generated images, precise visual verification, and a single implementation step that handles responsive design and images together.
 
 1. **Design Phase**: Wireframes are created as SVG files with unique 4-digit IDs (0001, 0002, etc.)
+2. **Pencil Design Phase**: High-fidelity Pencil designs are generated from wireframes with AI images
+3. **Implementation Phase**: Responsive pages are implemented directly from Pencil designs
+
+```bash
+# Recommended workflow
+/create-page-wireframe "page description"
+/create-pencil-design {NNNN} 1200   # Desktop
+/create-pencil-design {NNNN} 375    # Mobile
+/create-page-from-pencil design.pen
+npm run dev
+```
+
+### Legacy Workflow: Direct Wireframe-to-Code
+
+The standard wireframe-to-code path is still available but involves more manual steps (responsive design, asset creation, asset integration as separate phases):
+
+1. **Design Phase**: Wireframes are created as SVG files
 2. **Planning Phase**: Responsive designs and asset requirements are generated from wireframes
-3. **Implementation Phase**: React components are created following wireframe specifications
+3. **Implementation Phase**: React/Astro components are created following wireframe specifications
 4. **Integration Phase**: Responsive design and assets are applied to components
 
 ### Directory Structure
@@ -39,7 +58,7 @@ This project uses **custom Claude Code skills** for wireframe-driven development
 project/
 ├── .claude/                                  # Claude Code configuration
 │   └── settings.json                         # Claude Code settings
-├── skills/                                   # Custom Claude Code skills (8 skills)
+├── skills/                                   # Custom Claude Code skills (10 skills)
 │   ├── create-page-wireframe/
 │   ├── create-page-from-wireframe/
 │   ├── create-responsive-design/
@@ -47,7 +66,9 @@ project/
 │   ├── create-required-assets-list/
 │   ├── apply-required-assets/
 │   ├── create-components-from-wireframe/
-│   └── generate-wireframe-catalog/
+│   ├── generate-wireframe-catalog/
+│   ├── create-pencil-design/
+│   └── create-page-from-pencil/
 ├── docs/                                     # Example artifacts and assets
 │   ├── wireframes/{NNNN}/                    # Wireframe ID directory
 │   │   ├── {page-name}-wireframe.svg         # Original wireframe design
@@ -108,7 +129,7 @@ project/
 
 ## Available Skills
 
-The project has 8 custom Claude Code skills for frontend development (React and Astro):
+The project has 10 custom Claude Code skills for frontend development (React and Astro):
 
 1. **create-page-wireframe**: Creates SVG wireframe designs
 2. **create-components-from-wireframe**: Extracts reusable component SVGs from wireframes
@@ -118,19 +139,26 @@ The project has 8 custom Claude Code skills for frontend development (React and 
 6. **create-required-assets-list**: Generates asset requirements documentation
 7. **apply-required-assets**: Integrates assets into React or Astro components (framework auto-detected)
 8. **generate-wireframe-catalog**: Generates comprehensive wireframe catalog documentation
+9. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
+10. **create-page-from-pencil**: Implements responsive React or Astro pages from Pencil (.pen) design files
 
 ## Working with This Project
 
 ### When User Asks to Create a Page
+
+**Recommended: Pencil Design Path** (produces responsive pages with images in fewer steps)
 
 1. **Check if wireframe exists**: Look in `docs/wireframes/{NNNN}/`
 2. **If no wireframe**: Suggest creating one with `/create-page-wireframe`
    - **If user mentions a specific website**: Ask if they want to reference it: `/create-page-wireframe "spec" "https://example.com"`
    - **If user says "like [website]"**: Use URL parameter: `/create-page-wireframe "description" "https://website.com"`
    - **If user provides URL**: Use it to analyze and extract design system
-3. **If wireframe exists**: Use `/create-page-from-wireframe {NNNN}`
-   - Framework will be auto-detected (checks for Astro config or React files)
-   - Or specify explicitly: `/create-page-from-wireframe {NNNN} react` or `/create-page-from-wireframe {NNNN} astro`
+3. **If wireframe exists**: Recommend the Pencil design path:
+   - `/create-pencil-design {NNNN} 1200` (desktop frame)
+   - `/create-pencil-design {NNNN} 375` (mobile frame)
+   - Review and refine designs in Pencil editor
+   - `/create-page-from-pencil design.pen`
+4. **Alternative (legacy path)**: Use `/create-page-from-wireframe {NNNN}` followed by apply-responsive-design and apply-required-assets
 
 **URL Reference Usage**:
 
@@ -157,6 +185,24 @@ The project has 8 custom Claude Code skills for frontend development (React and 
 2. **If not exists**: Generate with `/create-required-assets-list {NNNN}`
 3. **Check docs/assets/**: Verify assets are placed correctly
 4. **Apply assets**: Use `/apply-required-assets`
+
+### When User Asks to Create a Pencil Design
+
+1. **Check if wireframe exists**: Look in `docs/wireframes/{NNNN}/`
+2. **If wireframe exists**: Use `/create-pencil-design {NNNN} {breakpoint}`
+   - Desktop: `/create-pencil-design 0001 1200`
+   - Mobile: `/create-pencil-design 0001 375`
+3. **If no wireframe**: Suggest creating one with `/create-page-wireframe` first
+4. **Output**: A high-fidelity Pencil design frame in the active `.pen` file
+
+### When User Asks to Implement a Pencil Design as Code
+
+1. **Check if .pen file exists**: Look for `design.pen` or the specified `.pen` file
+2. **If .pen file exists**: Use `/create-page-from-pencil design.pen`
+   - Framework will be auto-detected (Astro or React)
+   - Or specify explicitly: `/create-page-from-pencil design.pen astro` or `/create-page-from-pencil design.pen react`
+3. **Process**: Analyzes desktop and mobile screens in the `.pen` file, extracts images, implements responsive page
+4. **Output**: Responsive page with actual images from the design
 
 ### When User Asks About Wireframe Catalog or Documentation
 
@@ -291,9 +337,23 @@ Skills must be called in a specific sequence. **Calling them out of order will c
    → Requires: Steps 4, 5, 6, AND 7 complete
    → ⚠️ Must run AFTER apply-responsive-design
 
-# PHASE 5: TESTING
+# PHASE 5: PENCIL DESIGN (Alternative Path)
 # ────────────────────────────────────────
-9️⃣ npm run dev
+9️⃣ /create-pencil-design {NNNN} {breakpoint}
+   → Output: High-fidelity design frame in .pen file
+   → Why: Visual design with generated images before coding
+   → Skip: ✅ Optional alternative to direct wireframe-to-code
+   → Requires: Step 1 complete
+
+🔟 /create-page-from-pencil {pen-file}
+   → Output: src/pages/{page-name}.astro or src/App.tsx (with images)
+   → Why: Implement from high-fidelity Pencil design
+   → Skip: ✅ If implementing directly from wireframe
+   → Requires: Step 9 complete (or existing .pen file)
+
+# PHASE 6: TESTING
+# ────────────────────────────────────────
+1️⃣1️⃣ npm run dev
    → Start dev server and test
 ```
 
@@ -312,9 +372,14 @@ create-page-wireframe (1)
     │       └─→ [manual asset creation] (7)
     │               └─→ apply-required-assets (8)
     │
-    └─→ create-page-from-wireframe (5)
-            └─→ apply-responsive-design (6) ⚠️
-                    └─→ apply-required-assets (8)
+    ├─→ create-page-from-wireframe (5)
+    │       └─→ apply-responsive-design (6) ⚠️
+    │               └─→ apply-required-assets (8)
+    │
+    └─→ create-pencil-design (9) [⭐ Recommended Path]
+            → Generates high-fidelity .pen design from wireframe
+            └─→ create-page-from-pencil (10)
+                    → Implements responsive page from .pen file with images
 ```
 
 ### Critical Rules for Claude
@@ -342,7 +407,7 @@ create-page-wireframe (1)
 
 ### Common Patterns
 
-**Pattern 1: Creating a New Page**
+**Pattern 1: Creating a New Page (Legacy Path)**
 
 ```bash
 /create-page-wireframe "page description"
@@ -353,6 +418,8 @@ create-page-wireframe (1)
 [user creates assets]
 /apply-required-assets
 ```
+
+> Note: The **Pencil Design Path (Pattern 9)** is recommended over this approach. It produces responsive pages with AI-generated images in fewer steps.
 
 **Pattern 2: Desktop-Only Page (Skip Responsive)**
 
@@ -454,6 +521,45 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 ```
 
 **Use case**: Maintaining up-to-date documentation of all wireframes, components, and implementation status. The catalog serves as a single source of truth for the design system.
+
+### Pattern 9: Pencil Design Workflow (Recommended)
+
+```bash
+# 1. Create wireframe
+/create-page-wireframe "page description"
+
+# 2. Generate Pencil design frames from wireframe
+/create-pencil-design {NNNN} 1200   # Desktop frame
+/create-pencil-design {NNNN} 375    # Mobile frame
+
+# 3. Review and refine designs in Pencil editor
+# (Manual step: adjust layouts, add images, tweak styling)
+
+# 4. Implement page from Pencil design
+/create-page-from-pencil design.pen
+```
+
+**This is the recommended workflow for new pages.** The Pencil design path produces better results because:
+- AI-generated images are included automatically (no manual asset creation)
+- Responsive design is handled in a single implementation step
+- Visual verification is possible before coding via Pencil screenshots
+- Fewer skill invocations needed (4 steps vs 7+ in the legacy path)
+
+### Pattern 10: Pencil-to-Code (Existing .pen File)
+
+```bash
+# If .pen file already exists with designs
+/create-page-from-pencil design.pen
+
+# Specify framework explicitly
+/create-page-from-pencil design.pen astro
+/create-page-from-pencil design.pen react
+
+# Specify output path
+/create-page-from-pencil design.pen astro src/pages/landing.astro
+```
+
+**Use case**: When a Pencil design already exists (created manually or by another team member) and you need to implement it as a responsive page.
 
 **Benefits**:
 
@@ -557,7 +663,7 @@ import logoImage from '/docs/assets/logo.png'
 **Error**: User mentions a skill that doesn't exist
 
 **Response**:
-"That skill doesn't exist yet. Available skills are: create-page-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets. Which would you like to use?"
+"That skill doesn't exist yet. Available skills are: create-page-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, create-components-from-wireframe, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil. Which would you like to use?"
 
 ### Tailwind Not Working
 
@@ -630,7 +736,8 @@ When user request matches multiple approaches:
 
 **Scenario**: "Create a landing page"
 
-- ✅ Use: `/create-page-wireframe` → `/create-page-from-wireframe`
+- ✅ Best: `/create-page-wireframe` → `/create-pencil-design` → `/create-page-from-pencil` (recommended Pencil path)
+- ✅ OK: `/create-page-wireframe` → `/create-page-from-wireframe` (legacy path)
 - ❌ Don't: Write component from scratch without wireframe
 
 ## Communication Style
@@ -677,13 +784,15 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 
 This project uses a **structured, skill-based workflow** for frontend development. As Claude:
 
-1. **Understand the workflow**: Design → Plan → Implement → Integrate
+1. **Recommend the Pencil workflow**: Wireframe → Pencil Design → Code is the preferred path for new pages
 2. **Use skills appropriately**: Match tasks to available skills
 3. **Follow Tailwind v4 conventions**: No config files, use @import
 4. **Maintain mobile-first approach**: Base styles for mobile, prefixes for desktop
-5. **Reference wireframes**: Check designs before implementing
-6. **Guide users**: Suggest next steps in the workflow
+5. **Reference designs**: Check wireframes and .pen files before implementing
+6. **Guide users**: Suggest the Pencil design path and next steps in the workflow
 7. **Preserve project patterns**: Colors, structure, TypeScript types
+
+**Recommended Workflow**: `/create-page-wireframe` → `/create-pencil-design` → `/create-page-from-pencil` → `npm run dev`
 
 **Goal**: Enable efficient, consistent frontend development through automation and best practices.
 

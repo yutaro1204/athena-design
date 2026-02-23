@@ -14,7 +14,29 @@ A comprehensive set of Claude Code skills for wireframe-driven frontend developm
 
 ## Overview
 
-This skill collection enables a structured, design-first approach to frontend development:
+This skill collection enables a structured, design-first approach to frontend development.
+
+### Recommended Workflow: Pencil Design Path
+
+The **recommended workflow** uses Pencil (.pen) designs as a high-fidelity design step between wireframes and code:
+
+1. **Design Phase**: Create wireframes as SVG files
+2. **Pencil Design Phase**: Generate high-fidelity designs from wireframes with AI-generated images
+3. **Implementation Phase**: Implement responsive pages directly from Pencil designs
+
+```bash
+/create-page-wireframe "page description"
+/create-pencil-design 0001 1200   # Desktop
+/create-pencil-design 0001 375    # Mobile
+/create-page-from-pencil design.pen
+npm run dev
+```
+
+This path is recommended because it produces responsive pages with images in fewer steps, allows visual verification before coding, and handles responsive design and image integration in a single implementation step.
+
+### Legacy Workflow: Direct Wireframe-to-Code
+
+The standard wireframe-to-code path is still available for cases where Pencil is not needed:
 
 1. **Design Phase**: Create wireframes as SVG files
 2. **Planning Phase**: Generate responsive designs and asset requirements
@@ -29,7 +51,7 @@ All skills work together in a seamless workflow, ensuring consistency from desig
 project/
 ├── .claude/
 │   └── settings.json              # Claude Code settings
-├── skills/                        # Custom Claude Code skills
+├── skills/                        # Custom Claude Code skills (10 skills)
 │   ├── create-page-wireframe/
 │   ├── create-components-from-wireframe/
 │   ├── create-page-from-wireframe/
@@ -37,7 +59,9 @@ project/
 │   ├── apply-responsive-design/
 │   ├── create-required-assets-list/
 │   ├── apply-required-assets/
-│   └── generate-wireframe-catalog/
+│   ├── generate-wireframe-catalog/
+│   ├── create-pencil-design/
+│   └── create-page-from-pencil/
 ├── docs/                          # Example artifacts and documentation
 │   ├── wireframes/                # Wireframe files
 │   │   ├── README.md              # Wireframe catalog (auto-generated)
@@ -141,10 +165,12 @@ project/
 ```
 
 **Input**:
+
 - Wireframe ID (4-digit number, required)
 - Framework (optional: 'react' or 'astro', auto-detected if not specified)
 
 **Output**:
+
 - React: Component in `src/App.tsx` with Tailwind CSS
 - Astro: Page file in `src/pages/{page-name}.astro` with Tailwind CSS
 
@@ -200,6 +226,7 @@ project/
 - Output path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
 
 **Output**:
+
 - React: Updated component with responsive Tailwind CSS classes (using `className`)
 - Astro: Updated page file with responsive Tailwind CSS classes (using `class`)
 
@@ -252,6 +279,7 @@ project/
 **Input**: Output path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
 
 **Output**:
+
 - React: Updated component with image imports and proper usage (e.g., `<img src={logoImage} />`)
 - Astro: Updated page with image imports and proper usage (e.g., `<img src={logoImage.src} />`)
 
@@ -299,11 +327,127 @@ project/
 
 ---
 
+### 9. create-pencil-design
+
+**Purpose**: Generates high-fidelity Pencil (.pen) design frames from existing SVG wireframes
+
+**Usage**:
+
+```bash
+# Desktop design from wireframe 0001 (1200px wide)
+/create-pencil-design 0001 1200
+
+# Mobile design from wireframe 0001 (375px wide)
+/create-pencil-design 0001 375
+
+# Tablet design from wireframe 0002 (768px wide)
+/create-pencil-design 0002 768
+```
+
+**Input**:
+
+- Wireframe ID (4-digit number, required)
+- Breakpoint in pixels (required)
+
+**Output**: Design frame in the active `.pen` file matching the wireframe layout, colors, typography, and content
+
+**Features**:
+
+- Faithfully reproduces wireframe colors, typography, and layout
+- Creates reusable components for repeated patterns (cards, category boxes)
+- Generates AI images for placeholders
+- Supports desktop and mobile breakpoints
+- Uses Pencil MCP tools for all .pen file operations
+
+**When to use**: After wireframe is created, when you want a visual design phase with generated images before implementing code
+
+---
+
+### 10. create-page-from-pencil
+
+**Purpose**: Implements responsive React or Astro pages from Pencil (.pen) design files
+
+**Usage**:
+
+```bash
+# Auto-detect framework
+/create-page-from-pencil design.pen
+
+# Specify framework
+/create-page-from-pencil design.pen astro
+/create-page-from-pencil design.pen react
+
+# Specify output path
+/create-page-from-pencil design.pen astro src/pages/landing.astro
+```
+
+**Input**:
+
+- Pencil file path (required)
+- Framework (optional: 'react' or 'astro', auto-detected if not specified)
+- Output path (optional, auto-determined from page name)
+
+**Output**:
+
+- React: Component in `src/App.tsx` with responsive Tailwind CSS and images
+- Astro: Page file in `src/pages/{page-name}.astro` with responsive Tailwind CSS and images
+
+**Features**:
+
+- Analyzes both desktop and mobile screens in the .pen file
+- Extracts generated images and copies them to `public/images/`
+- Implements mobile-first responsive design with `lg:` breakpoint
+- Maps Pen properties to Tailwind CSS classes
+- Uses data-driven patterns for repeated content (cards, categories)
+
+**Prerequisites**:
+
+- A `.pen` file with at least one design screen
+- Pencil MCP server available for reading .pen files
+
+**When to use**: After Pencil designs are approved and ready for implementation
+
+---
+
 ## Skill Execution Order
 
-### Recommended Order for New Pages
+### Recommended Order: Pencil Design Path
 
-When creating a new page from scratch, follow this order:
+When creating a new page from scratch, the **Pencil design path is recommended**:
+
+```bash
+# 🎨 PHASE 1: DESIGN
+# ────────────────────────────────────────
+1️⃣ /create-page-wireframe "page specification"
+   → Creates: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
+
+# 🖌️ PHASE 2: PENCIL DESIGN
+# ────────────────────────────────────────
+2️⃣ /create-pencil-design {NNNN} 1200
+   → Creates: Desktop design frame in .pen file with AI-generated images
+
+3️⃣ /create-pencil-design {NNNN} 375
+   → Creates: Mobile design frame in .pen file with AI-generated images
+
+# 👀 PHASE 3: REVIEW
+# ────────────────────────────────────────
+4️⃣ [OPTIONAL] Review and refine designs in Pencil editor
+
+# 💻 PHASE 4: IMPLEMENTATION
+# ────────────────────────────────────────
+5️⃣ /create-page-from-pencil design.pen
+   → Creates: Responsive page with images (React or Astro, auto-detected)
+   → Handles responsive design and image integration in one step
+
+# ✅ PHASE 5: TESTING
+# ────────────────────────────────────────
+6️⃣ npm run dev
+   → Test responsive design and verify assets
+```
+
+### Legacy Order: Direct Wireframe-to-Code
+
+The standard wireframe-to-code path is still available:
 
 ```bash
 # 🎨 PHASE 1: DESIGN
@@ -346,49 +490,55 @@ When creating a new page from scratch, follow this order:
 
 ### Quick Reference Chart
 
-| Step | Skill                       | Input                     | Output                              | Can Skip?           |
-| ---- | --------------------------- | ------------------------- | ----------------------------------- | ------------------- |
-| 1    | create-page-wireframe       | Specification             | Wireframe SVG                       | ❌ No               |
-| 2    | create-responsive-design    | Wireframe ID + Breakpoint | Responsive wireframe                | ✅ If desktop-only  |
-| 3    | create-required-assets-list | Wireframe ID              | assets-list.md                      | ✅ If no images     |
-| 4    | create-page-from-wireframe  | Wireframe ID + Framework  | React/Astro component               | ❌ No               |
-| 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive React/Astro component    | ✅ If desktop-only  |
-| 6    | [Manual]                    | assets-list.md            | Image files                         | ✅ If no images     |
-| 7    | apply-required-assets       | Output path               | React/Astro component with images   | ✅ If no images     |
-| 8    | npm run dev                 | -                         | Running dev server                  | ❌ No (for testing) |
+**Recommended Path (Pencil Design):**
+
+| Step | Skill                  | Input                     | Output                      | Required? |
+| ---- | ---------------------- | ------------------------- | --------------------------- | --------- |
+| 1    | create-page-wireframe  | Specification             | Wireframe SVG               | ❌ No     |
+| 2    | create-pencil-design   | Wireframe ID + Breakpoint | .pen design frame (desktop) | ❌ No     |
+| 3    | create-pencil-design   | Wireframe ID + Breakpoint | .pen design frame (mobile)  | ❌ No     |
+| 4    | [Optional review]      | -                         | Refined designs             | ✅ Skip   |
+| 5    | create-page-from-pencil| .pen file + Framework     | Responsive page with images | ❌ No     |
+| 6    | npm run dev            | -                         | Running dev server          | ❌ No     |
+
+**Legacy Path (Direct Wireframe-to-Code):**
+
+| Step | Skill                       | Input                     | Output                            | Can Skip?          |
+| ---- | --------------------------- | ------------------------- | --------------------------------- | ------------------- |
+| 1    | create-page-wireframe       | Specification             | Wireframe SVG                     | ❌ No               |
+| 2    | create-responsive-design    | Wireframe ID + Breakpoint | Responsive wireframe              | ✅ If desktop-only  |
+| 3    | create-required-assets-list | Wireframe ID              | assets-list.md                    | ✅ If no images     |
+| 4    | create-page-from-wireframe  | Wireframe ID + Framework  | React/Astro component             | ❌ No               |
+| 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive React/Astro component  | ✅ If desktop-only  |
+| 6    | [Manual]                    | assets-list.md            | Image files                       | ✅ If no images     |
+| 7    | apply-required-assets       | Output path               | React/Astro component with images | ✅ If no images     |
+| 8    | npm run dev                 | -                         | Running dev server                | ❌ No               |
 
 ### Minimal Workflows
 
-**Simple Page (No responsive, no images):**
+**Recommended: Pencil Design Path (responsive page with images):**
 
 ```bash
-# Auto-detect framework
-/create-page-wireframe
-/create-page-from-wireframe 0001
-npm run dev
-
-# Or specify framework explicitly
-/create-page-wireframe
-/create-page-from-wireframe 0001 react  # Creates src/App.tsx
-/create-page-from-wireframe 0001 astro  # Creates src/pages/{name}.astro
+# Wireframe → Pencil design → Code
+/create-page-wireframe "landing page specification"
+/create-pencil-design 0001 1200   # Desktop design frame
+/create-pencil-design 0001 375    # Mobile design frame
+# Review and refine in Pencil editor
+/create-page-from-pencil design.pen
 npm run dev
 ```
 
-**Responsive Page (No images):**
+**Legacy: Simple Page (No responsive, no images):**
 
 ```bash
-# React or Astro (auto-detected)
 /create-page-wireframe
-/create-responsive-design 0001 768
 /create-page-from-wireframe 0001
-/apply-responsive-design 0001 768
 npm run dev
 ```
 
-**Complete Page (Everything):**
+**Legacy: Complete Page (responsive + images):**
 
 ```bash
-# Works for both React and Astro
 /create-page-wireframe
 /create-responsive-design 0001 768
 /create-required-assets-list 0001
@@ -453,7 +603,42 @@ npm run dev
 
 ## Workflow
 
-### Complete Development Flow
+### Recommended: Pencil Design Flow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     1. DESIGN PHASE                             │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+        /create-page-wireframe "landing page specification"
+                              ↓
+              docs/wireframes/0001/page-wireframe.svg
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                  2. PENCIL DESIGN PHASE                         │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+             /create-pencil-design 0001 1200  (Desktop)
+             /create-pencil-design 0001 375   (Mobile)
+                              ↓
+            High-fidelity .pen design frames with images
+                              ↓
+         [Review and refine designs in Pencil editor]
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                3. IMPLEMENTATION PHASE                          │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+               /create-page-from-pencil design.pen
+                              ↓
+      Responsive page with images (React or Astro)
+                              ↓
+                        npm run dev
+                              ↓
+                    ✅ DONE! Review in browser
+```
+
+### Legacy: Direct Wireframe-to-Code Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -507,54 +692,63 @@ npm run dev
 
 ## Quick Start
 
-### Example: Creating a Landing Page
+### Example: Creating a Landing Page (Recommended Pencil Path)
 
 ```bash
 # 1. Create wireframe
 /create-page-wireframe "TCG landing page with hero, features, and products"
 # Output: docs/wireframes/0001/tcg-landing-page-wireframe.svg
 
-# 2. Create responsive design visualization
+# 2. Create Pencil design frames
+/create-pencil-design 0001 1200
+# Output: Desktop design frame in design.pen with AI-generated images
+
+/create-pencil-design 0001 375
+# Output: Mobile design frame in design.pen with AI-generated images
+
+# 3. (Optional) Review and refine designs in Pencil editor
+
+# 4. Implement the page from Pencil design (auto-detects framework)
+/create-page-from-pencil design.pen
+# Output: src/pages/tcg-landing-page.astro (Astro) or src/App.tsx (React)
+# Includes: responsive design, extracted images, mobile-first Tailwind
+
+# 5. Run development server
+npm run dev
+```
+
+### Example: Legacy Path (Direct Wireframe-to-Code)
+
+```bash
+# 1. Create wireframe
+/create-page-wireframe "TCG landing page with hero, features, and products"
+
+# 2-3. Create responsive design + asset list
 /create-responsive-design 0001 768
-# Output: docs/wireframes/0001/768/tcg-landing-page-responsive-wireframe.svg
-
-# 3. Generate asset requirements
 /create-required-assets-list 0001
-# Output: docs/assets-list.md
 
-# 4. Implement the page (auto-detects framework)
+# 4-5. Implement + apply responsive design
 /create-page-from-wireframe 0001
-# Output: src/App.tsx (React) or src/pages/tcg-landing-page.astro (Astro)
-
-# 5. Apply responsive design
 /apply-responsive-design 0001 768
-# Output: Updated component/page with responsive classes
 
-# 6. Create/place assets in docs/assets/
-# (Manual step: create images based on assets-list.md)
-
-# 7. Integrate assets
+# 6-7. Create assets manually, then integrate
+[create assets manually]
 /apply-required-assets
-# Output: Updated component/page with image imports
-# React: <img src={logoImage} />
-# Astro: <img src={logoImage.src} />
 
-# 8. Run development server
+# 8. Test
 npm run dev
 ```
 
 ### Example: Explicitly Specifying Framework
 
 ```bash
-# For React project
-/create-page-from-wireframe 0001 react
-/apply-responsive-design 0001 768 src/App.tsx
-/apply-required-assets src/App.tsx
+# Pencil path (recommended)
+/create-page-from-pencil design.pen astro
+/create-page-from-pencil design.pen react
 
-# For Astro project
+# Legacy path
+/create-page-from-wireframe 0001 react
 /create-page-from-wireframe 0001 astro
-/apply-responsive-design 0001 768 src/pages/landing.astro
-/apply-required-assets src/pages/landing.astro
 ```
 
 ## Detailed Usage
@@ -590,6 +784,7 @@ Skills automatically detect your project framework by checking:
 2. **React detection**: Looks for React files in `src/` directory
 
 **Auto-detection (recommended):**
+
 ```bash
 /create-page-from-wireframe 0001
 /apply-responsive-design 0001 768
@@ -597,6 +792,7 @@ Skills automatically detect your project framework by checking:
 ```
 
 **Manual specification:**
+
 ```bash
 # Force React
 /create-page-from-wireframe 0001 react
@@ -607,16 +803,16 @@ Skills automatically detect your project framework by checking:
 
 **Key Differences:**
 
-| Feature              | React                       | Astro                                |
-| -------------------- | --------------------------- | ------------------------------------ |
-| File extension       | `.tsx`                      | `.astro`                             |
-| Output path          | `src/App.tsx`               | `src/pages/{page-name}.astro`        |
-| CSS class attribute  | `className="..."`           | `class="..."`                        |
-| Comments             | `{/* comment */}`           | `<!-- comment -->`                   |
-| Image imports        | `<img src={img} />`         | `<img src={img.src} />`              |
-| Import location      | Top of file                 | Frontmatter (`---`)                  |
-| Routing              | Manual or library-based     | File-based (automatic)               |
-| Component structure  | JSX in function body        | Frontmatter + HTML-like template     |
+| Feature             | React                   | Astro                            |
+| ------------------- | ----------------------- | -------------------------------- |
+| File extension      | `.tsx`                  | `.astro`                         |
+| Output path         | `src/App.tsx`           | `src/pages/{page-name}.astro`    |
+| CSS class attribute | `className="..."`       | `class="..."`                    |
+| Comments            | `{/* comment */}`       | `<!-- comment -->`               |
+| Image imports       | `<img src={img} />`     | `<img src={img.src} />`          |
+| Import location     | Top of file             | Frontmatter (`---`)              |
+| Routing             | Manual or library-based | File-based (automatic)           |
+| Component structure | JSX in function body    | Frontmatter + HTML-like template |
 
 ### Asset Organization
 
@@ -836,6 +1032,7 @@ The project uses Vite (React) or Astro as the build tool:
 ### Framework-Specific Features
 
 **React + TypeScript:**
+
 - Type safety for props and components
 - Component-based architecture with `.tsx` files
 - JSX syntax with `className` for CSS classes
@@ -844,6 +1041,7 @@ The project uses Vite (React) or Astro as the build tool:
 - Single-page application (SPA) architecture
 
 **Astro:**
+
 - File-based routing (pages in `src/pages/`)
 - Component frontmatter with `---` delimiters
 - HTML-like syntax with `class` for CSS classes
@@ -854,6 +1052,7 @@ The project uses Vite (React) or Astro as the build tool:
 - Multi-page application (MPA) architecture
 
 **Astro Routing Examples:**
+
 ```
 src/pages/index.astro       → /
 src/pages/about.astro       → /about
@@ -881,7 +1080,7 @@ For issues or questions:
 
 ---
 
-**Version**: 1.3
-**Last Updated**: 2026-02-22
+**Version**: 1.4
+**Last Updated**: 2026-02-23
 **Frameworks**: React, Astro
-**Skills**: 8 (create-page-wireframe, create-components-from-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, generate-wireframe-catalog)
+**Skills**: 10 (create-page-wireframe, create-components-from-wireframe, create-page-from-wireframe, create-responsive-design, apply-responsive-design, create-required-assets-list, apply-required-assets, generate-wireframe-catalog, create-pencil-design, create-page-from-pencil)
