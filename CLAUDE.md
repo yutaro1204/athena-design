@@ -145,7 +145,7 @@ The project has 11 custom Claude Code skills for frontend development (React and
 7. **apply-required-assets**: Integrates assets into React or Astro components (framework auto-detected)
 8. **generate-wireframe-catalog**: Generates comprehensive wireframe catalog documentation
 9. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
-10. **create-page-from-pencil**: Implements responsive React or Astro pages from Pencil (.pen) design files
+10. **create-page-from-pencil**: Implements responsive React or Astro pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
 11. **convert-images-to-webp**: Converts PNG and JPEG images to WebP format for optimized file sizes
 12. **generate-pencil-images**: Generates or regenerates AI images (WebP) in `pencil/images/` for nodes in the selected Pencil (.pen) design frame
 

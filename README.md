@@ -370,12 +370,12 @@ project/
 
 ### 10. create-page-from-pencil
 
-**Purpose**: Implements responsive React or Astro pages from Pencil (.pen) design files
+**Purpose**: Implements responsive React or Astro pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
 
 **Usage**:
 
 ```bash
-# Auto-detect framework
+# Auto-detect framework, default assets directory (src/assets/images)
 /create-page-from-pencil pencil/design.pen
 
 # Specify framework
@@ -384,23 +384,29 @@ project/
 
 # Specify output path
 /create-page-from-pencil pencil/design.pen astro src/pages/landing.astro
+
+# Specify output path and assets directory
+/create-page-from-pencil pencil/design.pen astro src/pages/index.astro src/assets/images
 ```
 
 **Input**:
 
-- Pencil file path (required)
+- Pencil file path (optional, defaults to `pencil/design.pen`)
 - Framework (optional: 'react' or 'astro', auto-detected if not specified)
 - Output path (optional, auto-determined from page name)
+- Assets directory path (optional, defaults to `src/assets/images`)
 
 **Output**:
 
-- React: Component in `src/App.tsx` with responsive Tailwind CSS and images
-- Astro: Page file in `src/pages/{page-name}.astro` with responsive Tailwind CSS and images
+- React: Component in `src/App.tsx` with responsive Tailwind CSS and image imports
+- Astro: Page file in `src/pages/{page-name}.astro` with responsive Tailwind CSS and image imports
+- Images copied from `pencil/images/` to the assets directory with descriptive names
 
 **Features**:
 
 - Analyzes both desktop and mobile screens in the .pen file
-- Extracts generated images and copies them to `public/images/`
+- Copies images from `pencil/images/` to the assets directory with descriptive names (WebP format)
+- Generates import statements for images in the output file
 - Implements mobile-first responsive design with `lg:` breakpoint
 - Maps Pen properties to Tailwind CSS classes
 - Uses data-driven patterns for repeated content (cards, categories)
@@ -409,6 +415,7 @@ project/
 
 - A `.pen` file with at least one design screen
 - Pencil MCP server available for reading .pen files
+- Images generated in `pencil/images/` (via `/generate-pencil-images` or `/create-pencil-design`)
 
 **When to use**: After Pencil designs are approved and ready for implementation
 

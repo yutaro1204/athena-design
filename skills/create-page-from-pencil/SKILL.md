@@ -1,7 +1,7 @@
 ---
 name: create-page-from-pencil
 description: Implements a responsive Astro/React page from a Pencil (.pen) design file
-argument-hint: '[pen-file] [framework] [output-path]'
+argument-hint: '[pen-file] [framework] [output-path] [assets-path]'
 disable-model-invocation: true
 ---
 
@@ -15,11 +15,13 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
    - First argument: path to .pen file (optional, defaults to `pencil/design.pen`)
    - Second argument: framework - "react" or "astro" (optional, will auto-detect if not provided)
    - Third argument: output file path (optional, uses framework defaults if not provided)
+   - Fourth argument: assets directory path (optional, defaults to `src/assets/images`)
    - Examples:
-     - (no args): Uses `pencil/design.pen`, auto-detect framework, default output
+     - (no args): Uses `pencil/design.pen`, auto-detect framework, default output, assets in `src/assets/images`
      - `pencil/design.pen`: Explicit pen file, auto-detect framework
      - `pencil/design.pen astro`: Pen file with Astro framework
-     - `pencil/design.pen react src/App.tsx`: Pen file, React, custom output path
+     - `pencil/design.pen astro src/pages/index.astro`: Pen file, Astro, custom output path
+     - `pencil/design.pen astro src/pages/index.astro src/assets/images`: All arguments explicit
    - If the pen file does not exist, inform the user and stop
 
 2. **Auto-detect framework** (if not explicitly provided):
@@ -61,18 +63,24 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
      - Navigation changes (e.g., fewer nav links on mobile)
    - Document the responsive delta for each section
 
-6. **Extract and copy images**:
-   - From the design analysis, collect all image URLs (e.g., `./images/generated-*.png`)
-   - These images exist in the project's `images/` directory (relative to the .pen file)
-   - Create the `public/images/` directory (for Astro) or appropriate static directory
-   - Copy each image to the public directory with a descriptive name:
-     - Logo: `logo.png`
-     - Hero background: `hero-bg.png`
-     - Card images: `card-{title-slug}.png`
-     - Category images: `cat-{name-slug}.png`
-     - Other section images: `{section}-{description}.png`
+6. **Extract and copy images to the assets directory**:
+   - From the design analysis, collect all image URLs (e.g., `./images/generated-*.webp`)
+   - These images exist in the `pencil/images/` directory (relative to the project root)
+   - Create the assets directory if it does not exist:
+     ```bash
+     mkdir -p {assets-path}
+     ```
+   - Copy each image from `pencil/images/` to the assets directory with a descriptive name:
+     - Logo: `logo.webp`
+     - Hero background: `hero-bg.webp`
+     - Card images: `card-{title-slug}.webp`
+     - Category images: `cat-{name-slug}.webp`
+     - Other section images: `{section}-{description}.webp`
    - If an image is square but contains horizontal content (e.g., a logo), crop whitespace using `sips` to match the design aspect ratio
-   - Record the mapping from design node → public image path
+   - Record the mapping from design node → assets image path
+   - The output page file will import images from this assets directory:
+     - **Astro**: `import logoImg from '{relative-assets-path}/logo.webp'` with `logoImg.src` for usage
+     - **React**: `import logoImg from '{relative-assets-path}/logo.webp'` for direct usage
 
 7. **Determine the responsive breakpoint**:
    - Compare the desktop and mobile frame widths from the design
@@ -273,14 +281,16 @@ Compare desktop and mobile frames in the design to determine:
 ## Image Extraction Workflow
 
 1. **Identify images in the design**: Look for `fill: {type: "image", url: "..."}` properties
-2. **Locate source files**: Images are stored relative to the .pen file (e.g., `./images/generated-*.png`)
-3. **Create public directory**: `mkdir -p public/images/`
-4. **Copy with descriptive names**: Map generated filenames to semantic names
+2. **Locate source files**: Images are stored in `pencil/images/` as WebP files (e.g., `pencil/images/generated-*.webp`)
+3. **Create assets directory**: `mkdir -p {assets-path}` (defaults to `src/assets/images`)
+4. **Copy with descriptive names**: Map generated filenames to semantic names (e.g., `logo.webp`, `hero-bg.webp`)
 5. **Handle square logos**: If a logo image is square (1:1) but displayed in a wide frame, crop whitespace:
    ```bash
-   sips --cropToHeightWidth {height} {width} --cropOffset {top} 0 input.png --out output.png
+   sips --cropToHeightWidth {height} {width} --cropOffset {top} 0 input.webp --out output.webp
    ```
-6. **Reference in HTML**: Use `/images/{name}.png` paths (Astro serves from `public/`)
+6. **Reference in code**: Import images from the assets directory:
+   - **Astro**: `import logoImg from '../assets/images/logo.webp'` → use `logoImg.src`
+   - **React**: `import logoImg from '../assets/images/logo.webp'` → use `logoImg` directly
 
 ## Data-Driven Content Pattern
 
@@ -291,15 +301,19 @@ Extract repeated elements into data arrays for clean rendering:
 ```astro
 ---
 import Layout from '../layouts/Layout.astro'
+import card1Img from '../assets/images/card-1.webp'
+import card2Img from '../assets/images/card-2.webp'
+import catAImg from '../assets/images/cat-a.webp'
+import catBImg from '../assets/images/cat-b.webp'
 
 const cards = [
-  { title: 'Card 1', meta: 'Category | $49', image: '/images/card-1.png' },
-  { title: 'Card 2', meta: 'Category | $89', image: '/images/card-2.png' },
+  { title: 'Card 1', meta: 'Category | $49', image: card1Img.src },
+  { title: 'Card 2', meta: 'Category | $89', image: card2Img.src },
 ]
 
 const categories = [
-  { name: 'Category A', count: '450+ items', image: '/images/cat-a.png' },
-  { name: 'Category B', count: '320+ items', image: '/images/cat-b.png' },
+  { name: 'Category A', count: '450+ items', image: catAImg.src },
+  { name: 'Category B', count: '320+ items', image: catBImg.src },
 ]
 ---
 
@@ -330,9 +344,12 @@ const categories = [
 ### React Example
 
 ```tsx
+import card1Img from '../assets/images/card-1.webp'
+import card2Img from '../assets/images/card-2.webp'
+
 const cards = [
-  { title: 'Card 1', meta: 'Category | $49', image: '/images/card-1.png' },
-  { title: 'Card 2', meta: 'Category | $89', image: '/images/card-2.png' },
+  { title: 'Card 1', meta: 'Category | $49', image: card1Img },
+  { title: 'Card 2', meta: 'Category | $89', image: card2Img },
 ]
 
 export default function Page() {
@@ -378,10 +395,14 @@ export default function Page() {
 
 ## Hero Section with Background Image Pattern
 
-```html
+```astro
+---
+import heroBgImg from '../assets/images/hero-bg.webp'
+---
+
 <section
   class="relative flex flex-col items-center justify-center h-[400px] lg:h-[500px] px-4 lg:px-10 bg-cover bg-center"
-  style="background-image: url('/images/hero-bg.png');"
+  style={`background-image: url('${heroBgImg.src}');`}
 >
   <div class="absolute inset-0 bg-black/20"></div>
   <h1 class="relative text-[28px] lg:text-[42px] font-bold text-white text-center drop-shadow-lg">
@@ -396,7 +417,7 @@ export default function Page() {
 ## Usage Examples
 
 ```bash
-# Auto-detect framework, use pencil/design.pen
+# Auto-detect framework, use pencil/design.pen, assets in src/assets/images
 /create-page-from-pencil
 
 # Explicit pen file
@@ -405,11 +426,11 @@ export default function Page() {
 # Astro framework
 /create-page-from-pencil pencil/design.pen astro
 
-# React with custom output
-/create-page-from-pencil pencil/design.pen react src/App.tsx
+# Astro with custom output path
+/create-page-from-pencil pencil/design.pen astro src/pages/index.astro
 
-# Custom pen file path
-/create-page-from-pencil designs/landing.pen astro src/pages/landing.astro
+# All arguments explicit (pen file, framework, output path, assets directory)
+/create-page-from-pencil pencil/design.pen astro src/pages/index.astro src/assets/images
 ```
 
 ## Workflow Example
@@ -424,25 +445,26 @@ export default function Page() {
 **Typical file output:**
 
 ```
-public/
-  images/
-    logo.png
-    hero-bg.png
-    card-{name}.png (per card)
-    cat-{name}.png (per category)
-    new-{name}.png (per new release)
 src/
+  assets/
+    images/
+      logo.webp
+      hero-bg.webp
+      card-{name}.webp (per card)
+      cat-{name}.webp (per category)
+      new-{name}.webp (per new release)
   layouts/
     Layout.astro (updated with fonts and CSS variables)
   pages/
-    index.astro (full responsive page)
+    index.astro (full responsive page with image imports)
 ```
 
 ## Important Notes
 
 - **Pencil MCP Tools**: Use Pencil MCP tools exclusively for reading .pen files — never use `Read` or `Grep` on .pen files
 - **resolveInstances**: When calling `batch_get`, set `resolveInstances: true` to see full component instance content instead of just `ref` nodes
-- **Image URLs**: Design images use relative paths like `./images/generated-*.png` — these exist in the project's `images/` directory relative to the .pen file
+- **Image source**: Design images are stored as WebP files in `pencil/images/` — copy them to the assets directory (default `src/assets/images`) with descriptive names
+- **Image imports**: Import images in the output file using framework import syntax, not static URL paths
 - **Image Cropping**: Square images displayed in rectangular frames need cropping before use in HTML — check image dimensions with `sips` or `file` command
 - **Font Family**: Map `fontFamily: "Inter"` to Google Fonts Inter; map `fontFamily: "Arial"` to Inter as well
 - **Text Visibility**: In the design, text nodes have a `fill` property for color — map this to Tailwind `text-{color}` classes
@@ -459,7 +481,7 @@ src/
 - [ ] .pen file opened and explored with Pencil MCP tools
 - [ ] Desktop screen fully analyzed (all sections, properties, images)
 - [ ] Mobile screen fully analyzed (responsive differences documented)
-- [ ] All images extracted from design and copied to `public/images/`
+- [ ] All images copied from `pencil/images/` to assets directory (default `src/assets/images`)
 - [ ] Square images cropped to match design aspect ratio
 - [ ] Layout file updated (title, fonts, CSS variables)
 - [ ] Page implemented with mobile-first Tailwind CSS
