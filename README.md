@@ -440,6 +440,7 @@ project/
 - Converts both PNG and JPEG (`.jpg`, `.jpeg`) formats
 - Reports size comparison with reduction percentage
 - Removes original PNG/JPEG files after successful conversion
+- Updates image references in source files (`.astro`, `.tsx`, `.css`, etc.) to use `.webp` extensions
 - Uses `cwebp` for high-quality conversion
 - Batch processes all images efficiently
 

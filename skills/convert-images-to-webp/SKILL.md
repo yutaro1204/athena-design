@@ -79,10 +79,28 @@ You are a build tools specialist. Your task is to convert PNG and JPEG images to
    - Only delete a source file if its corresponding `.webp` file exists
    - If any conversions failed in step 5, do **not** delete those failed source files — only delete sources that were successfully converted
 
-8. **Report completion**:
+8. **Update image references in source files**:
+   - Search the `src/` directory for references to the converted image filenames with their original extensions
+   - Use Grep to find all occurrences of `.png`, `.jpg`, and `.jpeg` references that match converted files
+   - For each source file containing references:
+     - Read the file
+     - Replace each original extension with `.webp`:
+       - `{filename}.png` → `{filename}.webp`
+       - `{filename}.jpg` → `{filename}.webp`
+       - `{filename}.jpeg` → `{filename}.webp`
+     - This covers all reference patterns:
+       - HTML: `<img src="/images/photo.png" />` → `<img src="/images/photo.webp" />`
+       - CSS/inline styles: `background-image: url('/images/hero.jpg')` → `background-image: url('/images/hero.webp')`
+       - Astro frontmatter: `image: '/images/card.png'` → `image: '/images/card.webp'`
+       - React/TypeScript imports: `import img from '../images/logo.png'` → `import img from '../images/logo.webp'`
+   - Also search in CSS files (`src/**/*.css`) and layout files (`src/layouts/`)
+   - Report how many files were updated and which references were changed
+
+9. **Report completion**:
    - List the total number of images converted
    - Note that original PNG/JPEG files have been removed
-   - If the directory is `public/images/` or similar web-serving directory, remind the user to update HTML/CSS references from `.png`/`.jpg` to `.webp`
+   - List the source files where image references were updated
+   - If no references were found in source files, note that no reference updates were needed
 
 ## Quality Guidelines
 
@@ -109,7 +127,9 @@ Converted 15 images in public/images/:
 |-----------------|-------|---------------|-----------|-----------|
 | public/images/  | 15    | 18 MB         | 644 KB    | ~96%      |
 
-Original files have been removed. To update your HTML/CSS references:
-- Change `.png` extensions to `.webp`
-- Change `.jpg`/`.jpeg` extensions to `.webp`
+Original files have been removed.
+
+Updated image references in 2 source files:
+- src/pages/index.astro: 15 references updated (.png → .webp)
+- src/layouts/Layout.astro: 1 reference updated (.png → .webp)
 ```
