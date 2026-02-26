@@ -52,8 +52,8 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
      ├── design.pen          # Pencil design file
      └── images/             # AI-generated images referenced by design.pen
      ```
-   - Call `get_editor_state` to identify the active `.pen` file and any existing content
-   - If no `.pen` file is open, open `pencil/design.pen` using `open_document`
+   - **Always open `pencil/design.pen`** using `open_document("pencil/design.pen")` — do this unconditionally, regardless of what file is currently active in the editor. Never use or reference any other `.pen` file unless the user explicitly specifies one.
+   - Call `get_editor_state` after opening to confirm the file is active and inspect existing content
    - Call `get_guidelines("landing-page")` for design rules and best practices
    - Call `find_empty_space_on_canvas` to find a clear area for the new frame, using the breakpoint as width and an estimated height (e.g., 3200px for desktop, 4000px for mobile)
 
