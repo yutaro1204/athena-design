@@ -136,7 +136,7 @@ project/
 
 The project has 11 custom Claude Code skills for frontend development (React and Astro):
 
-1. **create-page-wireframe**: Creates SVG wireframe designs
+1. **create-page-wireframe**: Creates SVG wireframe designs (supports optional breakpoint for mobile/tablet/desktop viewports)
 2. **create-components-from-wireframe**: Extracts reusable component SVGs from wireframes
 3. **create-page-from-wireframe**: Implements React or Astro components from wireframes (framework auto-detected)
 4. **create-responsive-design**: Creates responsive wireframe visualizations
@@ -160,6 +160,8 @@ The project has 11 custom Claude Code skills for frontend development (React and
    - **If user mentions a specific website**: Ask if they want to reference it: `/create-page-wireframe "spec" "https://example.com"`
    - **If user says "like [website]"**: Use URL parameter: `/create-page-wireframe "description" "https://website.com"`
    - **If user provides URL**: Use it to analyze and extract design system
+   - **If user wants a mobile wireframe**: Use breakpoint argument: `/create-page-wireframe "spec" "" 375`
+   - **If user wants a tablet wireframe**: Use breakpoint argument: `/create-page-wireframe "spec" "" 768`
 3. **If wireframe exists**: Recommend the Pencil design path:
    - `/create-pencil-design {NNNN} 1200` (desktop frame)
    - `/create-pencil-design {NNNN} 375` (mobile frame)
@@ -172,6 +174,13 @@ The project has 11 custom Claude Code skills for frontend development (React and
 - User says: "Create a page like Stripe" → Use `/create-page-wireframe "" "https://stripe.com"`
 - User says: "Create a landing page inspired by Vercel" → Use `/create-page-wireframe "landing page" "https://vercel.com"`
 - User says: "Create a pricing page similar to Linear" → Use `/create-page-wireframe "pricing page" "https://linear.app/pricing"`
+
+**Breakpoint Usage** (optional third argument, defaults to 1200):
+
+- User says: "Create a mobile wireframe" → Use `/create-page-wireframe "description" "" 375`
+- User says: "Create a tablet wireframe" → Use `/create-page-wireframe "description" "" 768`
+- User says: "Create a mobile wireframe like Stripe" → Use `/create-page-wireframe "" "https://stripe.com" 375`
+- Desktop is the default (1200px), no breakpoint argument needed
 
 ### When User Asks to Extract Components
 
@@ -547,6 +556,7 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 ```
 
 **This is the recommended workflow for new pages.** The Pencil design path produces better results because:
+
 - AI-generated images are included automatically (no manual asset creation)
 - Responsive design is handled in a single implementation step
 - Visual verification is possible before coding via Pencil screenshots

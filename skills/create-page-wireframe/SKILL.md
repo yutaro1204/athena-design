@@ -1,7 +1,7 @@
 ---
 name: create-page-wireframe
 description: Creates SVG wireframe images for page designs based on specifications or existing web pages
-argument-hint: '[specification] [url]'
+argument-hint: '[specification] [url] [breakpoint]'
 disable-model-invocation: true
 ---
 
@@ -14,10 +14,14 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
 1. **Parse arguments**:
    - First argument: specification (optional) - Text description of the page to create
    - Second argument: url (optional) - URL of an existing web page to reference
+   - Third argument: breakpoint (optional, numeric) - Viewport width for the wireframe. Defaults to `1200`. Controls the viewBox width and layout style. Examples: `375` for mobile, `768` for tablet, `1200` for desktop.
    - Examples:
-     - `"Create a landing page for TCG"` - Specification only
+     - `"Create a landing page for TCG"` - Specification only, default 1200px
      - `"Create a landing page for TCG" "https://example.com"` - Specification with URL reference
      - `"" "https://example.com"` - URL only, no specification
+     - `"" "https://example.com" 375` - URL with mobile breakpoint
+     - `"" "" 375` - Mobile wireframe, no spec or URL
+     - `"Create a landing page for TCG" "" 768` - Tablet wireframe from spec
      - No arguments - Ask for specification
 
 2. **If URL is provided**:
@@ -72,7 +76,10 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
    - If URL was NOT provided: Use standard wireframe conventions (gray/black color scheme)
 
 5. **SVG specifications**:
-   - Use a viewBox of "0 0 1200 800" for desktop layouts or adjust based on the specification/analyzed page
+   - Use a viewBox of `"0 0 {breakpoint} {height}"` where `{breakpoint}` is the parsed breakpoint value (default `1200`) and `{height}` is determined by the content
+   - For mobile breakpoints (< 768px): Use mobile-friendly layout conventions — single-column stacked layout, smaller typography, reduced padding, compact navigation (hamburger menu), and touch-friendly target sizes
+   - For tablet breakpoints (768–1023px): Use reduced columns (2 max), adapted spacing, and simplified navigation
+   - For desktop breakpoints (>= 1024px): Use multi-column grids, horizontal layouts, and full navigation
    - Use a clean, minimal style with:
      - **If URL provided**: Use colors extracted from the analyzed page (backgrounds, text, accents, borders)
      - **If URL NOT provided**: Use standard wireframe colors (white/light gray #f5f5f5, dark gray #333, light gray #ddd)
@@ -83,13 +90,13 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
    - Adjust viewBox height to match the analyzed page structure if URL was provided
 
 6. **File naming and directory structure**:
-   - Create directory: `docs/wireframes/{NNNN}/`
-   - Save the wireframe in that directory: `docs/wireframes/{NNNN}/{page-name}-wireframe.svg`
-   - Where {NNNN} is the 4-digit page ID (e.g., 0001, 0002, 0003)
-   - Example directory: `docs/wireframes/0001/`
-   - Example file: `docs/wireframes/0001/login-page-wireframe.svg`
-   - Example: `docs/wireframes/0002/dashboard-wireframe.svg`
-   - Create the directory if it doesn't exist
+   - Create directory: `docs/wireframes/{NNNN}/{breakpoint}/`
+   - Save the wireframe in that directory: `docs/wireframes/{NNNN}/{breakpoint}/{page-name}-wireframe.svg`
+   - Where {NNNN} is the 4-digit page ID (e.g., 0001, 0002, 0003) and {breakpoint} is the viewport width (e.g., 1200, 375, 768)
+   - Example directory: `docs/wireframes/0001/1200/`
+   - Example file: `docs/wireframes/0001/1200/login-page-wireframe.svg`
+   - Example: `docs/wireframes/0002/375/dashboard-wireframe.svg`
+   - Create the directory (including the breakpoint subdirectory) if it doesn't exist
 
 7. **Output**: After creating the wireframe:
    - Confirm the file has been created with its page ID
@@ -120,13 +127,13 @@ A typical wireframe should include:
 
 ## Usage Examples
 
-### Example 1: Create wireframe from specification only
+### Example 1: Create wireframe from specification only (desktop, default 1200px)
 
 ```bash
 /create-page-wireframe "Create a landing page for a TCG with hero section, features grid, and product cards"
 ```
 
-**Result**: Creates a wireframe based purely on the specification, using standard wireframe colors.
+**Result**: Creates a 1200px-wide desktop wireframe based purely on the specification, using standard wireframe colors.
 
 ### Example 2: Create wireframe based on existing web page
 
@@ -134,7 +141,7 @@ A typical wireframe should include:
 /create-page-wireframe "" "https://stripe.com"
 ```
 
-**Result**: Analyzes Stripe's homepage, extracts structure, sections, colors, and creates a wireframe that mimics the design.
+**Result**: Analyzes Stripe's homepage, extracts structure, sections, colors, and creates a 1200px-wide wireframe that mimics the design.
 
 ### Example 3: Create wireframe with specification AND reference URL
 
@@ -151,6 +158,61 @@ A typical wireframe should include:
 ```
 
 **Result**: Claude will ask for specification details interactively.
+
+### Example 5: Create a mobile wireframe (375px)
+
+```bash
+/create-page-wireframe "landing page with hero and features" "" 375
+```
+
+**Result**: Creates a 375px-wide mobile wireframe with single-column stacked layout, compact navigation, and mobile-friendly spacing.
+
+### Example 6: Create a mobile wireframe from URL
+
+```bash
+/create-page-wireframe "" "https://stripe.com" 375
+```
+
+**Result**: Analyzes Stripe's homepage and creates a 375px-wide mobile wireframe with the extracted design system adapted to mobile layout.
+
+### Example 7: Create a tablet wireframe (768px)
+
+```bash
+/create-page-wireframe "dashboard with sidebar and content area" "" 768
+```
+
+**Result**: Creates a 768px-wide tablet wireframe with reduced columns and adapted spacing.
+
+## Breakpoint-Specific Design Guidance
+
+The wireframe layout should adapt based on the breakpoint value:
+
+### Desktop (>= 1024px)
+
+- Multi-column grids (2, 3, or 4 columns)
+- Horizontal navigation with full menu items
+- Side-by-side hero layouts (text + image)
+- Wide content areas with generous padding
+- Full-width sections with max-width containers
+
+### Tablet (768–1023px)
+
+- Reduced columns (2 columns max)
+- Navigation may use condensed menu or early hamburger
+- Adapted spacing and padding
+- Stacked or 2-column hero layouts
+- Slightly reduced typography sizes
+
+### Mobile (< 768px)
+
+- Single-column stacked layout throughout
+- Hamburger menu or compact navigation
+- Full-width content blocks
+- Smaller typography (reduce heading sizes by ~25%)
+- Reduced padding and margins
+- Touch-friendly tap targets (minimum 44px height for interactive elements)
+- Cards and features stacked vertically
+- CTAs span full width
 
 ## When to Use URL Reference
 
