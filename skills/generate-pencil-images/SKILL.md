@@ -101,6 +101,7 @@ You are a design tools specialist. Your task is to generate or regenerate AI ima
    - Note the frame ID and name that was processed
    - Confirm images are stored as WebP in `pencil/images/`
    - Example output:
+
      ```
      Generated 15 images in frame "Desktop" (KnmED):
 
@@ -119,34 +120,35 @@ You are a design tools specialist. Your task is to generate or regenerate AI ima
 ## Image Generation Best Practices
 
 ### Prompt Structure
+
 ```
 [Subject] + [Style] + [Lighting] + [Background] + [Mood]
 ```
 
 ### Common Prompt Templates
 
-| Image Type | Template |
-|-----------|----------|
-| Product shot | `"3D rendered {product}, studio lighting, clean white background, product photography"` |
-| Hero background | `"Modern {theme} scene, {atmosphere}, soft gradient background, wide composition"` |
-| Category image | `"{Category} collection display, professional photography, curated arrangement"` |
-| Logo | `"Modern minimalist {brand} logo, clean typography, simple geometric mark"` |
-| Icon/illustration | `"Flat design {subject} icon, minimal style, solid background"` |
-| Person/portrait | `"Professional portrait, {description}, studio lighting, neutral background"` |
-| Landscape | `"Beautiful {scene}, professional photography, vibrant colors, wide aspect ratio"` |
+| Image Type        | Template                                                                                |
+| ----------------- | --------------------------------------------------------------------------------------- |
+| Product shot      | `"3D rendered {product}, studio lighting, clean white background, product photography"` |
+| Hero background   | `"Modern {theme} scene, {atmosphere}, soft gradient background, wide composition"`      |
+| Category image    | `"{Category} collection display, professional photography, curated arrangement"`        |
+| Logo              | `"Modern minimalist {brand} logo, clean typography, simple geometric mark"`             |
+| Icon/illustration | `"Flat design {subject} icon, minimal style, solid background"`                         |
+| Person/portrait   | `"Professional portrait, {description}, studio lighting, neutral background"`           |
+| Landscape         | `"Beautiful {scene}, professional photography, vibrant colors, wide aspect ratio"`      |
 
 ### Image Type Detection
 
 Determine image type from node context:
 
-| Context Clue | Image Type |
-|-------------|-----------|
-| Node named "logo" or in header area | Logo |
-| Node named "hero" or full-width at top | Hero background |
-| Node inside a card component | Product/content card image |
-| Node named "cat-*" or "category-*" | Category image |
-| Node named "new-*" or in "new releases" section | New product/release image |
-| Node with small dimensions (< 100px) | Icon or thumbnail |
+| Context Clue                                     | Image Type                 |
+| ------------------------------------------------ | -------------------------- |
+| Node named "logo" or in header area              | Logo                       |
+| Node named "hero" or full-width at top           | Hero background            |
+| Node inside a card component                     | Product/content card image |
+| Node named "cat-_" or "category-_"               | Category image             |
+| Node named "new-\*" or in "new releases" section | New product/release image  |
+| Node with small dimensions (< 100px)             | Icon or thumbnail          |
 
 ## Important Notes
 

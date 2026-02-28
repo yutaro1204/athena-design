@@ -98,7 +98,7 @@ project/
 **Usage**:
 
 ```bash
-# From specification only
+# From specification only (desktop, default 1200px)
 /create-page-wireframe
 /create-page-wireframe "Create a landing page for a TCG with hero section, features, and product cards"
 
@@ -107,12 +107,22 @@ project/
 
 # From specification with URL reference
 /create-page-wireframe "Create a SaaS landing page with pricing" "https://vercel.com"
+
+# Mobile wireframe (375px)
+/create-page-wireframe "landing page" "" 375
+
+# Mobile wireframe from URL
+/create-page-wireframe "" "https://stripe.com" 375
+
+# Tablet wireframe (768px)
+/create-page-wireframe "dashboard" "" 768
 ```
 
 **Input**:
 
 - Specification (optional): Text description of page to create
 - URL (optional): Reference to existing web page for design inspiration
+- Breakpoint (optional, numeric): Viewport width for the wireframe. Defaults to `1200`. Controls SVG viewBox width and layout style (e.g., `375` for mobile, `768` for tablet)
 
 **Output**: `docs/wireframes/{NNNN}/{page-name}-wireframe.svg`
 
@@ -122,12 +132,14 @@ project/
 - Replicates section structure from analyzed pages
 - Combines URL structure with custom specifications
 - Uses WebFetch to analyze live web pages
+- Adapts layout to breakpoint: mobile (< 768px) uses single-column stacked layout, tablet (768-1023px) uses reduced columns, desktop (>= 1024px) uses multi-column grids
 
 **When to use**:
 
 - Start of every new page design
 - When you want to replicate an existing page's structure
 - When you need design system inspiration from real websites
+- When you need a mobile or tablet wireframe for a specific viewport width
 
 ---
 
@@ -583,27 +595,27 @@ The standard wireframe-to-code path is still available:
 
 **Recommended Path (Pencil Design):**
 
-| Step | Skill                  | Input                     | Output                      | Required? |
-| ---- | ---------------------- | ------------------------- | --------------------------- | --------- |
-| 1    | create-page-wireframe  | Specification             | Wireframe SVG               | ❌ No     |
-| 2    | create-pencil-design   | Wireframe ID + Breakpoint | .pen design frame (desktop) | ❌ No     |
-| 3    | create-pencil-design   | Wireframe ID + Breakpoint | .pen design frame (mobile)  | ❌ No     |
-| 4    | [Optional review]      | -                         | Refined designs             | ✅ Skip   |
-| 5    | create-page-from-pencil| .pen file + Framework     | Responsive page with images | ❌ No     |
-| 6    | npm run dev            | -                         | Running dev server          | ❌ No     |
+| Step | Skill                   | Input                     | Output                      | Required? |
+| ---- | ----------------------- | ------------------------- | --------------------------- | --------- |
+| 1    | create-page-wireframe   | Specification             | Wireframe SVG               | ❌ No     |
+| 2    | create-pencil-design    | Wireframe ID + Breakpoint | .pen design frame (desktop) | ❌ No     |
+| 3    | create-pencil-design    | Wireframe ID + Breakpoint | .pen design frame (mobile)  | ❌ No     |
+| 4    | [Optional review]       | -                         | Refined designs             | ✅ Skip   |
+| 5    | create-page-from-pencil | .pen file + Framework     | Responsive page with images | ❌ No     |
+| 6    | npm run dev             | -                         | Running dev server          | ❌ No     |
 
 **Legacy Path (Direct Wireframe-to-Code):**
 
 | Step | Skill                       | Input                     | Output                            | Can Skip?          |
-| ---- | --------------------------- | ------------------------- | --------------------------------- | ------------------- |
-| 1    | create-page-wireframe       | Specification             | Wireframe SVG                     | ❌ No               |
-| 2    | create-responsive-design    | Wireframe ID + Breakpoint | Responsive wireframe              | ✅ If desktop-only  |
-| 3    | create-required-assets-list | Wireframe ID              | assets-list.md                    | ✅ If no images     |
-| 4    | create-page-from-wireframe  | Wireframe ID + Framework  | React/Astro component             | ❌ No               |
-| 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive React/Astro component  | ✅ If desktop-only  |
-| 6    | [Manual]                    | assets-list.md            | Image files                       | ✅ If no images     |
-| 7    | apply-required-assets       | Output path               | React/Astro component with images | ✅ If no images     |
-| 8    | npm run dev                 | -                         | Running dev server                | ❌ No               |
+| ---- | --------------------------- | ------------------------- | --------------------------------- | ------------------ |
+| 1    | create-page-wireframe       | Specification             | Wireframe SVG                     | ❌ No              |
+| 2    | create-responsive-design    | Wireframe ID + Breakpoint | Responsive wireframe              | ✅ If desktop-only |
+| 3    | create-required-assets-list | Wireframe ID              | assets-list.md                    | ✅ If no images    |
+| 4    | create-page-from-wireframe  | Wireframe ID + Framework  | React/Astro component             | ❌ No              |
+| 5    | apply-responsive-design     | Wireframe ID + Breakpoint | Responsive React/Astro component  | ✅ If desktop-only |
+| 6    | [Manual]                    | assets-list.md            | Image files                       | ✅ If no images    |
+| 7    | apply-required-assets       | Output path               | React/Astro component with images | ✅ If no images    |
+| 8    | npm run dev                 | -                         | Running dev server                | ❌ No              |
 
 ### Minimal Workflows
 

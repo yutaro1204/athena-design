@@ -39,6 +39,7 @@ You are a build tools specialist. Your task is to convert PNG and JPEG images to
    - For each PNG file, run: `cwebp -q {quality} "{input}.png" -o "{input}.webp"`
    - For each JPEG file, run: `cwebp -q {quality} "{input}.jpg" -o "{input}.webp"`
    - Process all files in a single batch using a shell loop for efficiency:
+
      ```bash
      # PNG conversion
      cd {directory} && for f in *.png; do [ -f "$f" ] && cwebp -q {quality} "$f" -o "${f%.png}.webp"; done
@@ -49,6 +50,7 @@ You are a build tools specialist. Your task is to convert PNG and JPEG images to
      # JPEG conversion (.jpeg)
      cd {directory} && for f in *.jpeg; do [ -f "$f" ] && cwebp -q {quality} "$f" -o "${f%.jpeg}.webp"; done
      ```
+
    - Use a timeout of 300000ms (5 minutes) for large batches
 
 5. **Verify conversion results**:
@@ -63,7 +65,7 @@ You are a build tools specialist. Your task is to convert PNG and JPEG images to
    - Present results in a summary table:
 
      | Directory | Files | Original Size | WebP Size | Reduction |
-     |-----------|-------|---------------|-----------|-----------|
+     | --------- | ----- | ------------- | --------- | --------- |
      | {dir}     | {n}   | {size}        | {size}    | {pct}%    |
 
 7. **Remove original files**:
@@ -104,11 +106,11 @@ You are a build tools specialist. Your task is to convert PNG and JPEG images to
 
 ## Quality Guidelines
 
-| Quality | Use Case | Typical Reduction |
-|---------|----------|-------------------|
-| 90-100  | Photography, high-detail images | 50-70% |
-| 75-85   | General web images (recommended default) | 80-95% |
-| 50-70   | Thumbnails, background textures | 90-97% |
+| Quality | Use Case                                 | Typical Reduction |
+| ------- | ---------------------------------------- | ----------------- |
+| 90-100  | Photography, high-detail images          | 50-70%            |
+| 75-85   | General web images (recommended default) | 80-95%            |
+| 50-70   | Thumbnails, background textures          | 90-97%            |
 
 ## Important Notes
 
