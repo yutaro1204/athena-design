@@ -14,9 +14,9 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
 1. **Parse arguments**:
    - First argument: specification (optional) - Text description of the page to create
    - Second argument: url (optional) - URL of an existing web page to reference
-   - Third argument: breakpoint (optional, numeric) - Viewport width for the wireframe. Defaults to `1200`. Controls the viewBox width and layout style. Examples: `375` for mobile, `768` for tablet, `1200` for desktop.
+   - Third argument: breakpoint (optional, numeric) - Viewport width for the wireframe. Defaults to `1024`. Controls the viewBox width and layout style. Examples: `375` for mobile, `768` for tablet, `1024` for desktop.
    - Examples:
-     - `"Create a landing page for TCG"` - Specification only, default 1200px
+     - `"Create a landing page for TCG"` - Specification only, default 1024px
      - `"Create a landing page for TCG" "https://example.com"` - Specification with URL reference
      - `"" "https://example.com"` - URL only, no specification
      - `"" "https://example.com" 375` - URL with mobile breakpoint
@@ -76,7 +76,7 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
    - If URL was NOT provided: Use standard wireframe conventions (gray/black color scheme)
 
 5. **SVG specifications**:
-   - Use a viewBox of `"0 0 {breakpoint} {height}"` where `{breakpoint}` is the parsed breakpoint value (default `1200`) and `{height}` is determined by the content
+   - Use a viewBox of `"0 0 {breakpoint} {height}"` where `{breakpoint}` is the parsed breakpoint value (default `1024`) and `{height}` is determined by the content
    - For mobile breakpoints (< 768px): Use mobile-friendly layout conventions — single-column stacked layout, smaller typography, reduced padding, compact navigation (hamburger menu), and touch-friendly target sizes
    - For tablet breakpoints (768–1023px): Use reduced columns (2 max), adapted spacing, and simplified navigation
    - For desktop breakpoints (>= 1024px): Use multi-column grids, horizontal layouts, and full navigation
@@ -90,12 +90,13 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
    - Adjust viewBox height to match the analyzed page structure if URL was provided
 
 6. **File naming and directory structure**:
-   - Create directory: `docs/wireframes/{NNNN}/{breakpoint}/`
-   - Save the wireframe in that directory: `docs/wireframes/{NNNN}/{breakpoint}/{page-name}-wireframe.svg`
-   - Where {NNNN} is the 4-digit page ID (e.g., 0001, 0002, 0003) and {breakpoint} is the viewport width (e.g., 1200, 375, 768)
-   - Example directory: `docs/wireframes/0001/1200/`
-   - Example file: `docs/wireframes/0001/1200/login-page-wireframe.svg`
-   - Example: `docs/wireframes/0002/375/dashboard-wireframe.svg`
+   - **IMPORTANT**: The `docs/` directory MUST be created at the project root directory (the repository root where CLAUDE.md lives), NOT inside the skill or plugin directory. Always resolve the path relative to the project root.
+   - Create directory: `{project-root}/docs/wireframes/{NNNN}/{breakpoint}/`
+   - Save the wireframe in that directory: `{project-root}/docs/wireframes/{NNNN}/{breakpoint}/{page-name}-wireframe.svg`
+   - Where {NNNN} is the 4-digit page ID (e.g., 0001, 0002, 0003) and {breakpoint} is the viewport width (e.g., 1024, 375, 768)
+   - Example directory: `{project-root}/docs/wireframes/0001/1024/`
+   - Example file: `{project-root}/docs/wireframes/0001/1024/login-page-wireframe.svg`
+   - Example: `{project-root}/docs/wireframes/0002/375/dashboard-wireframe.svg`
    - Create the directory (including the breakpoint subdirectory) if it doesn't exist
 
 7. **Output**: After creating the wireframe:
@@ -127,13 +128,13 @@ A typical wireframe should include:
 
 ## Usage Examples
 
-### Example 1: Create wireframe from specification only (desktop, default 1200px)
+### Example 1: Create wireframe from specification only (desktop, default 1024px)
 
 ```bash
 /create-page-wireframe "Create a landing page for a TCG with hero section, features grid, and product cards"
 ```
 
-**Result**: Creates a 1200px-wide desktop wireframe based purely on the specification, using standard wireframe colors.
+**Result**: Creates a 1024px-wide desktop wireframe based purely on the specification, using standard wireframe colors.
 
 ### Example 2: Create wireframe based on existing web page
 
@@ -141,7 +142,7 @@ A typical wireframe should include:
 /create-page-wireframe "" "https://stripe.com"
 ```
 
-**Result**: Analyzes Stripe's homepage, extracts structure, sections, colors, and creates a 1200px-wide wireframe that mimics the design.
+**Result**: Analyzes Stripe's homepage, extracts structure, sections, colors, and creates a 1024px-wide wireframe that mimics the design.
 
 ### Example 3: Create wireframe with specification AND reference URL
 

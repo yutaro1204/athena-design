@@ -98,7 +98,7 @@ project/
 **Usage**:
 
 ```bash
-# From specification only (desktop, default 1200px)
+# From specification only (desktop, default 1024px)
 /create-page-wireframe
 /create-page-wireframe "Create a landing page for a TCG with hero section, features, and product cards"
 
@@ -122,9 +122,9 @@ project/
 
 - Specification (optional): Text description of page to create
 - URL (optional): Reference to existing web page for design inspiration
-- Breakpoint (optional, numeric): Viewport width for the wireframe. Defaults to `1200`. Controls SVG viewBox width and layout style (e.g., `375` for mobile, `768` for tablet)
+- Breakpoint (optional, numeric): Viewport width for the wireframe. Defaults to `1024`. Controls SVG viewBox width and layout style (e.g., `375` for mobile, `768` for tablet)
 
-**Output**: `docs/wireframes/{NNNN}/{page-name}-wireframe.svg`
+**Output**: `{project-root}/docs/wireframes/{NNNN}/{page-name}-wireframe.svg` (always created at the project root directory, not inside the skill/plugin directory)
 
 **Features**:
 
@@ -202,7 +202,7 @@ project/
 **Usage**:
 
 ```bash
-/create-responsive-design 0001           # Uses 768px breakpoint (default)
+/create-responsive-design 0001           # Uses 1024px breakpoint (default)
 /create-responsive-design 0001 1024      # Uses 1024px breakpoint
 /create-responsive-design 0002 640       # Uses 640px breakpoint
 ```
@@ -210,7 +210,7 @@ project/
 **Input**:
 
 - Wireframe ID (required)
-- Breakpoint in pixels (optional, default: 768)
+- Breakpoint in pixels (optional, default: 1024)
 
 **Output**: `docs/wireframes/{NNNN}/{breakpoint}/{page-name}-responsive-wireframe.svg`
 
@@ -226,7 +226,7 @@ project/
 
 ```bash
 # Auto-detect framework and use default paths
-/apply-responsive-design 0001                          # Default: 768px
+/apply-responsive-design 0001                          # Default: 1024px
 /apply-responsive-design 0001 1024                     # 1024px breakpoint
 
 # Specify custom output path (React)
@@ -239,7 +239,7 @@ project/
 **Input**:
 
 - Wireframe ID (required)
-- Breakpoint in pixels (optional, default: 768)
+- Breakpoint in pixels (optional, default: 1024)
 - Output path (optional, default: `src/App.tsx` for React or `src/pages/{page-name}.astro` for Astro)
 
 **Output**:
@@ -560,8 +560,8 @@ The standard wireframe-to-code path is still available:
 
 # 📋 PHASE 2: PLANNING
 # ────────────────────────────────────────
-2️⃣ /create-responsive-design {NNNN} 768
-   → Creates: docs/wireframes/{NNNN}/768/{page-name}-responsive-wireframe.svg
+2️⃣ /create-responsive-design {NNNN} 1024
+   → Creates: docs/wireframes/{NNNN}/1024/{page-name}-responsive-wireframe.svg
 
 3️⃣ /create-required-assets-list {NNNN}
    → Creates: docs/assets-list.md
@@ -572,7 +572,7 @@ The standard wireframe-to-code path is still available:
    → Creates: src/App.tsx (React) or src/pages/{page-name}.astro (Astro)
    → Component with placeholders
 
-5️⃣ /apply-responsive-design {NNNN} 768
+5️⃣ /apply-responsive-design {NNNN} 1024
    → Updates: React component (className) or Astro page (class)
    → Adds responsive Tailwind classes
 
@@ -643,10 +643,10 @@ npm run dev
 
 ```bash
 /create-page-wireframe
-/create-responsive-design 0001 768
+/create-responsive-design 0001 1024
 /create-required-assets-list 0001
 /create-page-from-wireframe 0001
-/apply-responsive-design 0001 768
+/apply-responsive-design 0001 1024
 [create assets manually]
 /apply-required-assets
 npm run dev
@@ -683,9 +683,9 @@ npm run dev
 
 ```bash
 [Edit wireframe manually]
-/create-responsive-design 0001 768
+/create-responsive-design 0001 1024
 /create-page-from-wireframe 0001
-/apply-responsive-design 0001 768
+/apply-responsive-design 0001 1024
 ```
 
 **Change breakpoint:**
@@ -756,9 +756,9 @@ npm run dev
 │                    2. PLANNING PHASE                            │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
-               /create-responsive-design 0001 768
+               /create-responsive-design 0001 1024
                               ↓
-       docs/wireframes/0001/768/page-responsive-wireframe.svg
+       docs/wireframes/0001/1024/page-responsive-wireframe.svg
                               ↓
               /create-required-assets-list 0001
                               ↓
@@ -772,7 +772,7 @@ npm run dev
                               ↓
          src/App.tsx (React) or src/pages/{page}.astro (Astro)
                               ↓
-                /apply-responsive-design 0001 768
+                /apply-responsive-design 0001 1024
                               ↓
       React component or Astro page (with responsive design)
                               ↓
@@ -827,12 +827,12 @@ npm run dev
 /create-page-wireframe "TCG landing page with hero, features, and products"
 
 # 2-3. Create responsive design + asset list
-/create-responsive-design 0001 768
+/create-responsive-design 0001 1024
 /create-required-assets-list 0001
 
 # 4-5. Implement + apply responsive design
 /create-page-from-wireframe 0001
-/apply-responsive-design 0001 768
+/apply-responsive-design 0001 1024
 
 # 6-7. Create assets manually, then integrate
 [create assets manually]
@@ -874,8 +874,8 @@ You can create multiple responsive designs for different breakpoints:
 **Tailwind CSS Breakpoint Mapping:**
 
 - 640px → `sm:` prefix
-- 768px → `md:` prefix (most common)
-- 1024px → `lg:` prefix
+- 768px → `md:` prefix
+- 1024px → `lg:` prefix (default)
 - 1280px → `xl:` prefix
 - 1536px → `2xl:` prefix
 
@@ -890,7 +890,7 @@ Skills automatically detect your project framework by checking:
 
 ```bash
 /create-page-from-wireframe 0001
-/apply-responsive-design 0001 768
+/apply-responsive-design 0001 1024
 /apply-required-assets
 ```
 
@@ -1056,10 +1056,10 @@ ls docs/wireframes/0001/
 
 ```bash
 # Create responsive wireframe first
-/create-responsive-design 0001 768
+/create-responsive-design 0001 1024
 
 # Then apply responsive design
-/apply-responsive-design 0001 768
+/apply-responsive-design 0001 1024
 ```
 
 ### Assets Not Found
@@ -1093,12 +1093,12 @@ ls docs/wireframes/0001/
 ```bash
 # Explicitly specify the framework
 /create-page-from-wireframe 0001 astro
-/apply-responsive-design 0001 768 src/pages/page.astro
+/apply-responsive-design 0001 1024 src/pages/page.astro
 /apply-required-assets src/pages/page.astro
 
 # Or for React
 /create-page-from-wireframe 0001 react
-/apply-responsive-design 0001 768 src/App.tsx
+/apply-responsive-design 0001 1024 src/App.tsx
 /apply-required-assets src/App.tsx
 ```
 

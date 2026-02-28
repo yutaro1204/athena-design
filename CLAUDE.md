@@ -175,12 +175,12 @@ The project has 11 custom Claude Code skills for frontend development (React and
 - User says: "Create a landing page inspired by Vercel" → Use `/create-page-wireframe "landing page" "https://vercel.com"`
 - User says: "Create a pricing page similar to Linear" → Use `/create-page-wireframe "pricing page" "https://linear.app/pricing"`
 
-**Breakpoint Usage** (optional third argument, defaults to 1200):
+**Breakpoint Usage** (optional third argument, defaults to 1024):
 
 - User says: "Create a mobile wireframe" → Use `/create-page-wireframe "description" "" 375`
 - User says: "Create a tablet wireframe" → Use `/create-page-wireframe "description" "" 768`
 - User says: "Create a mobile wireframe like Stripe" → Use `/create-page-wireframe "" "https://stripe.com" 375`
-- Desktop is the default (1200px), no breakpoint argument needed
+- Desktop is the default (1024px), no breakpoint argument needed
 
 ### When User Asks to Extract Components
 
@@ -250,8 +250,8 @@ className = 'px-12 sm:px-4 text-2xl sm:text-xl'
 **Responsive Breakpoints**:
 
 - 640px → `sm:` prefix
-- 768px → `md:` prefix (most common)
-- 1024px → `lg:` prefix
+- 768px → `md:` prefix
+- 1024px → `lg:` prefix (default)
 - 1280px → `xl:` prefix
 - 1536px → `2xl:` prefix
 
@@ -313,8 +313,8 @@ Skills must be called in a specific sequence. **Calling them out of order will c
    → Skip: ✅ Optional, but recommended for building component library
    → Requires: Step 1 complete
 
-3️⃣ /create-responsive-design {NNNN} 768
-   → Output: docs/wireframes/{NNNN}/768/{page-name}-responsive-wireframe.svg
+3️⃣ /create-responsive-design {NNNN} 1024
+   → Output: docs/wireframes/{NNNN}/1024/{page-name}-responsive-wireframe.svg
    → Why: Visualize responsive layout before coding
    → Skip: ✅ If desktop-only, but recommend keeping
    → Requires: Step 1 complete
@@ -333,7 +333,7 @@ Skills must be called in a specific sequence. **Calling them out of order will c
    → Skip: ❌ NEVER (core implementation step)
    → Requires: Step 1 complete
 
-6️⃣ /apply-responsive-design {NNNN} 768
+6️⃣ /apply-responsive-design {NNNN} 1024
    → Output: src/App.tsx (with responsive Tailwind classes)
    → Why: Add responsive behavior with mobile-first approach
    → Skip: ✅ If desktop-only
@@ -407,8 +407,8 @@ create-page-wireframe (1)
 2. **ALWAYS check dependencies before suggesting a skill**
    - Example: User wants responsive design
    - Check: Does responsive wireframe exist?
-   - If NO: Suggest `/create-responsive-design {NNNN} 768` first
-   - If YES: Then suggest `/apply-responsive-design {NNNN} 768`
+   - If NO: Suggest `/create-responsive-design {NNNN} 1024` first
+   - If YES: Then suggest `/apply-responsive-design {NNNN} 1024`
 
 3. **ENFORCE correct order**
    - If user tries to run apply-responsive-design without create-responsive-design:
@@ -427,10 +427,10 @@ create-page-wireframe (1)
 
 ```bash
 /create-page-wireframe "page description"
-/create-responsive-design {NNNN} 768
+/create-responsive-design {NNNN} 1024
 /create-required-assets-list {NNNN}
 /create-page-from-wireframe {NNNN}
-/apply-responsive-design {NNNN} 768
+/apply-responsive-design {NNNN} 1024
 [user creates assets]
 /apply-required-assets
 ```
@@ -457,8 +457,8 @@ create-page-wireframe (1)
 **Pattern 4: Update Existing Page to be Responsive**
 
 ```bash
-/create-responsive-design {NNNN} 768
-/apply-responsive-design {NNNN} 768
+/create-responsive-design {NNNN} 1024
+/apply-responsive-design {NNNN} 1024
 ```
 
 ### Pattern 5: Updating Responsive Design
@@ -588,15 +588,15 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 
 ### When User Skips Steps
 
-**User tries**: `/apply-responsive-design 0001 768`
+**User tries**: `/apply-responsive-design 0001 1024`
 **Error**: Responsive wireframe not found
 
 **Claude should respond**:
 "I need to create the responsive wireframe first. Let me run:"
 
 ```bash
-/create-responsive-design 0001 768
-/apply-responsive-design 0001 768
+/create-responsive-design 0001 1024
+/apply-responsive-design 0001 1024
 ```
 
 **User tries**: `/apply-required-assets`
@@ -619,7 +619,7 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 
 When reading wireframe SVGs:
 
-1. **Extract viewBox dimensions**: First line, e.g., `viewBox="0 0 1200 2400"`
+1. **Extract viewBox dimensions**: First line, e.g., `viewBox="0 0 1024 2400"`
 2. **Identify sections**: Look for labeled text (HEADER, HERO, FEATURES, etc.)
 3. **Note colors**: Extract fill/stroke colors for consistent styling
 4. **Understand layout**: Observe rect positions and sizes for spacing
@@ -630,7 +630,7 @@ When reading wireframe SVGs:
 When reading responsive wireframes:
 
 - **Left side** (smaller width, ~375px): Mobile view
-- **Right side** (larger width, ~1200px): Desktop view
+- **Right side** (larger width, ~1024px): Desktop view
 - **Key differences**: Layout direction, grid columns, typography sizes, spacing
 
 ## Asset Management
@@ -743,7 +743,7 @@ When user request matches multiple approaches:
 
 **Scenario**: "Make the page responsive"
 
-- ✅ Use: `/apply-responsive-design {NNNN} 768`
+- ✅ Use: `/apply-responsive-design {NNNN} 1024`
 - ❌ Don't: Manually edit all classes
 
 **Scenario**: "Add this specific image"
@@ -771,7 +771,7 @@ When working with users:
 
 **Good**:
 
-> "I'll create a responsive design for wireframe 0001 with a 768px breakpoint, then apply it to src/App.tsx."
+> "I'll create a responsive design for wireframe 0001 with a 1024px breakpoint, then apply it to src/App.tsx."
 
 **Too verbose**:
 

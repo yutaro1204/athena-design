@@ -13,24 +13,24 @@ You are a UX/UI designer. Your task is to create an SVG wireframe that shows how
 
 1. **Parse the arguments**:
    - First argument: wireframe ID (4-digit number like "0001", required)
-   - Second argument: breakpoint in pixels (optional, defaults to "768")
+   - Second argument: breakpoint in pixels (optional, defaults to "1024")
    - Examples:
-     - `0001`: Uses wireframe 0001 with 768px breakpoint
-     - `0001 768`: Uses wireframe 0001 with 768px breakpoint
+     - `0001`: Uses wireframe 0001 with 1024px breakpoint
+     - `0001 1024`: Uses wireframe 0001 with 1024px breakpoint
      - `0001 1024`: Uses wireframe 0001 with 1024px breakpoint
      - `0002 375`: Uses wireframe 0002 with 375px (mobile) breakpoint
    - If no wireframe ID is provided, ask the user for it
 
 2. **Find the existing wireframe**:
    - Search for wireframe files: `docs/wireframes/{NNNN}/**/*-wireframe.svg`
-   - Look in any breakpoint subdirectory (e.g., `docs/wireframes/0001/1200/`, `docs/wireframes/0001/375/`)
-   - Prefer the largest existing breakpoint version as the source of truth (typically the 1200px desktop version)
+   - Look in any breakpoint subdirectory (e.g., `docs/wireframes/0001/1024/`, `docs/wireframes/0001/375/`)
+   - Prefer the largest existing breakpoint version as the source of truth (typically the 1024px desktop version)
    - If not found, inform the user and stop
    - If found, read the SVG file to understand the design
    - Extract the page name from the filename for later use
 
 3. **Analyze the existing wireframe**:
-   - Extract the viewBox dimensions (e.g., "0 0 1200 2400")
+   - Extract the viewBox dimensions (e.g., "0 0 1024 2400")
    - Identify all sections:
      - Header/Navigation
      - Sidebar (if present)
@@ -182,13 +182,13 @@ Adapt the wireframe layout based on the given breakpoint width:
 # Create a 1024px wireframe for page 0002
 /create-responsive-design 0002 1024
 
-# Default breakpoint (768px)
+# Default breakpoint (1024px)
 /create-responsive-design 0001
 ```
 
 ## Workflow Example
 
-1. Designer creates initial desktop wireframe: `docs/wireframes/0001/1200/page-wireframe.svg`
+1. Designer creates initial desktop wireframe: `docs/wireframes/0001/1024/page-wireframe.svg`
 2. **Run `/create-responsive-design 0001 768`** to create the 768px version
 3. Generated: `docs/wireframes/0001/768/page-wireframe.svg`
 4. **Run `/create-responsive-design 0001 375`** to create the 375px version
@@ -202,14 +202,14 @@ Adapt the wireframe layout based on the given breakpoint width:
 docs/
   wireframes/
     0001/
-      1200/
+      1024/
         customer-management-wireframe.svg    (original desktop)
       768/
         customer-management-wireframe.svg    (tablet adaptation)
       375/
         customer-management-wireframe.svg    (mobile adaptation)
     0002/
-      1200/
+      1024/
         another-page-wireframe.svg           (original desktop)
       768/
         another-page-wireframe.svg           (tablet adaptation)
@@ -225,7 +225,7 @@ docs/
 - **Visual consistency**: Use the same colors, fonts, and design tokens as the original
 - **Proportional adaptation**: Layout should feel natural at the given width, not "squished"
 - **Breakpoint flexibility**: Support any numeric breakpoint (375, 640, 768, 1024, 1280, 1536, etc.)
-- **Source wireframe**: Always base adaptations on the largest available wireframe (typically the 1200px version)
+- **Source wireframe**: Always base adaptations on the largest available wireframe (typically the 1024px version)
 
 ## Design Checklist
 

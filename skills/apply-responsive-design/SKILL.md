@@ -13,11 +13,11 @@ You are a frontend developer. Your task is to apply responsive design to a React
 
 1. **Parse the arguments**:
    - First argument: wireframe ID (4-digit number like "0001", required)
-   - Second argument: breakpoint in pixels (optional, defaults to "768")
+   - Second argument: breakpoint in pixels (optional, defaults to "1024")
    - Third argument: output path (optional, auto-detects based on framework)
    - Examples:
-     - `0001`: Uses wireframe 0001, 768px breakpoint, auto-detect file
-     - `0001 768`: Uses wireframe 0001, 768px breakpoint, auto-detect file
+     - `0001`: Uses wireframe 0001, 1024px breakpoint, auto-detect file
+     - `0001 1024`: Uses wireframe 0001, 1024px breakpoint, auto-detect file
      - `0001 1024`: Uses wireframe 0001, 1024px breakpoint, auto-detect file
      - `0001 768 src/App.tsx`: React component
      - `0001 768 src/pages/landing.astro`: Astro page
@@ -44,8 +44,8 @@ You are a frontend developer. Your task is to apply responsive design to a React
 5. **Determine the Tailwind prefix**:
    - Map the breakpoint to Tailwind's responsive prefix:
      - 640px = `sm:` (Tailwind's small breakpoint)
-     - 768px = `md:` (Tailwind's medium breakpoint, default)
-     - 1024px = `lg:` (Tailwind's large breakpoint)
+     - 768px = `md:` (Tailwind's medium breakpoint)
+     - 1024px = `lg:` (Tailwind's large breakpoint, default)
      - 1280px = `xl:` (Tailwind's extra-large breakpoint)
      - 1536px = `2xl:` (Tailwind's 2xl breakpoint)
    - Use the determined prefix throughout the responsive design (e.g., `md:`, `lg:`, etc.)
@@ -238,7 +238,7 @@ You are a frontend developer. Your task is to apply responsive design to a React
 ## Usage Examples
 
 ```bash
-# Auto-detect output file with default 768px breakpoint (md:)
+# Auto-detect output file with default 1024px breakpoint (lg:)
 /apply-responsive-design 0001
 
 # Apply responsive design with 1024px breakpoint (lg:), auto-detect file
@@ -277,8 +277,8 @@ You are a frontend developer. Your task is to apply responsive design to a React
 - **Mobile-first approach**: Default styles are for mobile, prefix for desktop/larger screens
 - **Tailwind prefix**: Automatically determined based on the breakpoint
   - 640px → `sm:`
-  - 768px → `md:` (default)
-  - 1024px → `lg:`
+  - 768px → `md:`
+  - 1024px → `lg:` (default)
   - 1280px → `xl:`
   - 1536px → `2xl:`
 - **Syntax difference**: React uses `className`, Astro uses `class` (Tailwind classes are identical)
