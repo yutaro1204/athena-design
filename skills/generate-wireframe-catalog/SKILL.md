@@ -452,17 +452,6 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 /generate-wireframe-catalog
 ````
 
-## Important Notes
-
-- **Non-destructive**: Can be run multiple times safely
-- **Auto-discovery**: Finds all wireframes automatically
-- **Complete regeneration**: Overwrites previous catalog
-- **Consistent formatting**: Uses standardized structure
-- **Statistics tracking**: Calculates metrics automatically
-- **Component aggregation**: Combines components from all wireframes
-- **Status inference**: Determines implementation status automatically
-- **Extensible**: Easy to add new wireframes and regenerate
-
 ## Benefits
 
 1. **Automation**: No manual catalog maintenance
@@ -473,6 +462,17 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 6. **Metrics**: Tracks progress and statistics
 7. **Reusability**: Shows all available components
 8. **Guidance**: Includes usage instructions and standards
+
+## Important Notes
+
+- **Non-destructive**: Can be run multiple times safely
+- **Auto-discovery**: Finds all wireframes automatically
+- **Complete regeneration**: Overwrites previous catalog
+- **Consistent formatting**: Uses standardized structure
+- **Statistics tracking**: Calculates metrics automatically
+- **Component aggregation**: Combines components from all wireframes
+- **Status inference**: Determines implementation status automatically
+- **Extensible**: Easy to add new wireframes and regenerate
 
 ---
 

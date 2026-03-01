@@ -325,21 +325,6 @@ Find font properties used throughout:
 - **Labels**: Arial, sans-serif, italic, 11px-12px
 ```
 
-## Quality Checklist
-
-Before completing, verify:
-
-- [ ] All major sections identified and extracted
-- [ ] Y-coordinates properly adjusted in components
-- [ ] ViewBox dimensions correct for each component
-- [ ] Component names are descriptive and follow naming convention
-- [ ] Content generalized (no specific product/brand names)
-- [ ] Component labels added to each SVG
-- [ ] Directory structure created correctly
-- [ ] README.md is comprehensive and well-organized
-- [ ] Design system documented (colors, typography)
-- [ ] All components render correctly (valid SVG)
-
 ## Usage Examples
 
 ```bash
@@ -350,7 +335,7 @@ Before completing, verify:
 /create-components-from-wireframe 0002
 ```
 
-## Workflow Integration
+## Workflow Example
 
 This skill fits into the wireframe workflow:
 
@@ -367,15 +352,6 @@ This skill fits into the wireframe workflow:
 # Components can be referenced and reused for consistency
 ```
 
-## Important Notes
-
-- **Non-destructive**: This skill only reads the original wireframe, doesn't modify it
-- **Reusability focus**: Extracted components are generalized for reuse across multiple pages
-- **Design consistency**: Components maintain the original design system
-- **Documentation**: Comprehensive README ensures components are easy to understand and use
-- **Flexibility**: Components can be customized for specific use cases
-- **Integration**: Works seamlessly with other wireframe skills
-
 ## Benefits
 
 1. **Consistency**: Reuse the same component designs across multiple pages
@@ -391,6 +367,30 @@ This skill fits into the wireframe workflow:
 - Requires manual adjustment if sections have complex overlapping elements
 - Component extraction is based on visual analysis, may need refinement
 - Works best with consistent design systems
+
+## Important Notes
+
+- **Non-destructive**: This skill only reads the original wireframe, doesn't modify it
+- **Reusability focus**: Extracted components are generalized for reuse across multiple pages
+- **Design consistency**: Components maintain the original design system
+- **Documentation**: Comprehensive README ensures components are easy to understand and use
+- **Flexibility**: Components can be customized for specific use cases
+- **Integration**: Works seamlessly with other wireframe skills
+
+## Checklist
+
+Before completing, verify:
+
+- [ ] All major sections identified and extracted
+- [ ] Y-coordinates properly adjusted in components
+- [ ] ViewBox dimensions correct for each component
+- [ ] Component names are descriptive and follow naming convention
+- [ ] Content generalized (no specific product/brand names)
+- [ ] Component labels added to each SVG
+- [ ] Directory structure created correctly
+- [ ] README.md is comprehensive and well-organized
+- [ ] Design system documented (colors, typography)
+- [ ] All components render correctly (valid SVG)
 
 ---
 

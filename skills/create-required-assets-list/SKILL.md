@@ -201,7 +201,7 @@ Introduction paragraph mentioning the wireframe source.
 
 [Table of assets with sizes and totals]
 
-## Implementation Checklist
+## Checklist
 
 - [ ] [Checklist items including wireframe review]
 

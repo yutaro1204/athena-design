@@ -446,27 +446,6 @@ When replacing placeholders, use surrounding context to determine which asset to
 5. **Run `/apply-required-assets`** to integrate assets into component
 6. Review page with `npm run dev`
 
-## Important Notes
-
-- **Framework Support**: Works with both React (.tsx) and Astro (.astro) files
-- **Auto-detection**: Output file and framework are auto-detected if not specified
-- **Image syntax difference**:
-  - React: `<img src={logoImage} />` (direct variable)
-  - Astro: `<img src={logoImage.src} />` (use `.src` property)
-- **Attribute difference**: React uses `className`, Astro uses `class`
-- **Read assets-list.md first**: Contains mapping between wireframe elements and required assets
-- **Context-aware replacement**: Use surrounding HTML/text to determine which asset matches which placeholder
-- **Graceful handling**: If an asset is missing, leave the placeholder and note it in the output
-- **Preserve styling**: Keep all existing Tailwind CSS classes and responsive design
-- **Alt text quality**: Write meaningful, descriptive alt text for accessibility
-- **Loading strategy**: Follow performance recommendations (eager for above-fold, lazy for below-fold)
-- **Maintain structure**: Don't change the component structure, only replace placeholders
-- **Asset discovery**: Check actual files in docs/assets, don't assume based on assets-list.md alone
-- **Relative paths**:
-  - From `src/App.tsx`: use `../docs/assets/`
-  - From `src/pages/*.astro`: use `../../docs/assets/`
-  - Adjust based on component depth
-
 ## Framework Differences Summary
 
 | Feature                     | React                   | Astro                          |
@@ -501,3 +480,24 @@ When replacing placeholders, use surrounding context to determine which asset to
 - Confirm `loading="lazy"` on below-the-fold images
 - Check image file sizes are optimized
 - Verify WebP format is used where specified
+
+## Important Notes
+
+- **Framework Support**: Works with both React (.tsx) and Astro (.astro) files
+- **Auto-detection**: Output file and framework are auto-detected if not specified
+- **Image syntax difference**:
+  - React: `<img src={logoImage} />` (direct variable)
+  - Astro: `<img src={logoImage.src} />` (use `.src` property)
+- **Attribute difference**: React uses `className`, Astro uses `class`
+- **Read assets-list.md first**: Contains mapping between wireframe elements and required assets
+- **Context-aware replacement**: Use surrounding HTML/text to determine which asset matches which placeholder
+- **Graceful handling**: If an asset is missing, leave the placeholder and note it in the output
+- **Preserve styling**: Keep all existing Tailwind CSS classes and responsive design
+- **Alt text quality**: Write meaningful, descriptive alt text for accessibility
+- **Loading strategy**: Follow performance recommendations (eager for above-fold, lazy for below-fold)
+- **Maintain structure**: Don't change the component structure, only replace placeholders
+- **Asset discovery**: Check actual files in docs/assets, don't assume based on assets-list.md alone
+- **Relative paths**:
+  - From `src/App.tsx`: use `../docs/assets/`
+  - From `src/pages/*.astro`: use `../../docs/assets/`
+  - Adjust based on component depth

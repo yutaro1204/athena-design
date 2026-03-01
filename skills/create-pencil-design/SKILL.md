@@ -326,7 +326,7 @@ Key rules:
 - **Component Reuse**: Create reusable components for any element that repeats 3+ times (cards, list items, category boxes)
 - **Canvas Placement**: Always use `find_empty_space_on_canvas` before creating frames to avoid overlapping existing content
 
-## Design Checklist
+## Checklist
 
 - [ ] Page container created with correct width matching breakpoint
 - [ ] All sections from wireframe present and in correct order

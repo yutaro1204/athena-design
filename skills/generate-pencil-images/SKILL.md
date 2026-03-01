@@ -150,6 +150,18 @@ Determine image type from node context:
 | Node named "new-\*" or in "new releases" section | New product/release image  |
 | Node with small dimensions (< 100px)             | Icon or thumbnail          |
 
+## Usage Examples
+
+```bash
+# 1. Open the .pen file in Pencil editor
+# 2. Select the frame you want to generate images for
+# 3. Run the skill
+/generate-pencil-images
+# 4. Review proposed prompts
+# 5. Images are generated one by one
+# 6. Verify via screenshot
+```
+
 ## Important Notes
 
 - **Images are stored as WebP in `pencil/images/`** — the `G()` operation initially saves as PNG, but this skill converts them to WebP and updates the `.pen` file references
@@ -162,15 +174,3 @@ Determine image type from node context:
 - The `G()` operation applies the generated image as a fill to the specified frame/rectangle node
 - There is no separate "image" node type in Pencil — images are fills on frame or rectangle nodes
 - **Requires `cwebp`** — install with `brew install webp` on macOS if not available
-
-## Usage Examples
-
-```bash
-# 1. Open the .pen file in Pencil editor
-# 2. Select the frame you want to generate images for
-# 3. Run the skill
-/generate-pencil-images
-# 4. Review proposed prompts
-# 5. Images are generated one by one
-# 6. Verify via screenshot
-```

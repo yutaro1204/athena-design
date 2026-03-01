@@ -478,7 +478,7 @@ src/
 - **Overlay Patterns**: For text over images, use `relative` parent + `absolute inset-0` overlay with semi-transparent background
 - **Lazy Loading**: Add `loading="lazy"` to images below the fold
 
-## Implementation Checklist
+## Checklist
 
 - [ ] .pen file opened and explored with Pencil MCP tools
 - [ ] Desktop screen fully analyzed (all sections, properties, images)

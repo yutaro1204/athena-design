@@ -227,7 +227,7 @@ docs/
 - **Breakpoint flexibility**: Support any numeric breakpoint (375, 640, 768, 1024, 1280, 1536, etc.)
 - **Source wireframe**: Always base adaptations on the largest available wireframe (typically the 1024px version)
 
-## Design Checklist
+## Checklist
 
 - [ ] Directory structure created: `docs/wireframes/{NNNN}/{breakpoint}/`
 - [ ] File saved with correct naming: `{page-name}-wireframe.svg`

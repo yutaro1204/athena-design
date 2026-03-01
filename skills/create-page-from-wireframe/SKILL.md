@@ -174,6 +174,17 @@ export default Page0001
 /create-page-from-wireframe
 ```
 
+## Framework Differences
+
+| Feature         | React              | Astro                         |
+| --------------- | ------------------ | ----------------------------- |
+| File extension  | `.tsx`             | `.astro`                      |
+| Default path    | `src/App.tsx`      | `src/pages/[page-name].astro` |
+| Class attribute | `className`        | `class`                       |
+| Comments        | `{/* comment */}`  | `<!-- comment -->`            |
+| Structure       | Function component | HTML with frontmatter         |
+| Routing         | Manual/library     | File-based (automatic)        |
+
 ## Important Notes
 
 - **Framework Support**: Works with both React and Astro frameworks
@@ -190,14 +201,3 @@ export default Page0001
 - Make the code readable and maintainable
 - Add comments for complex sections if needed
 - Reference wireframe file for design accuracy
-
-## Framework Differences
-
-| Feature         | React              | Astro                         |
-| --------------- | ------------------ | ----------------------------- |
-| File extension  | `.tsx`             | `.astro`                      |
-| Default path    | `src/App.tsx`      | `src/pages/[page-name].astro` |
-| Class attribute | `className`        | `class`                       |
-| Comments        | `{/* comment */}`  | `<!-- comment -->`            |
-| Structure       | Function component | HTML with frontmatter         |
-| Routing         | Manual/library     | File-based (automatic)        |

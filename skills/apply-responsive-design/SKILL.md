@@ -268,26 +268,6 @@ You are a frontend developer. Your task is to apply responsive design to a React
 7. Test the responsive page with `npm run dev`
 8. Resize browser to verify mobile and desktop views
 
-## Important Notes
-
-- **Framework Support**: Works with both React (.tsx) and Astro (.astro) files
-- **Auto-detection**: Output file and framework are auto-detected if not specified
-- **Prerequisites**: The responsive wireframe must exist at `docs/wireframes/{NNNN}/{breakpoint}/`
-  - Create it first with `/create-responsive-design` if needed
-- **Mobile-first approach**: Default styles are for mobile, prefix for desktop/larger screens
-- **Tailwind prefix**: Automatically determined based on the breakpoint
-  - 640px → `sm:`
-  - 768px → `md:`
-  - 1024px → `lg:` (default)
-  - 1280px → `xl:`
-  - 1536px → `2xl:`
-- **Syntax difference**: React uses `className`, Astro uses `class` (Tailwind classes are identical)
-- **Preserve design**: Don't change colors, themes, or visual design elements
-- **Maintain structure**: Keep the same component structure, only adjust responsive classes
-- **Test thoroughly**: Ensure all interactive elements work on all screen sizes
-- **Tailwind CSS required**: The project must have Tailwind CSS configured
-- **Reference wireframe**: Use the responsive wireframe SVG as the design reference
-
 ## Example Transformations
 
 ### React Example
@@ -367,3 +347,23 @@ The Tailwind classes themselves are identical.
 - Review the responsive wireframe SVG to understand intended adaptations
 - Check that mobile and desktop views are correctly distinguished
 - Ensure all sections follow the mobile-first approach
+
+## Important Notes
+
+- **Framework Support**: Works with both React (.tsx) and Astro (.astro) files
+- **Auto-detection**: Output file and framework are auto-detected if not specified
+- **Prerequisites**: The responsive wireframe must exist at `docs/wireframes/{NNNN}/{breakpoint}/`
+  - Create it first with `/create-responsive-design` if needed
+- **Mobile-first approach**: Default styles are for mobile, prefix for desktop/larger screens
+- **Tailwind prefix**: Automatically determined based on the breakpoint
+  - 640px → `sm:`
+  - 768px → `md:`
+  - 1024px → `lg:` (default)
+  - 1280px → `xl:`
+  - 1536px → `2xl:`
+- **Syntax difference**: React uses `className`, Astro uses `class` (Tailwind classes are identical)
+- **Preserve design**: Don't change colors, themes, or visual design elements
+- **Maintain structure**: Keep the same component structure, only adjust responsive classes
+- **Test thoroughly**: Ensure all interactive elements work on all screen sizes
+- **Tailwind CSS required**: The project must have Tailwind CSS configured
+- **Reference wireframe**: Use the responsive wireframe SVG as the design reference

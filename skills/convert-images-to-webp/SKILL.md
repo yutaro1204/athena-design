@@ -112,14 +112,6 @@ You are a build tools specialist. Your task is to convert PNG and JPEG images to
 | 75-85   | General web images (recommended default) | 80-95%            |
 | 50-70   | Thumbnails, background textures          | 90-97%            |
 
-## Important Notes
-
-- Original PNG/JPEG files are **deleted** after successful conversion. Only files with a confirmed corresponding `.webp` output are removed.
-- WebP files are created in the **same directory** as the source files.
-- If a `.webp` file already exists for a source image, it will be **overwritten**.
-- The `cwebp` tool handles both lossy (JPEG-like) and lossless (PNG-like) compression. Quality parameter controls lossy compression level.
-- For lossless conversion (exact pixel match, larger files), the user can specify quality as `lossless` — in that case use `cwebp -lossless` instead of `-q`.
-
 ## Example Output
 
 ```
@@ -135,3 +127,11 @@ Updated image references in 2 source files:
 - src/pages/index.astro: 15 references updated (.png → .webp)
 - src/layouts/Layout.astro: 1 reference updated (.png → .webp)
 ```
+
+## Important Notes
+
+- Original PNG/JPEG files are **deleted** after successful conversion. Only files with a confirmed corresponding `.webp` output are removed.
+- WebP files are created in the **same directory** as the source files.
+- If a `.webp` file already exists for a source image, it will be **overwritten**.
+- The `cwebp` tool handles both lossy (JPEG-like) and lossless (PNG-like) compression. Quality parameter controls lossy compression level.
+- For lossless conversion (exact pixel match, larger files), the user can specify quality as `lossless` — in that case use `cwebp -lossless` instead of `-q`.
