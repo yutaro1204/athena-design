@@ -22,13 +22,12 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
    - If no breakpoint is provided, ask the user for it
 
 2. **Locate the wireframe SVG**:
-   - **Desktop** (breakpoint >= 1024):
-     - Read the main wireframe: `docs/wireframes/{NNNN}/*-wireframe.svg`
-     - Example: `docs/wireframes/0001/3d-model-landing-wireframe.svg`
-   - **Mobile/Tablet** (breakpoint < 1024):
-     - Read the responsive wireframe: `docs/wireframes/{NNNN}/{breakpoint}/*-responsive-wireframe.svg`
-     - Example: `docs/wireframes/0001/768/3d-model-landing-responsive-wireframe.svg`
-     - Extract only the **mobile view** portion (the left side `<g>` block, typically within `<g transform="translate(0, 60)">`)
+   - All breakpoints use the same path pattern: `docs/wireframes/{NNNN}/{breakpoint}/*-wireframe.svg`
+   - Examples:
+     - `docs/wireframes/0001/1024/rpg-landing-page-wireframe.svg` (desktop)
+     - `docs/wireframes/0001/768/rpg-landing-page-wireframe.svg` (tablet)
+     - `docs/wireframes/0001/375/rpg-landing-page-wireframe.svg` (mobile)
+   - Each breakpoint has its own dedicated wireframe SVG sized for that viewport — read the entire file as-is
    - If the wireframe file is not found, inform the user and stop
    - Extract the page name from the filename for naming the design frame
 
@@ -272,17 +271,20 @@ Key rules:
 
 ## Workflow Example
 
-1. Designer creates wireframe: `docs/wireframes/0001/landing-page-wireframe.svg`
-2. Optionally creates responsive wireframe: `docs/wireframes/0001/768/landing-page-responsive-wireframe.svg`
-3. **Run `/create-pencil-design 0001 1200`** to generate the desktop Pencil design frame
+1. Designer creates wireframes in breakpoint subdirectories:
+   - `docs/wireframes/0001/1024/landing-page-wireframe.svg` (desktop)
+   - `docs/wireframes/0001/768/landing-page-wireframe.svg` (tablet)
+   - `docs/wireframes/0001/375/landing-page-wireframe.svg` (mobile)
+2. **Run `/create-pencil-design 0001 1024`** to generate the desktop Pencil design frame
+3. **Run `/create-pencil-design 0001 768`** to generate the tablet Pencil design frame
 4. **Run `/create-pencil-design 0001 375`** to generate the mobile Pencil design frame
-5. Both frames appear on the Pencil canvas for review and refinement
-6. Use as high-fidelity reference for implementation with `/create-page-from-wireframe 0001`
+5. All frames appear on the Pencil canvas for review and refinement
+6. Use as high-fidelity reference for implementation with `/create-page-from-pencil pencil/design.pen`
 
 **Typical output on canvas:**
 
 ```
-[Desktop Frame - 1200px]  [Mobile Frame - 375px]  [Components]
+[Desktop Frame - 1024px]  [Tablet Frame - 768px]  [Mobile Frame - 375px]  [Components]
 ```
 
 ## Important Notes
