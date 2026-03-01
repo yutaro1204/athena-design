@@ -21,11 +21,13 @@ This skill collection enables a structured, design-first approach to frontend de
 The **recommended workflow** uses Pencil (.pen) designs as a high-fidelity design step between wireframes and code:
 
 1. **Design Phase**: Create wireframes as SVG files
-2. **Pencil Design Phase**: Generate high-fidelity designs from wireframes with AI-generated images
-3. **Implementation Phase**: Implement responsive pages directly from Pencil designs
+2. **Pencil Setup**: Create the `.pen` file manually in the Pencil application (required before Claude can design)
+3. **Pencil Design Phase**: Generate high-fidelity designs from wireframes with AI-generated images
+4. **Implementation Phase**: Implement responsive pages directly from Pencil designs
 
 ```bash
 /create-page-wireframe "page description"
+# [MANUAL] Open Pencil app and create pencil/design.pen
 /create-pencil-design 0001 1200   # Desktop
 /create-pencil-design 0001 375    # Mobile
 /create-page-from-pencil pencil/design.pen
@@ -376,7 +378,13 @@ project/
 - Supports desktop and mobile breakpoints
 - Uses Pencil MCP tools for all .pen file operations
 
-**When to use**: After wireframe is created, when you want a visual design phase with generated images before implementing code
+**Prerequisites**:
+
+- A wireframe SVG must exist in `docs/wireframes/{NNNN}/{breakpoint}/`
+- **The `pencil/design.pen` file must be created manually in the Pencil application** — the `.pen` format is proprietary and cannot be created by Claude or standard file tools
+- The Pencil application must be running with its MCP server connected
+
+**When to use**: After wireframe is created and the `.pen` file has been set up in the Pencil application, when you want a visual design phase with generated images before implementing code
 
 ---
 
@@ -524,27 +532,34 @@ When creating a new page from scratch, the **Pencil design path is recommended**
 1️⃣ /create-page-wireframe "page specification"
    → Creates: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
 
-# 🖌️ PHASE 2: PENCIL DESIGN
+# 🖌️ PHASE 2: PENCIL SETUP
 # ────────────────────────────────────────
-2️⃣ /create-pencil-design {NNNN} 1200
+2️⃣ [MANUAL] Create pencil/design.pen in the Pencil application
+   → Open Pencil app → Create new document → Save as pencil/design.pen
+   → The .pen format is proprietary and must be created by the Pencil app
+   → Ensure the Pencil MCP server is running and connected
+
+# 🖌️ PHASE 3: PENCIL DESIGN
+# ────────────────────────────────────────
+3️⃣ /create-pencil-design {NNNN} 1200
    → Creates: Desktop design frame in .pen file with AI-generated images
 
-3️⃣ /create-pencil-design {NNNN} 375
+4️⃣ /create-pencil-design {NNNN} 375
    → Creates: Mobile design frame in .pen file with AI-generated images
 
-# 👀 PHASE 3: REVIEW
+# 👀 PHASE 4: REVIEW
 # ────────────────────────────────────────
-4️⃣ [OPTIONAL] Review and refine designs in Pencil editor
+5️⃣ [OPTIONAL] Review and refine designs in Pencil editor
 
-# 💻 PHASE 4: IMPLEMENTATION
+# 💻 PHASE 5: IMPLEMENTATION
 # ────────────────────────────────────────
-5️⃣ /create-page-from-pencil pencil/design.pen
+6️⃣ /create-page-from-pencil pencil/design.pen
    → Creates: Responsive page with images (React or Astro, auto-detected)
    → Handles responsive design and image integration in one step
 
-# ✅ PHASE 5: TESTING
+# ✅ PHASE 6: TESTING
 # ────────────────────────────────────────
-6️⃣ npm run dev
+7️⃣ npm run dev
    → Test responsive design and verify assets
 ```
 
@@ -595,14 +610,15 @@ The standard wireframe-to-code path is still available:
 
 **Recommended Path (Pencil Design):**
 
-| Step | Skill                   | Input                     | Output                      | Required? |
-| ---- | ----------------------- | ------------------------- | --------------------------- | --------- |
-| 1    | create-page-wireframe   | Specification             | Wireframe SVG               | ❌ No     |
-| 2    | create-pencil-design    | Wireframe ID + Breakpoint | .pen design frame (desktop) | ❌ No     |
-| 3    | create-pencil-design    | Wireframe ID + Breakpoint | .pen design frame (mobile)  | ❌ No     |
-| 4    | [Optional review]       | -                         | Refined designs             | ✅ Skip   |
-| 5    | create-page-from-pencil | .pen file + Framework     | Responsive page with images | ❌ No     |
-| 6    | npm run dev             | -                         | Running dev server          | ❌ No     |
+| Step | Skill                          | Input                     | Output                      | Required? |
+| ---- | ------------------------------ | ------------------------- | --------------------------- | --------- |
+| 1    | create-page-wireframe          | Specification             | Wireframe SVG               | ❌ No     |
+| 2    | [MANUAL] Create .pen in Pencil | -                         | pencil/design.pen           | ❌ No     |
+| 3    | create-pencil-design           | Wireframe ID + Breakpoint | .pen design frame (desktop) | ❌ No     |
+| 4    | create-pencil-design           | Wireframe ID + Breakpoint | .pen design frame (mobile)  | ❌ No     |
+| 5    | [Optional review]              | -                         | Refined designs             | ✅ Skip   |
+| 6    | create-page-from-pencil        | .pen file + Framework     | Responsive page with images | ❌ No     |
+| 7    | npm run dev                    | -                         | Running dev server          | ❌ No     |
 
 **Legacy Path (Direct Wireframe-to-Code):**
 
@@ -622,8 +638,9 @@ The standard wireframe-to-code path is still available:
 **Recommended: Pencil Design Path (responsive page with images):**
 
 ```bash
-# Wireframe → Pencil design → Code
+# Wireframe → Pencil setup → Pencil design → Code
 /create-page-wireframe "landing page specification"
+# [MANUAL] Open Pencil app → Create new document → Save as pencil/design.pen
 /create-pencil-design 0001 1200   # Desktop design frame
 /create-pencil-design 0001 375    # Mobile design frame
 # Review and refine in Pencil editor
@@ -672,10 +689,11 @@ npm run dev
 ### Important Rules
 
 1. ⚠️ **Never skip create-page-wireframe** - It's the foundation
-2. ⚠️ **Run create-responsive-design BEFORE apply-responsive-design** - Need visualization first
-3. ⚠️ **Run create-required-assets-list BEFORE creating assets** - Get specifications first
-4. ⚠️ **Run apply-responsive-design BEFORE apply-required-assets** - Structure before content
-5. ✅ **Test after each phase** - Catch issues early
+2. ⚠️ **Create `pencil/design.pen` in the Pencil app BEFORE running create-pencil-design** - The `.pen` format is proprietary and cannot be created by Claude
+3. ⚠️ **Run create-responsive-design BEFORE apply-responsive-design** - Need visualization first
+4. ⚠️ **Run create-required-assets-list BEFORE creating assets** - Get specifications first
+5. ⚠️ **Run apply-responsive-design BEFORE apply-required-assets** - Structure before content
+6. ✅ **Test after each phase** - Catch issues early
 
 ### Iterative Updates
 
@@ -718,7 +736,14 @@ npm run dev
               docs/wireframes/0001/page-wireframe.svg
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                  2. PENCIL DESIGN PHASE                         │
+│               2. PENCIL SETUP PHASE [MANUAL]                    │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+     Open Pencil app → Create new document → Save as pencil/design.pen
+     (.pen is a proprietary format — must be created in Pencil app)
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                  3. PENCIL DESIGN PHASE                         │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
              /create-pencil-design 0001 1200  (Desktop)
@@ -729,7 +754,7 @@ npm run dev
          [Review and refine designs in Pencil editor]
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                3. IMPLEMENTATION PHASE                          │
+│                4. IMPLEMENTATION PHASE                          │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
                /create-page-from-pencil pencil/design.pen
@@ -802,21 +827,25 @@ npm run dev
 /create-page-wireframe "TCG landing page with hero, features, and products"
 # Output: docs/wireframes/0001/tcg-landing-page-wireframe.svg
 
-# 2. Create Pencil design frames
+# 2. [MANUAL] Create .pen file in Pencil application
+#    Open Pencil app → Create new document → Save as pencil/design.pen
+#    Ensure the Pencil MCP server is running and connected
+
+# 3. Create Pencil design frames
 /create-pencil-design 0001 1200
 # Output: Desktop design frame in pencil/design.pen with AI-generated images
 
 /create-pencil-design 0001 375
 # Output: Mobile design frame in pencil/design.pen with AI-generated images
 
-# 3. (Optional) Review and refine designs in Pencil editor
+# 4. (Optional) Review and refine designs in Pencil editor
 
-# 4. Implement the page from Pencil design (auto-detects framework)
+# 5. Implement the page from Pencil design (auto-detects framework)
 /create-page-from-pencil pencil/design.pen
 # Output: src/pages/tcg-landing-page.astro (Astro) or src/App.tsx (React)
 # Includes: responsive design, extracted images, mobile-first Tailwind
 
-# 5. Run development server
+# 6. Run development server
 npm run dev
 ```
 

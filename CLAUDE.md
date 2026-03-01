@@ -31,12 +31,14 @@ This project uses **custom Claude Code skills** for wireframe-driven development
 The **recommended workflow** uses Pencil (.pen) designs as an intermediate high-fidelity design step between wireframes and code. This path produces better results because it includes AI-generated images, precise visual verification, and a single implementation step that handles responsive design and images together.
 
 1. **Design Phase**: Wireframes are created as SVG files with unique 4-digit IDs (0001, 0002, etc.)
-2. **Pencil Design Phase**: High-fidelity Pencil designs are generated from wireframes with AI images
-3. **Implementation Phase**: Responsive pages are implemented directly from Pencil designs
+2. **Pencil Setup**: The `.pen` file must be created manually in the Pencil application before Claude can work with it
+3. **Pencil Design Phase**: High-fidelity Pencil designs are generated from wireframes with AI images
+4. **Implementation Phase**: Responsive pages are implemented directly from Pencil designs
 
 ```bash
 # Recommended workflow
 /create-page-wireframe "page description"
+# [MANUAL] Open Pencil app and create pencil/design.pen
 /create-pencil-design {NNNN} 1200   # Desktop
 /create-pencil-design {NNNN} 375    # Mobile
 /create-page-from-pencil pencil/design.pen
@@ -73,9 +75,8 @@ project/
 │   └── generate-pencil-images/
 ├── docs/                                     # Example artifacts and assets
 │   ├── wireframes/{NNNN}/                    # Wireframe ID directory
-│   │   ├── {page-name}-wireframe.svg         # Original wireframe design
-│   │   ├── {breakpoint}/                     # Responsive versions (768, 1024, etc.)
-│   │   │   └── {page-name}-responsive-wireframe.svg
+│   │   ├── {breakpoint}/                     # Breakpoint directories (375, 768, 1024, etc.)
+│   │   │   └── {page-name}-wireframe.svg     # Wireframe for that breakpoint
 │   │   └── components/                       # Extracted reusable components
 │   │       ├── README.md                     # Component library documentation
 │   │       ├── headers/*.svg                 # Header components
@@ -163,6 +164,7 @@ The project has 11 custom Claude Code skills for frontend development (React and
    - **If user wants a mobile wireframe**: Use breakpoint argument: `/create-page-wireframe "spec" "" 375`
    - **If user wants a tablet wireframe**: Use breakpoint argument: `/create-page-wireframe "spec" "" 768`
 3. **If wireframe exists**: Recommend the Pencil design path:
+   - Ensure `pencil/design.pen` exists (must be created manually in the Pencil application)
    - `/create-pencil-design {NNNN} 1200` (desktop frame)
    - `/create-pencil-design {NNNN} 375` (mobile frame)
    - Review and refine designs in Pencil editor
@@ -205,11 +207,15 @@ The project has 11 custom Claude Code skills for frontend development (React and
 ### When User Asks to Create a Pencil Design
 
 1. **Check if wireframe exists**: Look in `docs/wireframes/{NNNN}/`
-2. **If wireframe exists**: Use `/create-pencil-design {NNNN} {breakpoint}`
+2. **Check if `pencil/design.pen` exists**: The `.pen` file must be created manually in the Pencil application before Claude can work with it. If it does not exist, ask the user to:
+   - Open the Pencil application
+   - Create a new document and save it as `pencil/design.pen` in the project root
+   - Ensure the Pencil MCP server is running and connected
+3. **If wireframe exists and .pen file is ready**: Use `/create-pencil-design {NNNN} {breakpoint}`
    - Desktop: `/create-pencil-design 0001 1200`
    - Mobile: `/create-pencil-design 0001 375`
-3. **If no wireframe**: Suggest creating one with `/create-page-wireframe` first
-4. **Output**: A high-fidelity Pencil design frame in the active `.pen` file
+4. **If no wireframe**: Suggest creating one with `/create-page-wireframe` first
+5. **Output**: A high-fidelity Pencil design frame in the active `.pen` file
 
 ### When User Asks to Implement a Pencil Design as Code
 
@@ -314,7 +320,7 @@ Skills must be called in a specific sequence. **Calling them out of order will c
    → Requires: Step 1 complete
 
 3️⃣ /create-responsive-design {NNNN} 1024
-   → Output: docs/wireframes/{NNNN}/1024/{page-name}-responsive-wireframe.svg
+   → Output: docs/wireframes/{NNNN}/1024/{page-name}-wireframe.svg
    → Why: Visualize responsive layout before coding
    → Skip: ✅ If desktop-only, but recommend keeping
    → Requires: Step 1 complete
@@ -355,21 +361,27 @@ Skills must be called in a specific sequence. **Calling them out of order will c
 
 # PHASE 5: PENCIL DESIGN (Alternative Path)
 # ────────────────────────────────────────
-9️⃣ /create-pencil-design {NNNN} {breakpoint}
+9️⃣ [MANUAL - User action]
+   → User opens the Pencil application and creates pencil/design.pen
+   → The .pen file format is proprietary and can only be created by the Pencil app
+   → The Pencil MCP server must be running and fully connected
+   → Skip: ✅ If not using the Pencil design path
+
+🔟 /create-pencil-design {NNNN} {breakpoint}
    → Output: High-fidelity design frame in .pen file
    → Why: Visual design with generated images before coding
    → Skip: ✅ Optional alternative to direct wireframe-to-code
-   → Requires: Step 1 complete
+   → Requires: Step 1 and Step 9 complete
 
-🔟 /create-page-from-pencil {pen-file}
+1️⃣1️⃣ /create-page-from-pencil {pen-file-path}
    → Output: src/pages/{page-name}.astro or src/App.tsx (with images)
    → Why: Implement from high-fidelity Pencil design
    → Skip: ✅ If implementing directly from wireframe
-   → Requires: Step 9 complete (or existing .pen file)
+   → Requires: Step 🔟 complete (or existing .pen file)
 
 # PHASE 6: TESTING
 # ────────────────────────────────────────
-1️⃣1️⃣ npm run dev
+1️⃣2️⃣ npm run dev
    → Start dev server and test
 ```
 
@@ -392,10 +404,11 @@ create-page-wireframe (1)
     │       └─→ apply-responsive-design (6) ⚠️
     │               └─→ apply-required-assets (8)
     │
-    └─→ create-pencil-design (9) [⭐ Recommended Path]
-            → Generates high-fidelity .pen design from wireframe
-            └─→ create-page-from-pencil (10)
-                    → Implements responsive page from .pen file with images
+    └─→ [MANUAL] Create pencil/design.pen in Pencil app (9)
+            └─→ create-pencil-design (10) [⭐ Recommended Path]
+                    → Generates high-fidelity .pen design from wireframe
+                    └─→ create-page-from-pencil (11)
+                            → Implements responsive page from .pen file with images
 ```
 
 ### Critical Rules for Claude
@@ -420,6 +433,7 @@ create-page-wireframe (1)
    - Before `/apply-responsive-design`: Check `docs/wireframes/{NNNN}/{breakpoint}/` exists
    - Before `/apply-required-assets`: Check `docs/assets/` has files
    - Before `/create-page-from-wireframe`: Check `docs/wireframes/{NNNN}/` exists
+   - Before `/create-pencil-design`: Check `pencil/design.pen` exists (must be created manually in the Pencil application)
 
 ### Common Patterns
 
@@ -544,14 +558,18 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 # 1. Create wireframe
 /create-page-wireframe "page description"
 
-# 2. Generate Pencil design frames from wireframe
+# 2. [MANUAL] Create .pen file in Pencil application
+#    Open Pencil app → Create new document → Save as pencil/design.pen
+#    Ensure the Pencil MCP server is running and connected
+
+# 3. Generate Pencil design frames from wireframe
 /create-pencil-design {NNNN} 1200   # Desktop frame
 /create-pencil-design {NNNN} 375    # Mobile frame
 
-# 3. Review and refine designs in Pencil editor
+# 4. Review and refine designs in Pencil editor
 # (Manual step: adjust layouts, add images, tweak styling)
 
-# 4. Implement page from Pencil design
+# 5. Implement page from Pencil design
 /create-page-from-pencil pencil/design.pen
 ```
 
@@ -614,6 +632,18 @@ grep -r "md:" src/App.tsx  # Look for existing prefix
 ```bash
 /create-page-wireframe "what kind of page would you like?"
 ```
+
+**User tries**: `/create-pencil-design 0001 1200`
+**No `pencil/design.pen` file exists**
+
+**Claude should respond**:
+"The `pencil/design.pen` file doesn't exist yet. The `.pen` file format is proprietary and must be created manually in the Pencil application. Please:
+1. Open the Pencil application
+2. Create a new document
+3. Save it as `pencil/design.pen` in the project root
+4. Make sure the Pencil MCP server is running and connected
+
+Then I can proceed with generating the design frame."
 
 ## Wireframe Analysis
 
@@ -809,7 +839,7 @@ This project uses a **structured, skill-based workflow** for frontend developmen
 6. **Guide users**: Suggest the Pencil design path and next steps in the workflow
 7. **Preserve project patterns**: Colors, structure, TypeScript types
 
-**Recommended Workflow**: `/create-page-wireframe` → `/create-pencil-design` → `/create-page-from-pencil` → `npm run dev`
+**Recommended Workflow**: `/create-page-wireframe` → [Create `pencil/design.pen` in Pencil app] → `/create-pencil-design` → `/create-page-from-pencil` → `npm run dev`
 
 **Goal**: Enable efficient, consistent frontend development through automation and best practices.
 
