@@ -1,7 +1,7 @@
 ---
 name: create-page-from-pencil
 description: Implements a responsive Astro/React page from a Pencil (.pen) design file
-argument-hint: '[pen-file] [framework] [output-path] [assets-path]'
+argument-hint: '[pen-file-path] [framework] [output-path] [assets-path]'
 disable-model-invocation: true
 ---
 
@@ -22,7 +22,7 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
      - `pencil/design.pen astro`: Pen file with Astro framework
      - `pencil/design.pen astro src/pages/index.astro`: Pen file, Astro, custom output path
      - `pencil/design.pen astro src/pages/index.astro src/assets/images`: All arguments explicit
-   - If the pen file does not exist, inform the user and stop
+   - If the pen file does not exist, inform the user that the `.pen` file must be created manually in the Pencil application first, and stop
 
 2. **Auto-detect framework** (if not explicitly provided):
    - Check for `astro.config.mjs` or `astro.config.ts` → Astro
@@ -436,11 +436,12 @@ import heroBgImg from '../assets/images/hero-bg.webp'
 ## Workflow Example
 
 1. Designer creates wireframe: `docs/wireframes/0001/landing-wireframe.svg`
-2. Run `/create-pencil-design 0001 1200` to generate desktop Pencil frame
-3. Run `/create-pencil-design 0001 375` to generate mobile Pencil frame
-4. Refine design in Pencil editor (add images, adjust layout, etc.)
-5. **Run `/create-page-from-pencil pencil/design.pen astro`** to implement the page
-6. Review at `http://localhost:4321/` and iterate
+2. **[MANUAL] Create the `.pen` file** in the Pencil application and save as `pencil/design.pen`
+3. Run `/create-pencil-design 0001 1200` to generate desktop Pencil frame
+4. Run `/create-pencil-design 0001 375` to generate mobile Pencil frame
+5. Refine design in Pencil editor (add images, adjust layout, etc.)
+6. **Run `/create-page-from-pencil pencil/design.pen astro`** to implement the page
+7. Review at `http://localhost:4321/` and iterate
 
 **Typical file output:**
 
@@ -461,6 +462,7 @@ src/
 
 ## Important Notes
 
+- **Pen File Prerequisite**: The `.pen` file must be created manually in the Pencil application — the `.pen` format is proprietary and cannot be created by Claude or standard file tools
 - **Pencil MCP Tools**: Use Pencil MCP tools exclusively for reading .pen files — never use `Read` or `Grep` on .pen files
 - **resolveInstances**: When calling `batch_get`, set `resolveInstances: true` to see full component instance content instead of just `ref` nodes
 - **Image source**: Design images are stored as WebP files in `pencil/images/` — copy them to the assets directory (default `src/assets/images`) with descriptive names

@@ -1,7 +1,7 @@
 ---
 name: create-pencil-design
 description: Generates a Pencil (.pen) design frame from an existing SVG wireframe
-argument-hint: '[wireframe-id] [breakpoint]'
+argument-hint: '[wireframe-id] [breakpoint] [pen-file-path]'
 disable-model-invocation: true
 ---
 
@@ -14,12 +14,15 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
 1. **Parse the arguments**:
    - First argument: wireframe ID (4-digit number like "0001", required)
    - Second argument: breakpoint in pixels (required)
+   - Third argument: `.pen` file path (optional, defaults to `pencil/design.pen`)
    - Examples:
-     - `0001 1200`: Desktop frame from wireframe 0001 (1200px wide)
-     - `0001 375`: Mobile frame from wireframe 0001 (375px wide)
-     - `0002 768`: Tablet frame from wireframe 0002 (768px wide)
+     - `0001 1200`: Desktop frame from wireframe 0001 (1200px wide), using default `pencil/design.pen`
+     - `0001 375`: Mobile frame from wireframe 0001 (375px wide), using default `pencil/design.pen`
+     - `0002 768`: Tablet frame from wireframe 0002 (768px wide), using default `pencil/design.pen`
+     - `0001 1200 pencil/my-design.pen`: Desktop frame targeting a specific `.pen` file
    - If no wireframe ID is provided, ask the user for it
    - If no breakpoint is provided, ask the user for it
+   - If no `.pen` file path is provided, use `pencil/design.pen` as the default
 
 2. **Locate the wireframe SVG**:
    - All breakpoints use the same path pattern: `docs/wireframes/{NNNN}/{breakpoint}/*-wireframe.svg`
@@ -41,17 +44,20 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
    - **Icons/Symbols**: Note any special characters (checkmarks, lightning bolts, infinity symbols) for icon mapping
 
 4. **Set up the Pencil directory and editor**:
-   - Create the `pencil/` directory in the project root if it does not exist:
+   - Determine the target `.pen` file path from the third argument (default: `pencil/design.pen`)
+   - Create the parent directory of the target `.pen` file if it does not exist:
      ```bash
-     mkdir -p pencil
+     mkdir -p pencil  # or the parent directory of the specified .pen file path
      ```
    - This directory stores all Pencil design artifacts:
      ```
      pencil/
-     ├── design.pen          # Pencil design file
+     ├── design.pen          # Pencil design file (default target)
      └── images/             # AI-generated images referenced by design.pen
      ```
-   - **Always open `pencil/design.pen`** using `open_document("pencil/design.pen")` — do this unconditionally, regardless of what file is currently active in the editor. Never use or reference any other `.pen` file unless the user explicitly specifies one.
+   - **Verify the `.pen` file exists** — the `.pen` format is proprietary and must be created manually in the Pencil application. If the file does not exist, inform the user:
+     "The file `{pen-file-path}` does not exist. Please create it in the Pencil application first, then re-run this skill."
+   - **Always open the target `.pen` file** using `open_document("{pen-file-path}")` — do this unconditionally, regardless of what file is currently active in the editor.
    - Call `get_editor_state` after opening to confirm the file is active and inspect existing content
    - Call `get_guidelines("landing-page")` for design rules and best practices
    - Call `find_empty_space_on_canvas` to find a clear area for the new frame, using the breakpoint as width and an estimated height (e.g., 3200px for desktop, 4000px for mobile)
@@ -256,17 +262,23 @@ Key rules:
 ## Usage Examples
 
 ```bash
-# Desktop design from wireframe 0001 (1200px wide)
+# Desktop design from wireframe 0001 (1200px wide), default pencil/design.pen
 /create-pencil-design 0001 1200
 
-# Mobile design from wireframe 0001 (375px wide)
+# Mobile design from wireframe 0001 (375px wide), default pencil/design.pen
 /create-pencil-design 0001 375
 
-# Tablet design from wireframe 0002 (768px wide)
+# Tablet design from wireframe 0002 (768px wide), default pencil/design.pen
 /create-pencil-design 0002 768
 
-# Desktop design at 1440px
+# Desktop design at 1440px, default pencil/design.pen
 /create-pencil-design 0003 1440
+
+# Desktop design targeting a specific .pen file
+/create-pencil-design 0001 1200 pencil/my-project.pen
+
+# Mobile design targeting a specific .pen file
+/create-pencil-design 0001 375 pencil/landing-page.pen
 ```
 
 ## Workflow Example
@@ -275,11 +287,20 @@ Key rules:
    - `docs/wireframes/0001/1024/landing-page-wireframe.svg` (desktop)
    - `docs/wireframes/0001/768/landing-page-wireframe.svg` (tablet)
    - `docs/wireframes/0001/375/landing-page-wireframe.svg` (mobile)
-2. **Run `/create-pencil-design 0001 1024`** to generate the desktop Pencil design frame
-3. **Run `/create-pencil-design 0001 768`** to generate the tablet Pencil design frame
-4. **Run `/create-pencil-design 0001 375`** to generate the mobile Pencil design frame
-5. All frames appear on the Pencil canvas for review and refinement
-6. Use as high-fidelity reference for implementation with `/create-page-from-pencil pencil/design.pen`
+2. **[MANUAL] Create the `.pen` file** in the Pencil application and save as `pencil/design.pen`
+3. **Run `/create-pencil-design 0001 1024`** to generate the desktop Pencil design frame
+4. **Run `/create-pencil-design 0001 768`** to generate the tablet Pencil design frame
+5. **Run `/create-pencil-design 0001 375`** to generate the mobile Pencil design frame
+6. All frames appear on the Pencil canvas for review and refinement
+7. Use as high-fidelity reference for implementation with `/create-page-from-pencil pencil/design.pen`
+
+**Using a custom `.pen` file:**
+
+```bash
+# Target a specific .pen file for all breakpoints
+/create-pencil-design 0001 1024 pencil/my-project.pen
+/create-pencil-design 0001 375 pencil/my-project.pen
+```
 
 **Typical output on canvas:**
 
@@ -290,6 +311,8 @@ Key rules:
 ## Important Notes
 
 - **Wireframe ID Format**: Always use 4-digit wireframe IDs (0001, 0002, etc.)
+- **Pen File Prerequisite**: The target `.pen` file must be created manually in the Pencil application before running this skill — the `.pen` format is proprietary and cannot be created by Claude or standard file tools
+- **Pen File Path**: Defaults to `pencil/design.pen` if no third argument is provided. Pass a custom path to target a different `.pen` file.
 - **Pencil MCP Tools**: This skill uses the Pencil MCP server tools exclusively for .pen file operations — never use `Read` or `Grep` on .pen files
 - **Placeholder Workflow**: Always set `placeholder: true` on the page frame before building, remove it only when fully complete
 - **Text Visibility**: Text nodes MUST have a `fill` property set or they will be invisible

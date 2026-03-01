@@ -13,7 +13,7 @@ You are a design tools specialist. Your task is to generate or regenerate AI ima
 1. **Get the editor state and identify the target frame**:
    - Call `get_editor_state` to get the active `.pen` file and current selection
    - Use the currently selected node from the editor state as the target frame
-   - If no `.pen` file is open, inform the user to open one and stop
+   - If no `.pen` file is open, inform the user to open one in the Pencil application and stop (the `.pen` file must be created manually in the Pencil app — it is a proprietary format)
    - If no frame is selected, inform the user to select a frame in the Pencil editor and stop
    - Report the frame name and ID that will be processed
 
@@ -153,6 +153,7 @@ Determine image type from node context:
 ## Important Notes
 
 - **Images are stored as WebP in `pencil/images/`** — the `G()` operation initially saves as PNG, but this skill converts them to WebP and updates the `.pen` file references
+- **Pen File Prerequisite** — the `.pen` file must be created manually in the Pencil application before running this skill
 - **Use Pencil MCP tools exclusively** — never use `Read` or `Grep` on `.pen` files
 - **Generate images one at a time** — each `G()` operation should be in its own `batch_design` call to avoid timeouts
 - **Use `"ai"` type** for G() operations — this generates images via AI rather than searching stock photos
