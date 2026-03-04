@@ -361,7 +361,6 @@ Use these formatting patterns:
 ````markdown
 ```bash
 /create-page-wireframe "description"
-/create-components-from-wireframe 0001
 ```
 ````
 
@@ -418,7 +417,7 @@ If a wireframe directory exists but is incomplete:
 ### No components extracted
 If wireframes don't have components/ directories:
 - Show "Component Library" section as empty
-- Suggest extracting components with `/create-components-from-wireframe`
+- Note that no components have been extracted yet
 
 ### Corrupted SVG files
 If an SVG file can't be parsed:
@@ -448,7 +447,6 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 /generate-wireframe-catalog
 
 # Regenerate after extracting components
-/create-components-from-wireframe 0002
 /generate-wireframe-catalog
 ````
 

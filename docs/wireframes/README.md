@@ -145,13 +145,11 @@ See [`0001/components/README.md`](0001/components/README.md) for full component 
 
 ```bash
 /create-page-wireframe "TCG landing page with hero, features, products"
-/create-components-from-wireframe 0001
 /create-responsive-design 0001 768
 /create-responsive-design 0001 1024
-/create-required-assets-list 0001
-/create-page-from-wireframe 0001
-/apply-responsive-design 0001 768
-/apply-required-assets
+/create-pencil-design 0001 1200
+/create-pencil-design 0001 375
+/create-page-from-pencil pencil/design.pen
 ```
 
 ---
@@ -269,13 +267,9 @@ open docs/wireframes/0001/tcg-landing-page-wireframe.svg
 ```bash
 # 1. Create new wireframe
 /create-page-wireframe "Your page description"
-# → Creates: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
+# -> Creates: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
 
-# 2. Extract components (optional)
-/create-components-from-wireframe {NNNN}
-# → Creates: docs/wireframes/{NNNN}/components/
-
-# 3. Create responsive versions (optional)
+# 2. Create responsive versions (optional)
 /create-responsive-design {NNNN} 768
 /create-responsive-design {NNNN} 1024
 ```
@@ -292,12 +286,11 @@ When creating a new wireframe, reference existing components for consistency:
 ### Implementing Wireframes
 
 ```bash
-# Full implementation workflow
-/create-page-from-wireframe {NNNN}
-/create-required-assets-list {NNNN}
-/apply-responsive-design {NNNN} 768
-# [Create and place assets]
-/apply-required-assets
+# Full implementation workflow (Pencil Design Path)
+# [MANUAL] Create pencil/design.pen in Pencil app
+/create-pencil-design {NNNN} 1200
+/create-pencil-design {NNNN} 375
+/create-page-from-pencil pencil/design.pen
 npm run dev
 ```
 
@@ -406,15 +399,15 @@ All wireframes in this catalog follow these standards:
 
 ### Skills Reference
 
-| Skill                               | Purpose                                    |
-| ----------------------------------- | ------------------------------------------ |
-| `/create-page-wireframe`            | Create new wireframe designs               |
-| `/create-components-from-wireframe` | Extract reusable components                |
-| `/create-page-from-wireframe`       | Implement React components                 |
-| `/create-responsive-design`         | Create responsive wireframe visualizations |
-| `/apply-responsive-design`          | Apply responsive Tailwind classes          |
-| `/create-required-assets-list`      | Generate asset requirements                |
-| `/apply-required-assets`            | Integrate assets into components           |
+| Skill                        | Purpose                                    |
+| ---------------------------- | ------------------------------------------ |
+| `/create-page-wireframe`    | Create new wireframe designs               |
+| `/create-responsive-design` | Create responsive wireframe visualizations |
+| `/create-pencil-design`     | Generate Pencil designs from wireframes    |
+| `/generate-pencil-images`   | Generate AI images in Pencil designs       |
+| `/create-page-from-pencil`  | Implement pages from Pencil designs        |
+| `/convert-images-to-webp`   | Convert images to WebP format              |
+| `/generate-wireframe-catalog` | Generate wireframe catalog documentation |
 
 ---
 
