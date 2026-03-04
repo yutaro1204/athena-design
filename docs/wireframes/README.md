@@ -16,14 +16,15 @@ A comprehensive catalog of all wireframe designs for this project, including the
 
 This directory contains all wireframe designs for the project. Each wireframe is assigned a unique 4-digit ID (0001, 0002, etc.) and organized in its own subdirectory with:
 
-- Original desktop wireframe SVG
-- Responsive wireframe variations
+- Breakpoint-specific wireframe SVGs (e.g., `1024/`)
 - Extracted reusable components
 - Related documentation
 
-**Total Wireframes**: 1
+Additionally, standalone wireframe examples (e.g., `example-login-wireframe.svg`) may exist at the wireframes root.
+
+**Total Wireframes**: 1 (+ 1 example)
 **Total Components**: 7
-**Last Updated**: 2026-02-15
+**Last Updated**: 2026-03-04
 
 ---
 
@@ -49,9 +50,7 @@ A dark-themed landing page for a Trading Card Game (TCG) featuring:
 
 #### Files
 
-- 📄 **Wireframe**: [`0001/tcg-landing-page-wireframe.svg`](0001/tcg-landing-page-wireframe.svg)
-- 📱 **Responsive (768px)**: [`0001/768/tcg-landing-page-responsive-wireframe.svg`](0001/768/tcg-landing-page-responsive-wireframe.svg)
-- 💻 **Responsive (1024px)**: [`0001/1024/tcg-landing-page-responsive-wireframe.svg`](0001/1024/tcg-landing-page-responsive-wireframe.svg)
+- 💻 **Wireframe (1024px)**: [`0001/1024/tcg-landing-page-wireframe.svg`](0001/1024/tcg-landing-page-wireframe.svg)
 - 🧩 **Components**: [`0001/components/`](0001/components/) (7 components)
 
 #### Design System
@@ -125,19 +124,15 @@ See [`0001/components/README.md`](0001/components/README.md) for full component 
 
 | Task                       | Status         | Notes                                      |
 | -------------------------- | -------------- | ------------------------------------------ |
-| Wireframe Created          | ✅ Complete    | Desktop version (1200×2400px)              |
-| Components Extracted       | ✅ Complete    | 7 reusable components                      |
-| Responsive Design (768px)  | ✅ Complete    | Mobile-first breakpoint                    |
-| Responsive Design (1024px) | ✅ Complete    | Tablet/desktop breakpoint                  |
-| Assets List Generated      | ✅ Complete    | [`docs/assets-list.md`](../assets-list.md) |
-| React Component            | ✅ Complete    | `src/App.tsx`                              |
-| Responsive Classes Applied | ✅ Complete    | Mobile-first Tailwind CSS                  |
-| Assets Integrated          | ✅ Complete    | All images imported                        |
-| Tested                     | 🔄 In Progress | Review in browser                          |
+| Wireframe Created          | ✅ Complete     | 1024px version                |
+| Components Extracted       | ✅ Complete     | 7 reusable components         |
+| React Component            | ✅ Complete     | `src/App.tsx`                 |
+| Responsive Classes Applied | ✅ Complete     | Mobile-first Tailwind CSS     |
+| Assets Integrated          | ✅ Complete     | All images imported           |
+| Tested                     | 🔄 In Progress | Review in browser             |
 
 #### Related Files
 
-- Asset Requirements: [`docs/assets-list.md`](../assets-list.md)
 - React Component: `src/App.tsx`
 - Assets Directory: `docs/assets/`
 
@@ -145,8 +140,6 @@ See [`0001/components/README.md`](0001/components/README.md) for full component 
 
 ```bash
 /create-page-wireframe "TCG landing page with hero, features, products"
-/create-responsive-design 0001 768
-/create-responsive-design 0001 1024
 /create-pencil-design 0001 1200
 /create-pencil-design 0001 375
 /create-page-from-pencil pencil/design.pen
@@ -154,15 +147,24 @@ See [`0001/components/README.md`](0001/components/README.md) for full component 
 
 ---
 
+### Example Wireframe - Login Page
+
+**Location**: [`example-login-wireframe.svg`](example-login-wireframe.svg)
+**Type**: Example / Reference
+**Description**: A standalone example wireframe for a login page, placed at the wireframes root for reference.
+
+---
+
 ## Quick Reference
 
 ### All Wireframes at a Glance
 
-| ID   | Name             | Type    | Status      | Desktop   | Mobile    | Components | Updated    |
-| ---- | ---------------- | ------- | ----------- | --------- | --------- | ---------- | ---------- |
-| 0001 | TCG Landing Page | Landing | ✅ Complete | 1200×2400 | 768, 1024 | 7          | 2026-02-14 |
-| 0002 | -                | -       | ⏳ Planned  | -         | -         | -          | -          |
-| 0003 | -                | -       | ⏳ Planned  | -         | -         | -          | -          |
+| ID   | Name                  | Type    | Status      | Breakpoints | Components | Updated    |
+| ---- | --------------------- | ------- | ----------- | ----------- | ---------- | ---------- |
+| 0001 | TCG Landing Page      | Landing | ✅ Complete | 1024        | 7          | 2026-02-14 |
+| -    | example-login (root)  | Example | ✅ Complete | -           | -          | -          |
+| 0002 | -                     | -       | ⏳ Planned  | -           | -          | -          |
+| 0003 | -                     | -       | ⏳ Planned  | -           | -          | -          |
 
 **Legend**:
 
@@ -252,7 +254,7 @@ header-logo-nav (80px)
 
 ```bash
 # Open SVG file directly in any modern browser
-open docs/wireframes/0001/tcg-landing-page-wireframe.svg
+open docs/wireframes/0001/1024/tcg-landing-page-wireframe.svg
 ```
 
 **In Design Tools**:
@@ -317,18 +319,15 @@ When adding a new wireframe:
 
 ### Design Metrics
 
-- **Total Wireframes**: 1
+- **Total Wireframes**: 1 (+ 1 example)
 - **Total Sections**: 7 (across all wireframes)
 - **Total Components**: 7 (reusable)
-- **Responsive Breakpoints**: 2 (768px, 1024px)
-- **Average Wireframe Height**: 2400px
+- **Breakpoints**: 1 (1024px)
 - **Design System**: Dark theme with consistent palette
 
 ### Implementation Metrics
 
 - **Wireframes Implemented**: 1/1 (100%)
-- **Components with Responsive Designs**: 1/1 (100%)
-- **Assets Lists Generated**: 1/1 (100%)
 - **React Components Created**: 1/1 (100%)
 
 ---
@@ -371,12 +370,18 @@ All wireframes in this catalog follow these standards:
 
 ## Version History
 
+### v1.1 (2026-03-04)
+
+- Updated file structure: removed root and 768px wireframes for 0001
+- Wireframe 0001 now has 1024px breakpoint only
+- Added example-login-wireframe.svg documentation
+- Removed references to non-existent assets-list.md
+
 ### v1.0 (2026-02-15)
 
 - Initial catalog created
 - Wireframe 0001 (TCG Landing Page) completed
 - 7 reusable components extracted
-- Responsive designs for 768px and 1024px
 - Full React implementation with assets
 
 ---
@@ -394,7 +399,6 @@ All wireframes in this catalog follow these standards:
 
 - [Project README](../../README.md) - Skills overview and workflow
 - [Claude Instructions](../../CLAUDE.md) - AI assistant guidelines
-- [Assets List](../assets-list.md) - Asset requirements for wireframe 0001
 - [Component Library](0001/components/README.md) - Reusable component docs
 
 ### Skills Reference
@@ -426,7 +430,7 @@ When adding new wireframes to this catalog:
 ---
 
 **Maintained by**: Development Team
-**Last Catalog Update**: 2026-02-15
-**Catalog Version**: 1.0
+**Last Catalog Update**: 2026-03-04
+**Catalog Version**: 1.1
 
 For questions or suggestions, refer to the [Claude Instructions](../../CLAUDE.md) or project documentation.
