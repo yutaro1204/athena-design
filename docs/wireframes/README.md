@@ -122,14 +122,14 @@ See [`0001/components/README.md`](0001/components/README.md) for full component 
 
 #### Implementation Status
 
-| Task                       | Status         | Notes                                      |
-| -------------------------- | -------------- | ------------------------------------------ |
-| Wireframe Created          | ✅ Complete     | 1024px version                |
-| Components Extracted       | ✅ Complete     | 7 reusable components         |
-| React Component            | ✅ Complete     | `src/App.tsx`                 |
-| Responsive Classes Applied | ✅ Complete     | Mobile-first Tailwind CSS     |
-| Assets Integrated          | ✅ Complete     | All images imported           |
-| Tested                     | 🔄 In Progress | Review in browser             |
+| Task                       | Status         | Notes                     |
+| -------------------------- | -------------- | ------------------------- |
+| Wireframe Created          | ✅ Complete    | 1024px version            |
+| Components Extracted       | ✅ Complete    | 7 reusable components     |
+| React Component            | ✅ Complete    | `src/App.tsx`             |
+| Responsive Classes Applied | ✅ Complete    | Mobile-first Tailwind CSS |
+| Assets Integrated          | ✅ Complete    | All images imported       |
+| Tested                     | 🔄 In Progress | Review in browser         |
 
 #### Related Files
 
@@ -159,12 +159,12 @@ See [`0001/components/README.md`](0001/components/README.md) for full component 
 
 ### All Wireframes at a Glance
 
-| ID   | Name                  | Type    | Status      | Breakpoints | Components | Updated    |
-| ---- | --------------------- | ------- | ----------- | ----------- | ---------- | ---------- |
-| 0001 | TCG Landing Page      | Landing | ✅ Complete | 1024        | 7          | 2026-02-14 |
-| -    | example-login (root)  | Example | ✅ Complete | -           | -          | -          |
-| 0002 | -                     | -       | ⏳ Planned  | -           | -          | -          |
-| 0003 | -                     | -       | ⏳ Planned  | -           | -          | -          |
+| ID   | Name                 | Type    | Status      | Breakpoints | Components | Updated    |
+| ---- | -------------------- | ------- | ----------- | ----------- | ---------- | ---------- |
+| 0001 | TCG Landing Page     | Landing | ✅ Complete | 1024        | 7          | 2026-02-14 |
+| -    | example-login (root) | Example | ✅ Complete | -           | -          | -          |
+| 0002 | -                    | -       | ⏳ Planned  | -           | -          | -          |
+| 0003 | -                    | -       | ⏳ Planned  | -           | -          | -          |
 
 **Legend**:
 
@@ -403,15 +403,15 @@ All wireframes in this catalog follow these standards:
 
 ### Skills Reference
 
-| Skill                        | Purpose                                    |
-| ---------------------------- | ------------------------------------------ |
-| `/create-page-wireframe`    | Create new wireframe designs               |
-| `/create-responsive-design` | Create responsive wireframe visualizations |
-| `/create-pencil-design`     | Generate Pencil designs from wireframes    |
-| `/generate-pencil-images`   | Generate AI images in Pencil designs       |
-| `/create-page-from-pencil`  | Implement pages from Pencil designs        |
-| `/convert-images-to-webp`   | Convert images to WebP format              |
-| `/generate-wireframe-catalog` | Generate wireframe catalog documentation |
+| Skill                         | Purpose                                    |
+| ----------------------------- | ------------------------------------------ |
+| `/create-page-wireframe`      | Create new wireframe designs               |
+| `/create-responsive-design`   | Create responsive wireframe visualizations |
+| `/create-pencil-design`       | Generate Pencil designs from wireframes    |
+| `/generate-pencil-images`     | Generate AI images in Pencil designs       |
+| `/create-page-from-pencil`    | Implement pages from Pencil designs        |
+| `/convert-images-to-webp`     | Convert images to WebP format              |
+| `/generate-wireframe-catalog` | Generate wireframe catalog documentation   |
 
 ---
 
