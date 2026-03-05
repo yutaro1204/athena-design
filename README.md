@@ -26,7 +26,7 @@ The workflow uses Pencil (.pen) designs as a high-fidelity design step between w
 4. **Implementation Phase**: Implement responsive pages directly from Pencil designs
 
 ```bash
-/create-page-wireframe "page description"
+/create-page-wireframe
 # [MANUAL] Open Pencil app and create pencil/design.pen
 /create-pencil-design 0001 1200   # Desktop
 /create-pencil-design 0001 375    # Mobile
@@ -78,31 +78,28 @@ project/
 **Usage**:
 
 ```bash
-# From specification only (desktop, default 1024px)
+# From specification.md only (desktop, default 1024px)
 /create-page-wireframe
-/create-page-wireframe "Create a landing page for a TCG with hero section, features, and product cards"
 
 # From existing web page URL
-/create-page-wireframe "" "https://stripe.com"
-
-# From specification with URL reference
-/create-page-wireframe "Create a SaaS landing page with pricing" "https://vercel.com"
+/create-page-wireframe "https://stripe.com"
 
 # Mobile wireframe (375px)
-/create-page-wireframe "landing page" "" 375
+/create-page-wireframe "" 375
 
 # Mobile wireframe from URL
-/create-page-wireframe "" "https://stripe.com" 375
+/create-page-wireframe "https://stripe.com" 375
 
 # Tablet wireframe (768px)
-/create-page-wireframe "dashboard" "" 768
+/create-page-wireframe "" 768
 ```
 
 **Input**:
 
-- Specification (optional): Text description of page to create
 - URL (optional): Reference to existing web page for design inspiration
 - Breakpoint (optional, numeric): Viewport width for the wireframe. Defaults to `1024`. Controls SVG viewBox width and layout style (e.g., `375` for mobile, `768` for tablet)
+
+**Reads**: `specification.md` from the project root for page specification
 
 **Output**: `{project-root}/docs/wireframes/{NNNN}/{page-name}-wireframe.svg` (always created at the project root directory, not inside the skill/plugin directory)
 
@@ -362,7 +359,8 @@ When creating a new page from scratch:
 ```bash
 # PHASE 1: DESIGN
 # ----------------------------------------
-1. /create-page-wireframe "page specification"
+1. /create-page-wireframe
+   -> Reads: specification.md from project root
    -> Creates: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
 
 # PHASE 2: PENCIL SETUP
@@ -414,7 +412,7 @@ When creating a new page from scratch:
 
 ```bash
 # Wireframe -> Pencil setup -> Pencil design -> Code
-/create-page-wireframe "landing page specification"
+/create-page-wireframe
 # [MANUAL] Open Pencil app -> Create new document -> Save as pencil/design.pen
 /create-pencil-design 0001 1200   # Desktop design frame
 /create-pencil-design 0001 375    # Mobile design frame
@@ -427,13 +425,13 @@ npm run dev
 
 ```bash
 # Create multiple pages with file-based routing
-/create-page-wireframe "home page"
+/create-page-wireframe
 # [MANUAL] Create pencil/design.pen
 /create-pencil-design 0001 1200
 /create-pencil-design 0001 375
 /create-page-from-pencil pencil/design.pen astro  # -> src/pages/index.astro
 
-/create-page-wireframe "about page"
+/create-page-wireframe
 /create-pencil-design 0002 1200
 /create-pencil-design 0002 375
 /create-page-from-pencil pencil/design.pen astro  # -> src/pages/about.astro
@@ -470,7 +468,7 @@ npm run dev
 |                     1. DESIGN PHASE                              |
 +-----------------------------------------------------------------+
                               |
-        /create-page-wireframe "landing page specification"
+        /create-page-wireframe
                               |
               docs/wireframes/0001/page-wireframe.svg
                               |
@@ -510,8 +508,8 @@ npm run dev
 ### Example: Creating a Landing Page
 
 ```bash
-# 1. Create wireframe
-/create-page-wireframe "TCG landing page with hero, features, and products"
+# 1. Create specification.md in the project root, then create wireframe
+/create-page-wireframe
 # Output: docs/wireframes/0001/tcg-landing-page-wireframe.svg
 
 # 2. [MANUAL] Create .pen file in Pencil application
@@ -802,7 +800,7 @@ For issues or questions:
 
 ---
 
-**Version**: 2.0
-**Last Updated**: 2026-03-03
+**Version**: 2.1
+**Last Updated**: 2026-03-06
 **Frameworks**: React, Astro
 **Skills**: 7 (create-page-wireframe, create-responsive-design, create-pencil-design, generate-pencil-images, create-page-from-pencil, convert-images-to-webp, generate-wireframe-catalog)

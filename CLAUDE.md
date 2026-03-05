@@ -37,7 +37,7 @@ The workflow uses Pencil (.pen) designs as an intermediate high-fidelity design 
 
 ```bash
 # Workflow
-/create-page-wireframe "page description"
+/create-page-wireframe
 # [MANUAL] Open Pencil app and create pencil/design.pen
 /create-pencil-design {NNNN} 1200   # Desktop
 /create-pencil-design {NNNN} 375    # Mobile
@@ -59,6 +59,7 @@ project/
 │   ├── generate-pencil-images/
 │   ├── convert-images-to-webp/
 │   └── generate-wireframe-catalog/
+├── specification.md                             # Page specification file (markdown)
 ├── docs/                                     # Example artifacts
 │   └── wireframes/{NNNN}/                    # Wireframe ID directory
 │       ├── {breakpoint}/                     # Breakpoint directories (375, 768, 1024, etc.)
@@ -103,7 +104,7 @@ project/
 
 The project has 7 custom Claude Code skills for frontend development (React and Astro):
 
-1. **create-page-wireframe**: Creates SVG wireframe designs (supports optional breakpoint for mobile/tablet/desktop viewports)
+1. **create-page-wireframe**: Creates SVG wireframe designs from `specification.md` in the project root (supports optional URL reference and breakpoint for mobile/tablet/desktop viewports)
 2. **create-responsive-design**: Creates responsive wireframe visualizations (side-by-side mobile/desktop)
 3. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
 4. **generate-pencil-images**: Generates or regenerates AI images (WebP) in `pencil/images/` for nodes in the selected Pencil (.pen) design frame
@@ -117,11 +118,12 @@ The project has 7 custom Claude Code skills for frontend development (React and 
 
 1. **Check if wireframe exists**: Look in `docs/wireframes/{NNNN}/`
 2. **If no wireframe**: Suggest creating one with `/create-page-wireframe`
-   - **If user mentions a specific website**: Ask if they want to reference it: `/create-page-wireframe "spec" "https://example.com"`
-   - **If user says "like [website]"**: Use URL parameter: `/create-page-wireframe "description" "https://website.com"`
-   - **If user provides URL**: Use it to analyze and extract design system
-   - **If user wants a mobile wireframe**: Use breakpoint argument: `/create-page-wireframe "spec" "" 375`
-   - **If user wants a tablet wireframe**: Use breakpoint argument: `/create-page-wireframe "spec" "" 768`
+   - **Ensure `specification.md` exists**: Guide the user to create `specification.md` in the project root with the page specification
+   - **Then run the skill**: `/create-page-wireframe`
+   - **If user mentions a specific website**: Use URL argument: `/create-page-wireframe "https://example.com"`
+   - **If user says "like [website]"**: Use URL argument: `/create-page-wireframe "https://website.com"`
+   - **If user wants a mobile wireframe**: Use breakpoint argument: `/create-page-wireframe "" 375`
+   - **If user wants a tablet wireframe**: Use breakpoint argument: `/create-page-wireframe "" 768`
 3. **If wireframe exists**: Follow the Pencil design path:
    - Ensure `pencil/design.pen` exists (must be created manually in the Pencil application)
    - `/create-pencil-design {NNNN} 1200` (desktop frame)
@@ -131,15 +133,15 @@ The project has 7 custom Claude Code skills for frontend development (React and 
 
 **URL Reference Usage**:
 
-- User says: "Create a page like Stripe" -> Use `/create-page-wireframe "" "https://stripe.com"`
-- User says: "Create a landing page inspired by Vercel" -> Use `/create-page-wireframe "landing page" "https://vercel.com"`
-- User says: "Create a pricing page similar to Linear" -> Use `/create-page-wireframe "pricing page" "https://linear.app/pricing"`
+- User says: "Create a page like Stripe" -> Use `/create-page-wireframe "https://stripe.com"`
+- User says: "Create a landing page inspired by Vercel" -> Use `/create-page-wireframe "https://vercel.com"`
+- User says: "Create a pricing page similar to Linear" -> Use `/create-page-wireframe "https://linear.app/pricing"`
 
-**Breakpoint Usage** (optional third argument, defaults to 1024):
+**Breakpoint Usage** (optional second argument, defaults to 1024):
 
-- User says: "Create a mobile wireframe" -> Use `/create-page-wireframe "description" "" 375`
-- User says: "Create a tablet wireframe" -> Use `/create-page-wireframe "description" "" 768`
-- User says: "Create a mobile wireframe like Stripe" -> Use `/create-page-wireframe "" "https://stripe.com" 375`
+- User says: "Create a mobile wireframe" -> Use `/create-page-wireframe "" 375`
+- User says: "Create a tablet wireframe" -> Use `/create-page-wireframe "" 768`
+- User says: "Create a mobile wireframe like Stripe" -> Use `/create-page-wireframe "https://stripe.com" 375`
 - Desktop is the default (1024px), no breakpoint argument needed
 
 ### When User Asks for Responsive Wireframes
@@ -248,7 +250,8 @@ Skills must be called in a specific sequence. **Calling them out of order will c
 ```bash
 # PHASE 1: DESIGN
 # ----------------------------------------
-1. /create-page-wireframe "page specification"
+1. /create-page-wireframe
+   -> Reads: specification.md from project root
    -> Output: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
    -> Why: Foundation for all other skills
 
@@ -324,7 +327,8 @@ create-page-wireframe (1)
 **Pattern 1: Creating a New Page (Recommended)**
 
 ```bash
-/create-page-wireframe "page description"
+# First, create specification.md in the project root
+/create-page-wireframe
 # [MANUAL] Create pencil/design.pen in Pencil app
 /create-pencil-design {NNNN} 1200   # Desktop
 /create-pencil-design {NNNN} 375    # Mobile
@@ -356,10 +360,8 @@ npm run dev
 **Pattern 4: Maintaining Wireframe Documentation**
 
 ```bash
-# Create multiple wireframes
-/create-page-wireframe "landing page"
-/create-page-wireframe "dashboard"
-/create-page-wireframe "profile page"
+# Create wireframe from specification.md, then generate catalog
+/create-page-wireframe
 
 # Generate comprehensive catalog
 /generate-wireframe-catalog
@@ -371,10 +373,10 @@ npm run dev
 **No wireframe exists**
 
 **Claude should respond**:
-"I couldn't find a wireframe for ID 0001. Let's create one first:"
+"I couldn't find a wireframe for ID 0001. Let's create one first. Please create `specification.md` in the project root describing the page, then run:"
 
 ```bash
-/create-page-wireframe "what kind of page would you like?"
+/create-page-wireframe
 ```
 
 **User tries**: `/create-pencil-design 0001 1200`
@@ -517,7 +519,7 @@ When user request matches multiple approaches:
 
 **Scenario**: "Create a landing page"
 
-- Use: `/create-page-wireframe` -> `/create-pencil-design` -> `/create-page-from-pencil`
+- Use: Create `specification.md` -> `/create-page-wireframe` -> `/create-pencil-design` -> `/create-page-from-pencil`
 - Don't: Write component from scratch without wireframe
 
 **Scenario**: "Add this specific image"
@@ -576,7 +578,7 @@ This project uses a **structured, skill-based workflow** for frontend developmen
 6. **Guide users**: Suggest the Pencil design path and next steps in the workflow
 7. **Preserve project patterns**: Colors, structure, TypeScript types
 
-**Workflow**: `/create-page-wireframe` -> [Create `pencil/design.pen` in Pencil app] -> `/create-pencil-design` -> `/create-page-from-pencil` -> `npm run dev`
+**Workflow**: Create `specification.md` -> `/create-page-wireframe` -> [Create `pencil/design.pen` in Pencil app] -> `/create-pencil-design` -> `/create-page-from-pencil` -> `npm run dev`
 
 **Goal**: Enable efficient, consistent frontend development through automation and best practices.
 

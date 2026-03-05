@@ -1,30 +1,38 @@
 ---
 name: create-page-wireframe
-description: Creates SVG wireframe images for page designs based on specifications or existing web pages
-argument-hint: '[specification] [url] [breakpoint]'
+description: Creates SVG wireframe images for page designs based on specification.md and/or existing web pages
+argument-hint: '[url] [breakpoint]'
 disable-model-invocation: true
 ---
 
 # Create Page Wireframe
 
-You are a wireframe designer. Your task is to create an SVG wireframe image based on the developer's specification or by analyzing an existing web page.
+You are a wireframe designer. Your task is to create an SVG wireframe image based on the `specification.md` file in the project root directory and/or by analyzing an existing web page.
 
 ## Instructions
 
 1. **Parse arguments**:
-   - First argument: specification (optional) - Text description of the page to create
-   - Second argument: url (optional) - URL of an existing web page to reference
-   - Third argument: breakpoint (optional, numeric) - Viewport width for the wireframe. Defaults to `1024`. Controls the viewBox width and layout style. Examples: `375` for mobile, `768` for tablet, `1024` for desktop.
+   - First argument: url (optional) - URL of an existing web page to reference
+   - Second argument: breakpoint (optional, numeric) - Viewport width for the wireframe. Defaults to `1024`. Controls the viewBox width and layout style. Examples: `375` for mobile, `768` for tablet, `1024` for desktop.
    - Examples:
-     - `"Create a landing page for TCG"` - Specification only, default 1024px
-     - `"Create a landing page for TCG" "https://example.com"` - Specification with URL reference
-     - `"" "https://example.com"` - URL only, no specification
-     - `"" "https://example.com" 375` - URL with mobile breakpoint
-     - `"" "" 375` - Mobile wireframe, no spec or URL
-     - `"Create a landing page for TCG" "" 768` - Tablet wireframe from spec
-     - No arguments - Ask for specification
+     - No arguments - Read specification.md, default 1024px
+     - `"https://example.com"` - specification.md + URL reference
+     - `"https://example.com" 375` - URL with mobile breakpoint
+     - `"" 375` - Mobile wireframe, no URL
+     - `"" 768` - Tablet wireframe, no URL
 
-2. **If URL is provided**:
+2. **Read the specification file**:
+
+   a. **Always read `specification.md`** from the project root directory:
+   - Use the Read tool to read `specification.md` at the project root
+   - If the file does not exist, inform the user and ask them to create `specification.md` in the project root directory
+
+   b. **Parse the specification file**:
+   - The markdown file contains the full page specification including page type, sections, components, layout structure, and any other design requirements
+   - Extract all relevant details from the file to inform the wireframe design
+   - Use the entire content of the file as the specification for the wireframe
+
+3. **If URL is provided**:
 
    a. **Fetch the web page**:
    - Use the WebFetch tool to retrieve the web page content
@@ -57,15 +65,6 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
    - Use the URL page as the base structure
    - Modify according to specification requirements
    - Keep the layout structure but adapt content/sections as specified
-
-3. **If URL is NOT provided**:
-
-   **Understand the specification**: Read and analyze the specification provided by the developer. If no specification is provided, ask the developer for details about:
-   - Page ID (a 4-digit number identifier for this page, e.g., "0001", "0002", "0003")
-   - Page type (landing page, dashboard, form, etc.)
-   - Key sections or components needed
-   - Layout structure (header, sidebar, main content, footer, etc.)
-   - Important UI elements (navigation, buttons, forms, cards, etc.)
 
 4. **Design the wireframe**: Create a clean, professional wireframe that includes:
    - Clear visual hierarchy
@@ -128,61 +127,82 @@ A typical wireframe should include:
 
 ## Usage Examples
 
-### Example 1: Create wireframe from specification only (desktop, default 1024px)
-
-```bash
-/create-page-wireframe "Create a landing page for a TCG with hero section, features grid, and product cards"
-```
-
-**Result**: Creates a 1024px-wide desktop wireframe based purely on the specification, using standard wireframe colors.
-
-### Example 2: Create wireframe based on existing web page
-
-```bash
-/create-page-wireframe "" "https://stripe.com"
-```
-
-**Result**: Analyzes Stripe's homepage, extracts structure, sections, colors, and creates a 1024px-wide wireframe that mimics the design.
-
-### Example 3: Create wireframe with specification AND reference URL
-
-```bash
-/create-page-wireframe "Create a SaaS landing page with pricing table" "https://vercel.com"
-```
-
-**Result**: Uses Vercel's homepage structure and design system as a base, but adapts it to include a pricing table as specified.
-
-### Example 4: Create wireframe from no arguments (interactive)
+### Example 1: Create wireframe from specification.md (desktop, default 1024px)
 
 ```bash
 /create-page-wireframe
 ```
 
-**Result**: Claude will ask for specification details interactively.
+**Result**: Reads `specification.md` from the project root and creates a 1024px-wide desktop wireframe based on its contents, using standard wireframe colors.
 
-### Example 5: Create a mobile wireframe (375px)
-
-```bash
-/create-page-wireframe "landing page with hero and features" "" 375
-```
-
-**Result**: Creates a 375px-wide mobile wireframe with single-column stacked layout, compact navigation, and mobile-friendly spacing.
-
-### Example 6: Create a mobile wireframe from URL
+### Example 2: Create wireframe with a reference URL
 
 ```bash
-/create-page-wireframe "" "https://stripe.com" 375
+/create-page-wireframe "https://stripe.com"
 ```
 
-**Result**: Analyzes Stripe's homepage and creates a 375px-wide mobile wireframe with the extracted design system adapted to mobile layout.
+**Result**: Reads `specification.md` and also analyzes Stripe's homepage to extract structure, sections, and colors. Combines both to create a 1024px-wide wireframe.
 
-### Example 7: Create a tablet wireframe (768px)
+### Example 3: Create a mobile wireframe (375px)
 
 ```bash
-/create-page-wireframe "dashboard with sidebar and content area" "" 768
+/create-page-wireframe "" 375
 ```
 
-**Result**: Creates a 768px-wide tablet wireframe with reduced columns and adapted spacing.
+**Result**: Reads `specification.md` and creates a 375px-wide mobile wireframe with single-column stacked layout, compact navigation, and mobile-friendly spacing.
+
+### Example 4: Create a mobile wireframe with URL reference
+
+```bash
+/create-page-wireframe "https://stripe.com" 375
+```
+
+**Result**: Reads `specification.md`, analyzes Stripe's homepage, and creates a 375px-wide mobile wireframe with the extracted design system adapted to mobile layout.
+
+### Example 5: Create a tablet wireframe (768px)
+
+```bash
+/create-page-wireframe "" 768
+```
+
+**Result**: Reads `specification.md` and creates a 768px-wide tablet wireframe with reduced columns and adapted spacing.
+
+## Specification File Format
+
+The specification markdown file should contain details about the page design. Here is a recommended structure:
+
+```markdown
+# Page Name
+
+## Page ID
+0001
+
+## Page Type
+Landing page / Dashboard / Form / etc.
+
+## Sections
+- **Header**: Logo, navigation menu, CTA button
+- **Hero**: Headline, subtext, hero image, primary CTA
+- **Features**: 3-column grid with icon, title, description
+- **Footer**: Links, copyright
+
+## Layout
+- Single column for mobile, multi-column grid for desktop
+- Full-width hero section
+- Contained content area (max-width: 1200px)
+
+## Key Components
+- Navigation bar with logo and menu items
+- Hero section with background image
+- Feature cards in a grid layout
+- Call-to-action buttons
+
+## Notes
+- Use dark theme
+- Include placeholder images
+```
+
+The file can include any level of detail. More detailed specifications produce more accurate wireframes.
 
 ## Breakpoint-Specific Design Guidance
 
