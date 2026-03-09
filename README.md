@@ -1,6 +1,6 @@
 # Frontend Development Skills
 
-A comprehensive set of Claude Code skills for wireframe-driven frontend development with React and Astro frameworks, using TypeScript and Tailwind CSS v4.
+A comprehensive set of Claude Code skills for wireframe-driven frontend development with React, Astro, and plain HTML, using Tailwind CSS v4.
 
 ## Table of Contents
 
@@ -36,7 +36,7 @@ npm run dev
 
 This path produces responsive pages with images in fewer steps, allows visual verification before coding, and handles responsive design and image integration in a single implementation step.
 
-All skills work together in a seamless workflow, ensuring consistency from design to implementation. Skills automatically detect whether your project uses React or Astro, or you can specify the framework explicitly.
+All skills work together in a seamless workflow, ensuring consistency from design to implementation. Skills automatically detect whether your project uses React, Astro, or plain HTML, or you can specify the framework explicitly.
 
 ## Directory Structure
 
@@ -62,9 +62,10 @@ project/
 ├── pencil/                        # Pencil design artifacts
 │   ├── design.pen                 # Pencil design file
 │   └── images/                    # AI-generated images referenced by design.pen
-├── src/                           # Application source code
+├── src/                           # Application source code (React/Astro)
 │   ├── App.tsx                    # React: Main component
 │   └── pages/{page-name}.astro    # Astro: Page files
+├── index.html                     # HTML: Self-contained page (when using html framework)
 ├── CLAUDE.md                      # Instructions for Claude
 └── README.md                      # This file
 ```
@@ -224,7 +225,7 @@ project/
 
 ### 5. create-page-from-pencil
 
-**Purpose**: Implements responsive React or Astro pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
+**Purpose**: Implements responsive React, Astro, or HTML pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
 
 **Usage**:
 
@@ -235,9 +236,11 @@ project/
 # Specify framework
 /create-page-from-pencil pencil/design.pen astro
 /create-page-from-pencil pencil/design.pen react
+/create-page-from-pencil pencil/design.pen html
 
 # Specify output path
 /create-page-from-pencil pencil/design.pen astro src/pages/landing.astro
+/create-page-from-pencil pencil/design.pen html landing.html
 
 # Specify output path and assets directory
 /create-page-from-pencil pencil/design.pen astro src/pages/index.astro src/assets/images
@@ -246,7 +249,7 @@ project/
 **Input**:
 
 - Pencil file path (optional, defaults to `pencil/design.pen`)
-- Framework (optional: 'react' or 'astro', auto-detected if not specified)
+- Framework (optional: 'react', 'astro', or 'html', auto-detected if not specified)
 - Output path (optional, auto-determined from page name)
 - Assets directory path (optional, defaults to `src/assets/images`)
 
@@ -254,6 +257,7 @@ project/
 
 - React: Component in `src/App.tsx` with responsive Tailwind CSS and image imports
 - Astro: Page file in `src/pages/{page-name}.astro` with responsive Tailwind CSS and image imports
+- HTML: Self-contained `index.html` with Tailwind CDN and relative image paths
 - Images copied from `pencil/images/` to the assets directory with descriptive names
 
 **Features**:
@@ -385,12 +389,13 @@ When creating a new page from scratch:
 # PHASE 5: IMPLEMENTATION
 # ----------------------------------------
 6. /create-page-from-pencil pencil/design.pen
-   -> Creates: Responsive page with images (React or Astro, auto-detected)
+   -> Creates: Responsive page with images (React, Astro, or HTML, auto-detected)
    -> Handles responsive design and image integration in one step
 
 # PHASE 6: TESTING
 # ----------------------------------------
-7. npm run dev
+7. npm run dev           # React/Astro
+   open index.html       # HTML (no build step needed)
    -> Test responsive design and verify assets
 ```
 
@@ -496,9 +501,10 @@ npm run dev
                               |
                /create-page-from-pencil pencil/design.pen
                               |
-      Responsive page with images (React or Astro)
+      Responsive page with images (React, Astro, or HTML)
                               |
-                        npm run dev
+                  npm run dev (React/Astro)
+                  open index.html (HTML)
                               |
                     DONE! Review in browser
 ```
@@ -527,7 +533,7 @@ npm run dev
 
 # 5. Implement the page from Pencil design (auto-detects framework)
 /create-page-from-pencil pencil/design.pen
-# Output: src/pages/tcg-landing-page.astro (Astro) or src/App.tsx (React)
+# Output: src/pages/tcg-landing-page.astro (Astro), src/App.tsx (React), or index.html (HTML)
 # Includes: responsive design, extracted images, mobile-first Tailwind
 
 # 6. Run development server
@@ -539,6 +545,7 @@ npm run dev
 ```bash
 /create-page-from-pencil pencil/design.pen astro
 /create-page-from-pencil pencil/design.pen react
+/create-page-from-pencil pencil/design.pen html
 ```
 
 ## Detailed Usage
@@ -571,7 +578,8 @@ You can create responsive wireframe variants for different breakpoints:
 Skills automatically detect your project framework by checking:
 
 1. **Astro detection**: Looks for `astro.config.mjs` or `astro.config.ts`
-2. **React detection**: Looks for React files in `src/` directory
+2. **React detection**: Looks for React imports or `package.json` with "react" dependency
+3. **HTML fallback**: If no `package.json` or no framework dependencies found, defaults to HTML
 
 **Auto-detection (recommended):**
 
@@ -587,20 +595,25 @@ Skills automatically detect your project framework by checking:
 
 # Force Astro
 /create-page-from-pencil pencil/design.pen astro
+
+# Force HTML (no build tool needed)
+/create-page-from-pencil pencil/design.pen html
 ```
 
 **Key Differences:**
 
-| Feature             | React                   | Astro                            |
-| ------------------- | ----------------------- | -------------------------------- |
-| File extension      | `.tsx`                  | `.astro`                         |
-| Output path         | `src/App.tsx`           | `src/pages/{page-name}.astro`    |
-| CSS class attribute | `className="..."`       | `class="..."`                    |
-| Comments            | `{/* comment */}`       | `<!-- comment -->`               |
-| Image imports       | `<img src={img} />`     | `<img src={img.src} />`          |
-| Import location     | Top of file             | Frontmatter (`---`)              |
-| Routing             | Manual or library-based | File-based (automatic)           |
-| Component structure | JSX in function body    | Frontmatter + HTML-like template |
+| Feature             | React                   | Astro                            | HTML                             |
+| ------------------- | ----------------------- | -------------------------------- | -------------------------------- |
+| File extension      | `.tsx`                  | `.astro`                         | `.html`                          |
+| Output path         | `src/App.tsx`           | `src/pages/{page-name}.astro`    | `index.html`                     |
+| CSS class attribute | `className="..."`       | `class="..."`                    | `class="..."`                    |
+| Comments            | `{/* comment */}`       | `<!-- comment -->`               | `<!-- comment -->`               |
+| Image imports       | `<img src={img} />`     | `<img src={img.src} />`          | `<img src="path/img.webp" />`    |
+| Import location     | Top of file             | Frontmatter (`---`)              | N/A (relative paths)             |
+| Routing             | Manual or library-based | File-based (automatic)           | N/A (static file)                |
+| Component structure | JSX in function body    | Frontmatter + HTML-like template | Standard HTML                    |
+| Build tool          | Vite                    | Astro                            | None (open in browser)           |
+| Tailwind            | `@import` in CSS        | `@import` in CSS                 | CDN `<script>` tag               |
 
 ### Wireframe ID System
 
@@ -709,7 +722,7 @@ ls docs/wireframes/0001/
 
 ### Wrong Framework Detected
 
-**Error**: Skill creates React file when you want Astro (or vice versa)
+**Error**: Skill creates the wrong framework output (e.g., React when you want Astro or HTML)
 
 **Solution**:
 
@@ -717,6 +730,7 @@ ls docs/wireframes/0001/
 # Explicitly specify the framework
 /create-page-from-pencil pencil/design.pen astro
 /create-page-from-pencil pencil/design.pen react
+/create-page-from-pencil pencil/design.pen html
 ```
 
 ### Astro Page Not Found
@@ -740,14 +754,13 @@ This project uses Tailwind CSS v4, which has a different configuration:
 - Use `@import "tailwindcss";` in CSS
 - All utility classes available by default
 
-### Vite Configuration
+### Build Tools
 
-The project uses Vite (React) or Astro as the build tool:
+The project uses Vite (React), Astro, or no build tool (HTML):
 
-- Fast development server
-- Automatic image optimization
-- TypeScript support
-- Hot module replacement (HMR)
+- **React**: Vite with fast dev server, HMR, TypeScript support
+- **Astro**: Built-in dev server, automatic image optimization, SSG
+- **HTML**: No build step required — open `.html` files directly in a browser
 
 ### Framework-Specific Features
 
@@ -770,6 +783,15 @@ The project uses Vite (React) or Astro as the build tool:
 - Partial hydration for interactive components
 - Zero JavaScript by default (ship less JS)
 - Multi-page application (MPA) architecture
+
+**HTML:**
+
+- No build step or framework required — open directly in a browser
+- Self-contained `.html` files with all markup, styles, and content
+- Tailwind CSS via CDN (`<script src="https://cdn.tailwindcss.com"></script>`)
+- Relative paths for images (`<img src="assets/images/logo.webp" />`)
+- Standard HTML with `class` for CSS classes
+- Ideal for prototypes, static pages, or projects without Node.js
 
 **Astro Routing Examples:**
 
@@ -802,5 +824,5 @@ For issues or questions:
 
 **Version**: 2.1
 **Last Updated**: 2026-03-06
-**Frameworks**: React, Astro
+**Frameworks**: React, Astro, HTML
 **Skills**: 7 (create-page-wireframe, create-responsive-design, create-pencil-design, generate-pencil-images, create-page-from-pencil, convert-images-to-webp, generate-wireframe-catalog)

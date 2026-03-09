@@ -4,7 +4,7 @@ This document provides context and guidelines for Claude (AI assistant) when wor
 
 ## Project Overview
 
-This is a **wireframe-driven frontend development project** that supports both React and Astro frameworks with TypeScript and Tailwind CSS v4. The project uses a structured workflow with custom Claude Code skills to streamline the design-to-implementation process.
+This is a **wireframe-driven frontend development project** that supports React, Astro, and plain HTML with Tailwind CSS v4. The project uses a structured workflow with custom Claude Code skills to streamline the design-to-implementation process.
 
 ## Claude Code Skills Structure
 
@@ -18,8 +18,8 @@ This project uses **custom Claude Code skills** for wireframe-driven development
 
 ## Technology Stack
 
-- **Framework**: React 18 or Astro (auto-detected or specified)
-- **Build Tool**: Vite (React) or Astro
+- **Framework**: React 18, Astro, or plain HTML (auto-detected or specified)
+- **Build Tool**: Vite (React), Astro, or none (HTML)
 - **Styling**: Tailwind CSS v4
 - **Design Format**: SVG wireframes, Pencil (.pen) design files
 - **Asset Format**: WebP (with JPEG fallback), SVG for icons/logos
@@ -68,47 +68,54 @@ project/
 ├── pencil/                                   # Pencil design artifacts
 │   ├── design.pen                            # Pencil design file
 │   └── images/                               # AI-generated images referenced by design.pen
-├── src/                                      # Application source code
+├── src/                                      # Application source code (React/Astro)
 │   ├── App.tsx                               # React: Main component
 │   └── pages/{page-name}.astro               # Astro: Page files (file-based routing)
+├── index.html                                # HTML: Self-contained page (when using html framework)
 ├── CLAUDE.md                                 # This file - project instructions
 └── README.md                                 # User-facing documentation
 ```
 
 ### Framework Support
 
-**React or Astro**: Skills automatically detect the framework or you can specify it explicitly.
+**React, Astro, or HTML**: Skills automatically detect the framework or you can specify it explicitly. If no `package.json` or framework dependencies are found, defaults to HTML.
 
 **Key Differences**:
 
-| Feature         | React               | Astro                         |
-| --------------- | ------------------- | ----------------------------- |
-| File extension  | `.tsx`              | `.astro`                      |
-| Output path     | `src/App.tsx`       | `src/pages/{page-name}.astro` |
-| Class attribute | `className`         | `class`                       |
-| Comments        | `{/* comment */}`   | `<!-- comment -->`            |
-| Image imports   | `<img src={img} />` | `<img src={img.src} />`       |
-| Import location | Top of file         | Frontmatter (`---`)           |
-| Routing         | Manual/library      | File-based (automatic)        |
+| Feature         | React               | Astro                         | HTML                          |
+| --------------- | ------------------- | ----------------------------- | ----------------------------- |
+| File extension  | `.tsx`              | `.astro`                      | `.html`                       |
+| Output path     | `src/App.tsx`       | `src/pages/{page-name}.astro` | `index.html`                  |
+| Class attribute | `className`         | `class`                       | `class`                       |
+| Comments        | `{/* comment */}`   | `<!-- comment -->`            | `<!-- comment -->`            |
+| Image imports   | `<img src={img} />` | `<img src={img.src} />`       | `<img src="path/img.webp" />` |
+| Import location | Top of file         | Frontmatter (`---`)           | N/A (relative paths)          |
+| Routing         | Manual/library      | File-based (automatic)        | N/A (static file)             |
+| Build tool      | Vite                | Astro                         | None (open in browser)        |
+| Tailwind        | `@import`           | `@import`                     | CDN `<script>` tag            |
 
 ### Tailwind CSS v4 Configuration
 
-**Important**: Both React and Astro projects use Tailwind CSS v4, which differs from v3:
+**Important**: React and Astro projects use Tailwind CSS v4, which differs from v3:
 
 - Use `@import "tailwindcss";` in CSS file
 - DO NOT create `tailwind.config.js`
 - DO NOT create `postcss.config.js`
 - DO NOT use `@tailwind base/components/utilities` directives
 
+**HTML projects** use the Tailwind CDN instead:
+- Include `<script src="https://cdn.tailwindcss.com"></script>` in the `<head>`
+- No build step or CSS file required
+
 ## Available Skills
 
-The project has 7 custom Claude Code skills for frontend development (React and Astro):
+The project has 7 custom Claude Code skills for frontend development (React, Astro, and HTML):
 
 1. **create-page-wireframe**: Creates SVG wireframe designs from `specification.md` in the project root (supports optional URL reference and breakpoint for mobile/tablet/desktop viewports)
 2. **create-responsive-design**: Creates responsive wireframe visualizations (side-by-side mobile/desktop)
 3. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
 4. **generate-pencil-images**: Generates or regenerates AI images (WebP) in `pencil/images/` for nodes in the selected Pencil (.pen) design frame
-5. **create-page-from-pencil**: Implements responsive React or Astro pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
+5. **create-page-from-pencil**: Implements responsive React, Astro, or HTML pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
 6. **convert-images-to-webp**: Converts PNG and JPEG images to WebP format for optimized file sizes
 7. **generate-wireframe-catalog**: Generates comprehensive wireframe catalog documentation
 
@@ -166,8 +173,8 @@ The project has 7 custom Claude Code skills for frontend development (React and 
 
 1. **Check if .pen file exists**: Look for `pencil/design.pen` or the specified `.pen` file
 2. **If .pen file exists**: Use `/create-page-from-pencil pencil/design.pen`
-   - Framework will be auto-detected (Astro or React)
-   - Or specify explicitly: `/create-page-from-pencil pencil/design.pen astro` or `/create-page-from-pencil pencil/design.pen react`
+   - Framework will be auto-detected (Astro, React, or HTML)
+   - Or specify explicitly: `/create-page-from-pencil pencil/design.pen astro`, `/create-page-from-pencil pencil/design.pen react`, or `/create-page-from-pencil pencil/design.pen html`
 3. **Process**: Analyzes desktop and mobile screens in the `.pen` file, extracts images, implements responsive page
 4. **Output**: Responsive page with actual images from the design
 
@@ -280,7 +287,7 @@ Skills must be called in a specific sequence. **Calling them out of order will c
 # PHASE 5: IMPLEMENTATION
 # ----------------------------------------
 5. /create-page-from-pencil {pen-file-path}
-   -> Output: src/pages/{page-name}.astro or src/App.tsx (with images)
+   -> Output: src/pages/{page-name}.astro, src/App.tsx, or index.html (with images)
    -> Why: Implement from high-fidelity Pencil design
    -> Requires: Step 4 complete (or existing .pen file)
 
@@ -352,9 +359,11 @@ npm run dev
 # Specify framework explicitly
 /create-page-from-pencil pencil/design.pen astro
 /create-page-from-pencil pencil/design.pen react
+/create-page-from-pencil pencil/design.pen html
 
 # Specify output path
 /create-page-from-pencil pencil/design.pen astro src/pages/landing.astro
+/create-page-from-pencil pencil/design.pen html landing.html
 ```
 
 **Pattern 4: Maintaining Wireframe Documentation**
@@ -415,12 +424,17 @@ When reading responsive wireframes:
 ### Image Import Paths
 
 ```tsx
-// Correct: Relative path from src/ to assets
+// React/Astro: Relative path from src/ to assets
 import logoImage from '../docs/assets/logo.png'
 
 // Wrong: Incorrect relative path
 import logoImage from './assets/logo.png'
 import logoImage from '/docs/assets/logo.png'
+```
+
+```html
+<!-- HTML: Relative path from the .html file to assets -->
+<img src="assets/images/logo.webp" alt="Logo" />
 ```
 
 ### Loading Strategies
@@ -475,8 +489,11 @@ import logoImage from '/docs/assets/logo.png'
 Always remind users to test:
 
 ```bash
-# Start dev server
+# React/Astro: Start dev server
 npm run dev
+
+# HTML: Open the .html file directly in a browser
+open index.html
 
 # Test responsive design
 # - Resize browser window
@@ -578,7 +595,7 @@ This project uses a **structured, skill-based workflow** for frontend developmen
 6. **Guide users**: Suggest the Pencil design path and next steps in the workflow
 7. **Preserve project patterns**: Colors, structure, TypeScript types
 
-**Workflow**: Create `specification.md` -> `/create-page-wireframe` -> [Create `pencil/design.pen` in Pencil app] -> `/create-pencil-design` -> `/create-page-from-pencil` -> `npm run dev`
+**Workflow**: Create `specification.md` -> `/create-page-wireframe` -> [Create `pencil/design.pen` in Pencil app] -> `/create-pencil-design` -> `/create-page-from-pencil` -> `npm run dev` (or open `.html` in browser)
 
 **Goal**: Enable efficient, consistent frontend development through automation and best practices.
 

@@ -1,26 +1,29 @@
 ---
 name: create-page-from-pencil
-description: Implements a responsive Astro/React page from a Pencil (.pen) design file
-argument-hint: '[pen-file-path] [framework] [output-path] [assets-path]'
+description: Implements a responsive Astro/React/HTML page from a Pencil (.pen) design file
+argument-hint: '[pen-file-path] [framework] [output-path] [assets-dir]'
 disable-model-invocation: true
 ---
 
 # Create Page from Pencil
 
-You are a frontend developer. Your task is to implement a responsive HTML page from a Pencil (.pen) design file, extracting all design data (layout, typography, colors, images) and producing production-ready code with Tailwind CSS.
+You are a frontend developer. Your task is to implement a responsive page from a Pencil (.pen) design file, extracting all design data (layout, typography, colors, images) and producing production-ready code with Tailwind CSS.
 
 ## Instructions
 
 1. **Parse the arguments**:
    - First argument: path to .pen file (optional, defaults to `pencil/design.pen`)
-   - Second argument: framework - "react" or "astro" (optional, will auto-detect if not provided)
+   - Second argument: framework - "react", "astro", or "html" (optional, will auto-detect if not provided)
    - Third argument: output file path (optional, uses framework defaults if not provided)
    - Fourth argument: assets directory path (optional, defaults to `src/assets/images`)
    - Examples:
      - (no args): Uses `pencil/design.pen`, auto-detect framework, default output, assets in `src/assets/images`
      - `pencil/design.pen`: Explicit pen file, auto-detect framework
      - `pencil/design.pen astro`: Pen file with Astro framework
+     - `pencil/design.pen react`: Pen file with React framework
+     - `pencil/design.pen html`: Pen file with plain HTML (no build tool)
      - `pencil/design.pen astro src/pages/index.astro`: Pen file, Astro, custom output path
+     - `pencil/design.pen html index.html`: Pen file, HTML, custom output path
      - `pencil/design.pen astro src/pages/index.astro src/assets/images`: All arguments explicit
    - If the pen file does not exist, inform the user that the `.pen` file must be created manually in the Pencil application first, and stop
 
@@ -28,7 +31,9 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
    - Check for `astro.config.mjs` or `astro.config.ts` → Astro
    - Check for React imports in existing files → React
    - Check `package.json` for "astro" dependency → Astro
-   - Default to React if unclear
+   - Check `package.json` for "react" dependency → React
+   - If no `package.json` or no framework dependencies found → HTML
+   - Default to HTML if unclear
    - Inform the user which framework was detected
 
 3. **Open and explore the .pen file**:
@@ -68,7 +73,7 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
    - These images exist in the `pencil/images/` directory (relative to the project root)
    - Create the assets directory if it does not exist:
      ```bash
-     mkdir -p {assets-path}
+     mkdir -p {assets-dir}
      ```
    - Copy each image from `pencil/images/` to the assets directory with a descriptive name:
      - Logo: `logo.webp`
@@ -79,8 +84,9 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
    - If an image is square but contains horizontal content (e.g., a logo), crop whitespace using `sips` to match the design aspect ratio
    - Record the mapping from design node → assets image path
    - The output page file will import images from this assets directory:
-     - **Astro**: `import logoImg from '{relative-assets-path}/logo.webp'` with `logoImg.src` for usage
-     - **React**: `import logoImg from '{relative-assets-path}/logo.webp'` for direct usage
+     - **Astro**: `import logoImg from '{relative-assets-dir}/logo.webp'` with `logoImg.src` for usage
+     - **React**: `import logoImg from '{relative-assets-dir}/logo.webp'` for direct usage
+     - **HTML**: `<img src="{relative-assets-dir}/logo.webp">` using relative path directly
 
 7. **Determine the responsive breakpoint**:
    - Compare the desktop and mobile frame widths from the design
@@ -92,6 +98,7 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
 8. **Update the layout file**:
    - **Astro**: Edit `src/layouts/Layout.astro`
    - **React**: Edit the root layout or `index.html`
+   - **HTML**: The layout is included directly in the output `.html` file (self-contained)
    - Changes to make:
      - Update `<title>` to match the page name from the design
      - Add Google Fonts `<link>` for fonts used in the design (e.g., Inter)
@@ -148,13 +155,13 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
 
    **Framework-specific syntax**:
 
-   | Element         | Astro                        | React                        |
-   | --------------- | ---------------------------- | ---------------------------- |
-   | Class attribute | `class`                      | `className`                  |
-   | Comments        | `<!-- -->`                   | `{/* */}`                    |
-   | Iteration       | `{items.map(item => (...))}` | `{items.map(item => (...))}` |
-   | Inline style    | `style="..."`                | `style={{...}}`              |
-   | File extension  | `.astro`                     | `.tsx`                       |
+   | Element         | Astro                        | React                        | HTML                         |
+   | --------------- | ---------------------------- | ---------------------------- | ---------------------------- |
+   | Class attribute | `class`                      | `className`                  | `class`                      |
+   | Comments        | `<!-- -->`                   | `{/* */}`                    | `<!-- -->`                   |
+   | Iteration       | `{items.map(item => (...))}` | `{items.map(item => (...))}` | Static HTML (no templating)  |
+   | Inline style    | `style="..."`                | `style={{...}}`              | `style="..."`                |
+   | File extension  | `.astro`                     | `.tsx`                       | `.html`                      |
 
 10. **Map Pen properties to Tailwind classes**:
 
@@ -220,7 +227,8 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
 
 11. **Format and verify**:
     - Run `npm run format` (or `npx prettier --write`) to ensure code style compliance
-    - Run `npm run dev` to start the development server
+    - **Astro/React**: Run `npm run dev` to start the development server
+    - **HTML**: Open the `.html` file directly in a browser (no build step needed)
     - Verify the page loads without errors (HTTP 200)
     - Verify all images are served correctly
     - Check desktop layout matches the design (all sections present, correct columns, typography)
@@ -228,7 +236,7 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
 
 12. **Output**:
     - Confirm the page has been implemented
-    - Mention the framework used (React or Astro)
+    - Mention the framework used (React, Astro, or HTML)
     - Mention the .pen file and output file path
     - List the file(s) created or modified
     - List all images copied to the public directory
@@ -236,7 +244,8 @@ You are a frontend developer. Your task is to implement a responsive HTML page f
       - Which sections are visible on mobile vs. desktop
       - Key layout changes (grid columns, stacking direction)
       - Typography scaling
-    - Suggest running `npm run dev` to view the page
+    - **Astro/React**: Suggest running `npm run dev` to view the page
+    - **HTML**: Suggest opening the `.html` file directly in a browser
 
 ## Responsive Implementation Pattern
 
@@ -282,7 +291,7 @@ Compare desktop and mobile frames in the design to determine:
 
 1. **Identify images in the design**: Look for `fill: {type: "image", url: "..."}` properties
 2. **Locate source files**: Images are stored in `pencil/images/` as WebP files (e.g., `pencil/images/generated-*.webp`)
-3. **Create assets directory**: `mkdir -p {assets-path}` (defaults to `src/assets/images`)
+3. **Create assets directory**: `mkdir -p {assets-dir}` (defaults to `src/assets/images`)
 4. **Copy with descriptive names**: Map generated filenames to semantic names (e.g., `logo.webp`, `hero-bg.webp`)
 5. **Handle square logos**: If a logo image is square (1:1) but displayed in a wide frame, crop whitespace:
    ```bash
@@ -291,6 +300,7 @@ Compare desktop and mobile frames in the design to determine:
 6. **Reference in code**: Import images from the assets directory:
    - **Astro**: `import logoImg from '../assets/images/logo.webp'` → use `logoImg.src`
    - **React**: `import logoImg from '../assets/images/logo.webp'` → use `logoImg` directly
+   - **HTML**: `<img src="assets/images/logo.webp">` → use relative path directly
 
 ## Data-Driven Content Pattern
 
@@ -376,6 +386,48 @@ export default function Page() {
 }
 ```
 
+### HTML Example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Title</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .font-primary { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="font-primary">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="border border-black bg-white flex flex-col p-[10px] pb-0">
+      <div class="h-[200px] lg:h-[240px] border border-black overflow-hidden">
+        <img src="assets/images/card-1.webp" alt="Card 1" class="w-full h-full object-cover" loading="lazy" />
+      </div>
+      <div class="flex flex-col justify-end gap-1 p-[10px] flex-1">
+        <span class="text-lg font-bold text-black">Card 1</span>
+        <span class="text-sm text-[#666666]">Category | $49</span>
+      </div>
+    </div>
+    <div class="border border-black bg-white flex flex-col p-[10px] pb-0">
+      <div class="h-[200px] lg:h-[240px] border border-black overflow-hidden">
+        <img src="assets/images/card-2.webp" alt="Card 2" class="w-full h-full object-cover" loading="lazy" />
+      </div>
+      <div class="flex flex-col justify-end gap-1 p-[10px] flex-1">
+        <span class="text-lg font-bold text-black">Card 2</span>
+        <span class="text-sm text-[#666666]">Category | $89</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+```
+
 ## Category Card with Image Overlay Pattern
 
 ```html
@@ -426,8 +478,17 @@ import heroBgImg from '../assets/images/hero-bg.webp'
 # Astro framework
 /create-page-from-pencil pencil/design.pen astro
 
+# React framework
+/create-page-from-pencil pencil/design.pen react
+
+# HTML (plain HTML, no build tool needed)
+/create-page-from-pencil pencil/design.pen html
+
 # Astro with custom output path
 /create-page-from-pencil pencil/design.pen astro src/pages/index.astro
+
+# HTML with custom output path
+/create-page-from-pencil pencil/design.pen html index.html
 
 # All arguments explicit (pen file, framework, output path, assets directory)
 /create-page-from-pencil pencil/design.pen astro src/pages/index.astro src/assets/images
@@ -440,8 +501,8 @@ import heroBgImg from '../assets/images/hero-bg.webp'
 3. Run `/create-pencil-design 0001 1200` to generate desktop Pencil frame
 4. Run `/create-pencil-design 0001 375` to generate mobile Pencil frame
 5. Refine design in Pencil editor (add images, adjust layout, etc.)
-6. **Run `/create-page-from-pencil pencil/design.pen astro`** to implement the page
-7. Review at `http://localhost:4321/` and iterate
+6. **Run `/create-page-from-pencil pencil/design.pen astro`** to implement the page (or `html` for plain HTML)
+7. Review at `http://localhost:4321/` (Astro/React) or open the `.html` file in a browser (HTML) and iterate
 
 **Typical file output:**
 
@@ -466,11 +527,11 @@ src/
 - **Pencil MCP Tools**: Use Pencil MCP tools exclusively for reading .pen files — never use `Read` or `Grep` on .pen files
 - **resolveInstances**: When calling `batch_get`, set `resolveInstances: true` to see full component instance content instead of just `ref` nodes
 - **Image source**: Design images are stored as WebP files in `pencil/images/` — copy them to the assets directory (default `src/assets/images`) with descriptive names
-- **Image imports**: Import images in the output file using framework import syntax, not static URL paths
+- **Image imports**: Import images in the output file using framework import syntax, not static URL paths (exception: HTML uses relative paths directly)
 - **Image Cropping**: Square images displayed in rectangular frames need cropping before use in HTML — check image dimensions with `sips` or `file` command
 - **Font Family**: Map `fontFamily: "Inter"` to Google Fonts Inter; map `fontFamily: "Arial"` to Inter as well
 - **Text Visibility**: In the design, text nodes have a `fill` property for color — map this to Tailwind `text-{color}` classes
-- **Tailwind v4**: Use `@import 'tailwindcss';` in CSS — do NOT create `tailwind.config.js` or use old `@tailwind` directives
+- **Tailwind v4**: Use `@import 'tailwindcss';` in CSS — do NOT create `tailwind.config.js` or use old `@tailwind` directives (exception: HTML uses the Tailwind CDN via `<script src="https://cdn.tailwindcss.com"></script>`)
 - **Mobile-First**: Base (unprefixed) styles = mobile, prefixed styles = desktop
 - **Color Fidelity**: Extract exact hex colors from the design — do not approximate
 - **Content Fidelity**: Use exact text content from the design — do not rephrase
