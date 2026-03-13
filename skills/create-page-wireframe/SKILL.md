@@ -1,13 +1,13 @@
 ---
 name: create-page-wireframe
-description: Creates SVG wireframe images for page designs based on specification.md and/or existing web pages
+description: Creates SVG wireframe images for page designs based on spec.md and/or existing web pages
 argument-hint: '[url] [breakpoint]'
 disable-model-invocation: true
 ---
 
 # Create Page Wireframe
 
-You are a wireframe designer. Your task is to create an SVG wireframe image based on the `specification.md` file in the project root directory and/or by analyzing an existing web page.
+You are a wireframe designer. Your task is to create an SVG wireframe image based on the `spec.md` file in the project root directory and/or by analyzing an existing web page.
 
 ## Instructions
 
@@ -15,17 +15,17 @@ You are a wireframe designer. Your task is to create an SVG wireframe image base
    - First argument: url (optional) - URL of an existing web page to reference
    - Second argument: breakpoint (optional, numeric) - Viewport width for the wireframe. Defaults to `1024`. Controls the viewBox width and layout style. Examples: `375` for mobile, `768` for tablet, `1024` for desktop.
    - Examples:
-     - No arguments - Read specification.md, default 1024px
-     - `"https://example.com"` - specification.md + URL reference
+     - No arguments - Read spec.md, default 1024px
+     - `"https://example.com"` - spec.md + URL reference
      - `"https://example.com" 375` - URL with mobile breakpoint
      - `"" 375` - Mobile wireframe, no URL
      - `"" 768` - Tablet wireframe, no URL
 
 2. **Read the specification file**:
 
-   a. **Always read `specification.md`** from the project root directory:
-   - Use the Read tool to read `specification.md` at the project root
-   - If the file does not exist, inform the user and ask them to create `specification.md` in the project root directory
+   a. **Always read `spec.md`** from the project root directory:
+   - Use the Read tool to read `spec.md` at the project root
+   - If the file does not exist, inform the user and ask them to create `spec.md` in the project root directory
 
    b. **Parse the specification file**:
    - The markdown file contains the full page specification including page type, sections, components, layout structure, and any other design requirements
@@ -127,13 +127,13 @@ A typical wireframe should include:
 
 ## Usage Examples
 
-### Example 1: Create wireframe from specification.md (desktop, default 1024px)
+### Example 1: Create wireframe from spec.md (desktop, default 1024px)
 
 ```bash
 /create-page-wireframe
 ```
 
-**Result**: Reads `specification.md` from the project root and creates a 1024px-wide desktop wireframe based on its contents, using standard wireframe colors.
+**Result**: Reads `spec.md` from the project root and creates a 1024px-wide desktop wireframe based on its contents, using standard wireframe colors.
 
 ### Example 2: Create wireframe with a reference URL
 
@@ -141,7 +141,7 @@ A typical wireframe should include:
 /create-page-wireframe "https://stripe.com"
 ```
 
-**Result**: Reads `specification.md` and also analyzes Stripe's homepage to extract structure, sections, and colors. Combines both to create a 1024px-wide wireframe.
+**Result**: Reads `spec.md` and also analyzes Stripe's homepage to extract structure, sections, and colors. Combines both to create a 1024px-wide wireframe.
 
 ### Example 3: Create a mobile wireframe (375px)
 
@@ -149,7 +149,7 @@ A typical wireframe should include:
 /create-page-wireframe "" 375
 ```
 
-**Result**: Reads `specification.md` and creates a 375px-wide mobile wireframe with single-column stacked layout, compact navigation, and mobile-friendly spacing.
+**Result**: Reads `spec.md` and creates a 375px-wide mobile wireframe with single-column stacked layout, compact navigation, and mobile-friendly spacing.
 
 ### Example 4: Create a mobile wireframe with URL reference
 
@@ -157,7 +157,7 @@ A typical wireframe should include:
 /create-page-wireframe "https://stripe.com" 375
 ```
 
-**Result**: Reads `specification.md`, analyzes Stripe's homepage, and creates a 375px-wide mobile wireframe with the extracted design system adapted to mobile layout.
+**Result**: Reads `spec.md`, analyzes Stripe's homepage, and creates a 375px-wide mobile wireframe with the extracted design system adapted to mobile layout.
 
 ### Example 5: Create a tablet wireframe (768px)
 
@@ -165,7 +165,7 @@ A typical wireframe should include:
 /create-page-wireframe "" 768
 ```
 
-**Result**: Reads `specification.md` and creates a 768px-wide tablet wireframe with reduced columns and adapted spacing.
+**Result**: Reads `spec.md` and creates a 768px-wide tablet wireframe with reduced columns and adapted spacing.
 
 ## Specification File Format
 

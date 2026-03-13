@@ -79,7 +79,7 @@ project/
 **Usage**:
 
 ```bash
-# From specification.md only (desktop, default 1024px)
+# From spec.md only (desktop, default 1024px)
 /create-page-wireframe
 
 # From existing web page URL
@@ -100,7 +100,7 @@ project/
 - URL (optional): Reference to existing web page for design inspiration
 - Breakpoint (optional, numeric): Viewport width for the wireframe. Defaults to `1024`. Controls SVG viewBox width and layout style (e.g., `375` for mobile, `768` for tablet)
 
-**Reads**: `specification.md` from the project root for page specification
+**Reads**: `spec.md` from the project root for page specification
 
 **Output**: `{project-root}/docs/wireframes/{NNNN}/{page-name}-wireframe.svg` (always created at the project root directory, not inside the skill/plugin directory)
 
@@ -364,7 +364,7 @@ When creating a new page from scratch:
 # PHASE 1: DESIGN
 # ----------------------------------------
 1. /create-page-wireframe
-   -> Reads: specification.md from project root
+   -> Reads: spec.md from project root
    -> Creates: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
 
 # PHASE 2: PENCIL SETUP
@@ -514,7 +514,7 @@ npm run dev
 ### Example: Creating a Landing Page
 
 ```bash
-# 1. Create specification.md in the project root, then create wireframe
+# 1. Create spec.md in the project root, then create wireframe
 /create-page-wireframe
 # Output: docs/wireframes/0001/tcg-landing-page-wireframe.svg
 
