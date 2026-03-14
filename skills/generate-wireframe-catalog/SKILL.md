@@ -16,13 +16,12 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - When specified, **all catalog text** should be written in the target language, including:
      - Section headings and titles (e.g., "Wireframe Catalog" → "ワイヤーフレームカタログ")
      - Descriptions, labels, and annotations
-     - Table headers (e.g., "Name", "Type", "Status" → "名前", "タイプ", "ステータス")
+     - Table headers (e.g., "Name", "Type" → "名前", "タイプ")
      - Usage guide instructions and code comments
-     - Statistics labels and status descriptions
+     - Statistics labels
      - Contributing guidelines and footer text
    - Keep technical terms as-is when no well-known localized equivalent exists (e.g., "SVG", "wireframe", "breakpoint", "viewBox")
    - Wireframe filenames and file paths remain unchanged (always English kebab-case)
-   - Status emoji badges (✅ 🔄 ⏳) are universal and remain as-is
    - Examples:
      - (no argument): Generate catalog in English
      - `ja`: Generate catalog in Japanese
@@ -68,16 +67,6 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - Calculate section heights from y-coordinate ranges
    - List sections with their heights
 
-   g. **Related files**:
-   - Check if `docs/assets-list.md` exists and references this wireframe
-   - Check if React component exists in `src/App.tsx` or `src/components/`
-
-   h. **Implementation status**:
-   - Determine status based on available artifacts:
-     - ✅ Complete: Has main wireframe + components + responsive + implementation
-     - 🔄 In Progress: Has main wireframe + some artifacts
-     - ⏳ Planned: Only has directory or placeholder
-
 4. **Generate catalog structure**:
 
    Create `docs/wireframes/catalog/catalog.md`. Refer to [`examples/catalog.md`](examples/catalog.md) for the exact format and section structure.
@@ -88,7 +77,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
 
    - **Header**: Title, description, table of contents
    - **Overview**: Summary table (wireframe count, component count, breakpoints, last updated)
-   - **Wireframes**: Detailed entry per wireframe (type, dimensions, updated date, description, file links for each breakpoint)
+   - **Wireframes**: Detailed entry per wireframe (type, dimensions, description, file links for each breakpoint)
    - **Quick Reference**: Summary table with columns: ID, Name, Type, Desktop, Tablet, Mobile, Updated
    - **Component Library**: Table of shared components (ID, size, description)
    - **Design System**: Color palette, typography, responsive breakpoint reference
@@ -116,25 +105,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - Remove duplicates (same component used in multiple wireframes)
    - Sort by category, then by size
 
-7. **Status determination logic**:
-
-   For each wireframe, determine status:
-
-   **✅ Complete**:
-   - Has main wireframe SVG
-   - Has components/ directory with components
-   - Has at least one responsive version
-   - Has implementation (React component or assets-list.md)
-
-   **🔄 In Progress**:
-   - Has main wireframe SVG
-   - Has some but not all artifacts (components OR responsive OR implementation)
-
-   **⏳ Planned**:
-   - Directory exists but no main wireframe
-   - Or only main wireframe, no other artifacts
-
-8. **Type inference**:
+7. **Type inference**:
 
    Infer page type from filename or sections:
    - "landing", "home" → Landing
@@ -145,7 +116,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - "about", "contact" → Informational
    - Default: Page
 
-9. **Generate HTML catalog**:
+8. **Generate HTML catalog**:
 
    After generating `docs/wireframes/catalog/catalog.md`, convert it into a styled, self-contained HTML document at `docs/wireframes/catalog/catalog.html`. Refer to [`examples/catalog.html`](examples/catalog.html) for the exact format, styling, and structure.
 
@@ -162,7 +133,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
 
    g. **Save the HTML file** at `docs/wireframes/catalog/catalog.html`.
 
-10. **Output**:
+9. **Output**:
    - Confirm the catalog has been generated
    - Report statistics:
      - Number of wireframes cataloged
@@ -255,13 +226,6 @@ docs/wireframes/0001/components/
 
 Use these formatting patterns:
 
-**Status badges**:
-
-- ✅ Complete
-- 🔄 In Progress
-- ⏳ Planned
-- ❌ Blocked
-
 **File links**:
 
 ```markdown
@@ -306,9 +270,9 @@ Statistics:
 
 Wireframes:
 
-- 0001: TCG Landing Page (✅ Complete)
-- 0002: Dashboard (🔄 In Progress)
-- 0003: Profile Page (⏳ Planned)
+- 0001: TCG Landing Page
+- 0002: Dashboard
+- 0003: Profile Page
 
 The catalog includes:
 ✓ Overview and statistics
@@ -333,12 +297,6 @@ If `docs/wireframes/` has no {NNNN} directories:
 - Include usage guide and standards
 - Encourage creating first wireframe with `/create-page-wireframe`
 
-### Incomplete wireframe data
-If a wireframe directory exists but is incomplete:
-- Mark as 🔄 In Progress or ⏳ Planned
-- List available artifacts
-- Note missing artifacts
-
 ### No components extracted
 If wireframes don't have components/ directories:
 - Show "Component Library" section as empty
@@ -348,7 +306,6 @@ If wireframes don't have components/ directories:
 If an SVG file can't be parsed:
 - Log warning
 - Use filename and directory info only
-- Mark status as needs review
 
 ## Regeneration
 
@@ -400,7 +357,6 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 - **Consistent formatting**: Uses standardized structure
 - **Statistics tracking**: Calculates metrics automatically
 - **Component aggregation**: Combines components from all wireframes
-- **Status inference**: Determines implementation status automatically
 - **Extensible**: Easy to add new wireframes and regenerate
 
 ---
@@ -415,11 +371,11 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 
 ## Wireframes
 ### 0001 - TCG Landing Page
-  - Status, files, design system, sections, components, implementation
+  - Files, design system, sections, components
 ### 0002 - Dashboard
-  - Status, files, design system, sections, components, implementation
+  - Files, design system, sections, components
 ### 0003 - Profile Page
-  - Status, files, design system, sections, components, implementation
+  - Files, design system, sections, components
 
 ## Quick Reference
 | Table of all wireframes |
