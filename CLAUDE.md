@@ -10,7 +10,7 @@ This is a **wireframe-driven frontend development project** that supports React,
 
 This project uses **custom Claude Code skills** for wireframe-driven development:
 
-- **skills/**: 7 custom commands for the workflow
+- **skills/**: 9 custom commands for the workflow
 - **docs/**: Example artifacts (wireframes) that skills reference
 - **.claude/**: Claude Code configuration (settings only)
 - **CLAUDE.md**: This file - project instructions for Claude
@@ -51,14 +51,15 @@ npm run dev
 project/
 ├── .claude/                                  # Claude Code configuration
 │   └── settings.json                         # Claude Code settings
-├── skills/                                   # Custom Claude Code skills (7 skills)
+├── skills/                                   # Custom Claude Code skills (9 skills)
 │   ├── create-page-wireframe/
 │   ├── create-responsive-design/
 │   ├── create-pencil-design/
 │   ├── create-page-from-pencil/
 │   ├── generate-pencil-images/
 │   ├── convert-images-to-webp/
-│   └── generate-wireframe-catalog/
+│   ├── generate-wireframe-catalog/
+│   └── generate-catalog-pdf/
 ├── spec.md                             # Page specification file (markdown)
 ├── docs/                                     # Example artifacts
 │   └── wireframes/{NNNN}/                    # Wireframe ID directory
@@ -109,15 +110,17 @@ project/
 
 ## Available Skills
 
-The project has 7 custom Claude Code skills for frontend development (React, Astro, and HTML):
+The project has 9 custom Claude Code skills for frontend development (React, Astro, and HTML):
 
-1. **create-page-wireframe**: Creates SVG wireframe designs from `spec.md` in the project root (supports optional URL reference and breakpoint for mobile/tablet/desktop viewports)
-2. **create-responsive-design**: Creates responsive wireframe visualizations (side-by-side mobile/desktop)
-3. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
-4. **generate-pencil-images**: Generates or regenerates AI images (WebP) in `pencil/images/` for nodes in the selected Pencil (.pen) design frame
-5. **create-page-from-pencil**: Implements responsive React, Astro, or HTML pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
-6. **convert-images-to-webp**: Converts PNG and JPEG images to WebP format for optimized file sizes
-7. **generate-wireframe-catalog**: Generates comprehensive wireframe catalog documentation
+1. **generate-spec**: Generates `spec.md` from a requirements document (markdown) for use by create-page-wireframe. Takes application type (`single` or `multi`) to determine spec format.
+2. **create-page-wireframe**: Creates SVG wireframe designs from `spec.md` in the project root (supports optional URL reference and breakpoint for mobile/tablet/desktop viewports)
+3. **create-responsive-design**: Creates responsive wireframe visualizations (side-by-side mobile/desktop)
+4. **create-pencil-design**: Generates Pencil (.pen) design frames from SVG wireframes
+5. **generate-pencil-images**: Generates or regenerates AI images (WebP) in `pencil/images/` for nodes in the selected Pencil (.pen) design frame
+6. **create-page-from-pencil**: Implements responsive React, Astro, or HTML pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
+7. **convert-images-to-webp**: Converts PNG and JPEG images to WebP format for optimized file sizes
+8. **generate-wireframe-catalog**: Generates comprehensive wireframe catalog documentation
+9. **generate-catalog-pdf**: Converts wireframe catalog HTML to PDF, with SVG-to-PNG conversion for reliable rendering
 
 ## Working with This Project
 
@@ -125,7 +128,7 @@ The project has 7 custom Claude Code skills for frontend development (React, Ast
 
 1. **Check if wireframe exists**: Look in `docs/wireframes/{NNNN}/`
 2. **If no wireframe**: Suggest creating one with `/create-page-wireframe`
-   - **Ensure `spec.md` exists**: Guide the user to create `spec.md` in the project root with the page specification
+   - **Ensure `spec.md` exists**: If no `spec.md` exists, suggest generating it with `/generate-spec <path-to-requirements> <single|multi>`
    - **Then run the skill**: `/create-page-wireframe`
    - **If user mentions a specific website**: Use URL argument: `/create-page-wireframe "https://example.com"`
    - **If user says "like [website]"**: Use URL argument: `/create-page-wireframe "https://website.com"`
@@ -255,6 +258,13 @@ Skills must be called in a specific sequence. **Calling them out of order will c
 ### Complete Order for New Pages
 
 ```bash
+# PHASE 0: SPECIFICATION
+# ----------------------------------------
+0. /generate-spec <path-to-requirements> <single|multi>
+   -> Reads: requirements markdown file
+   -> Output: spec.md in project root
+   -> Why: Translates abstract requirements into structured page specification
+
 # PHASE 1: DESIGN
 # ----------------------------------------
 1. /create-page-wireframe
@@ -300,12 +310,13 @@ Skills must be called in a specific sequence. **Calling them out of order will c
 ### Dependency Chain
 
 ```
-create-page-wireframe (1)
-    ├── create-responsive-design (2) [Optional - responsive wireframe variants]
-    │
-    └── [MANUAL] Create pencil/design.pen in Pencil app (3)
-            └── create-pencil-design (4)
-                    └── create-page-from-pencil (5)
+generate-spec (0) [Optional - generates spec.md from requirements]
+    └── create-page-wireframe (1)
+            ├── create-responsive-design (2) [Optional - responsive wireframe variants]
+            │
+            └── [MANUAL] Create pencil/design.pen in Pencil app (3)
+                    └── create-pencil-design (4)
+                            └── create-page-from-pencil (5)
 ```
 
 ### Critical Rules for Claude
@@ -334,7 +345,8 @@ create-page-wireframe (1)
 **Pattern 1: Creating a New Page (Recommended)**
 
 ```bash
-# First, create spec.md in the project root
+# First, generate spec.md from requirements (or create it manually)
+/generate-spec docs/requirements.md multi
 /create-page-wireframe
 # [MANUAL] Create pencil/design.pen in Pencil app
 /create-pencil-design {NNNN} 1200   # Desktop
@@ -382,7 +394,7 @@ npm run dev
 **No wireframe exists**
 
 **Claude should respond**:
-"I couldn't find a wireframe for ID 0001. Let's create one first. Please create `spec.md` in the project root describing the page, then run:"
+"I couldn't find a wireframe for ID 0001. Let's create one first. Generate `spec.md` from your requirements file, then create the wireframe:"
 
 ```bash
 /create-page-wireframe
@@ -471,7 +483,7 @@ import logoImage from '/docs/assets/logo.png'
 **Error**: User mentions a skill that doesn't exist
 
 **Response**:
-"That skill doesn't exist. Available skills are: create-page-wireframe, create-responsive-design, create-pencil-design, generate-pencil-images, create-page-from-pencil, convert-images-to-webp, generate-wireframe-catalog. Which would you like to use?"
+"That skill doesn't exist. Available skills are: generate-spec, create-page-wireframe, create-responsive-design, create-pencil-design, generate-pencil-images, create-page-from-pencil, convert-images-to-webp, generate-wireframe-catalog, generate-catalog-pdf. Which would you like to use?"
 
 ### Tailwind Not Working
 
@@ -536,7 +548,7 @@ When user request matches multiple approaches:
 
 **Scenario**: "Create a landing page"
 
-- Use: Create `spec.md` -> `/create-page-wireframe` -> `/create-pencil-design` -> `/create-page-from-pencil`
+- Use: `/generate-spec <requirements> <single|multi>` -> `/create-page-wireframe` -> `/create-pencil-design` -> `/create-page-from-pencil`
 - Don't: Write component from scratch without wireframe
 
 **Scenario**: "Add this specific image"
@@ -595,7 +607,7 @@ This project uses a **structured, skill-based workflow** for frontend developmen
 6. **Guide users**: Suggest the Pencil design path and next steps in the workflow
 7. **Preserve project patterns**: Colors, structure, TypeScript types
 
-**Workflow**: Create `spec.md` -> `/create-page-wireframe` -> [Create `pencil/design.pen` in Pencil app] -> `/create-pencil-design` -> `/create-page-from-pencil` -> `npm run dev` (or open `.html` in browser)
+**Workflow**: `/generate-spec <requirements> <single|multi>` -> `/create-page-wireframe` -> [Create `pencil/design.pen` in Pencil app] -> `/create-pencil-design` -> `/create-page-from-pencil` -> `npm run dev` (or open `.html` in browser)
 
 **Goal**: Enable efficient, consistent frontend development through automation and best practices.
 

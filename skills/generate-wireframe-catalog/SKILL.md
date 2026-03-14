@@ -1,21 +1,38 @@
 ---
 name: generate-wireframe-catalog
-description: Generates a comprehensive wireframe catalog in docs/wireframes/README.md
+description: Generates a comprehensive wireframe catalog (catalog.md + styled HTML with SVG previews) in docs/wireframes/catalog/
 disable-model-invocation: true
 ---
 
 # Generate Wireframe Catalog
 
-You are a technical documentation specialist. Your task is to scan all wireframes in the project and generate a comprehensive catalog document at `docs/wireframes/README.md`.
+You are a technical documentation specialist. Your task is to scan all wireframes in the project and generate a comprehensive catalog document at `docs/wireframes/catalog/catalog.md`.
 
 ## Instructions
 
-1. **Scan wireframes directory**:
+1. **Parse the arguments**:
+   - First argument: language (optional) - Language for all text in the catalog documents. Defaults to `en` (English). Use ISO 639-1 codes (e.g., `ja` for Japanese, `zh` for Chinese, `ko` for Korean, `fr` for French, `de` for German, `es` for Spanish).
+   - When specified, **all catalog text** should be written in the target language, including:
+     - Section headings and titles (e.g., "Wireframe Catalog" → "ワイヤーフレームカタログ")
+     - Descriptions, labels, and annotations
+     - Table headers (e.g., "Name", "Type", "Status" → "名前", "タイプ", "ステータス")
+     - Usage guide instructions and code comments
+     - Statistics labels and status descriptions
+     - Contributing guidelines and footer text
+   - Keep technical terms as-is when no well-known localized equivalent exists (e.g., "SVG", "wireframe", "breakpoint", "viewBox")
+   - Wireframe filenames and file paths remain unchanged (always English kebab-case)
+   - Status emoji badges (✅ 🔄 ⏳) are universal and remain as-is
+   - Examples:
+     - (no argument): Generate catalog in English
+     - `ja`: Generate catalog in Japanese
+     - `en`: Generate catalog in English
+
+2. **Scan wireframes directory**:
    - Look in `docs/wireframes/` for all subdirectories matching the pattern `{NNNN}` (4-digit numbers)
    - Example directories: `0001/`, `0002/`, `0003/`
    - Ignore non-numeric directories
 
-2. **For each wireframe directory, collect information**:
+3. **For each wireframe directory, collect information**:
 
    a. **Wireframe ID**: Extract from directory name (e.g., `0001`)
 
@@ -34,7 +51,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - Check if `components/` directory exists
    - Count subdirectories: headers/, heroes/, sections/, footers/
    - Count total SVG files across all component categories
-   - Read `components/README.md` if it exists
+   - Read `components/catalog.md` if it exists
 
    e. **Design system**:
    - Read the main wireframe SVG
@@ -60,146 +77,32 @@ You are a technical documentation specialist. Your task is to scan all wireframe
      - 🔄 In Progress: Has main wireframe + some artifacts
      - ⏳ Planned: Only has directory or placeholder
 
-3. **Generate catalog structure**:
+4. **Generate catalog structure**:
 
-   Create `docs/wireframes/README.md` with the following sections:
+   Create `docs/wireframes/catalog/catalog.md`. Refer to [`examples/catalog.md`](examples/catalog.md) for the exact format and section structure.
 
-   ### Header
+   **Important**: Since catalog files are in `docs/wireframes/catalog/`, all relative paths to wireframe SVGs must use `../` prefix (e.g., `../0001/1024/login-wireframe.svg` instead of `0001/1024/login-wireframe.svg`).
 
-   ```markdown
-   # Wireframe Catalog
+   The catalog must include these sections (in order):
 
-   A comprehensive catalog of all wireframe designs for this project, including their components, responsive versions, and implementation status.
+   - **Header**: Title, description, table of contents
+   - **Overview**: Summary table (wireframe count, component count, breakpoints, last updated)
+   - **Wireframes**: Detailed entry per wireframe (type, dimensions, updated date, description, file links for each breakpoint)
+   - **Quick Reference**: Summary table with columns: ID, Name, Type, Desktop, Tablet, Mobile, Updated
+   - **Component Library**: Table of shared components (ID, size, description)
+   - **Design System**: Color palette, typography, responsive breakpoint reference
+   - **Statistics**: Design metrics (totals, breakpoints, SVG file count, average/max/min heights)
+   - **Footer**: Last updated date
 
-   ## Table of Contents
-
-   - [Overview](#overview)
-   - [Wireframes](#wireframes)
-   - [Quick Reference](#quick-reference)
-   - [Component Library](#component-library)
-   - [Usage Guide](#usage-guide)
-   ```
-
-   ### Overview Section
-   - Total wireframes count
-   - Total components count (sum across all wireframes)
-   - Last updated date (current date)
-
-   ### Wireframes Section
-
-   For each wireframe (sorted by ID), create a detailed entry:
-
-   **Subsections**:
-   - **Status**: Badge with completion status
-   - **Type**: Landing, Dashboard, Profile, etc. (infer from page name)
-   - **Created**: File creation date
-   - **Dimensions**: From viewBox (e.g., 1200×2400px)
-
-   - **Description**:
-     - Generate from wireframe sections
-     - List key features (bullet points)
-
-   - **Files**:
-     - Link to main wireframe
-     - Links to responsive versions
-     - Link to components directory
-
-   - **Design System**:
-     - Color palette (extracted from SVG)
-     - Typography (extracted from SVG)
-
-   - **Sections**:
-     - Numbered list of sections with heights
-     - Brief description of each section
-
-   - **Components Extracted**:
-     - Table of components by category
-     - Include component name, size, use case
-
-   - **Implementation Status**:
-     - Checklist table with tasks and status
-     - Tasks: Wireframe Created, Components Extracted, Responsive Design, Assets List, React Component, etc.
-
-   - **Related Files**:
-     - Asset requirements
-     - React component
-     - Assets directory
-
-   - **Skills Used**:
-     - List of skills that were likely used (infer from artifacts)
-
-   ### Quick Reference Section
-   - Table with all wireframes
-   - Columns: ID, Name, Type, Status, Desktop, Mobile, Components, Updated
-   - Include legend for status symbols
-
-   ### Component Library Section
-   - Aggregate all components across wireframes
-   - Group by category (Headers, Heroes, Sections, Footers)
-   - Table format: Component, Source, Size, Description
-   - Show which wireframe each component came from
-
-   **Component Reusability**:
-   - Show 3 example layout compositions using available components
-   - Calculate total heights for each example
-
-   ### Usage Guide Section
-   - **Viewing Wireframes**: Browser and design tool instructions
-   - **Creating New Wireframes**: Skill command examples
-   - **Using Existing Components**: How to reuse components
-   - **Implementing Wireframes**: Full workflow commands
-   - **Updating the Catalog**: Instructions for maintaining this file
-
-   ### Statistics Section
-   - **Design Metrics**:
-     - Total wireframes, sections, components
-     - Responsive breakpoints used
-     - Average wireframe height
-     - Design system info
-
-   - **Implementation Metrics**:
-     - Wireframes implemented (percentage)
-     - Components with responsive designs
-     - Assets lists generated
-     - React components created
-
-   ### Design System Standards Section
-   - Color standards
-   - Layout standards
-   - Component standards
-   - Typography standards
-
-   ### Version History Section
-   - Version number (increment from existing if updating)
-   - Current date
-   - Changelog of what was added/updated
-
-   ### Resources Section
-   - Tools (SVG editors, browsers)
-   - Documentation links
-   - Skills reference table
-
-   ### Contributing Section
-   - Guidelines for adding new wireframes
-   - Checklist for catalog updates
-
-   ### Footer
-   - Maintained by
-   - Last catalog update
-   - Catalog version
-
-4. **Calculate statistics**:
+5. **Calculate statistics**:
    - Total wireframes: Count of {NNNN} directories
-   - Total sections: Sum of sections across all wireframes
-   - Total components: Sum of component SVG files
+   - Pages vs components: Count by wireframe type
+   - Total SVG files: wireframes x breakpoints
    - Responsive breakpoints: Unique breakpoints across all wireframes
    - Average wireframe height: Calculate from viewBox heights
-   - Wireframes implemented: Count with React components / total
-   - Components with responsive designs: Count with responsive directories
-   - Assets lists generated: Check for docs/assets-list.md references
-   - React components created: Check for implementations
+   - Max and min heights: Identify tallest and shortest wireframes
 
-5. **Component aggregation**:
+6. **Component aggregation**:
 
    For the Component Library section:
    - Collect all components from all wireframe `components/` directories
@@ -212,7 +115,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - Remove duplicates (same component used in multiple wireframes)
    - Sort by category, then by size
 
-6. **Status determination logic**:
+7. **Status determination logic**:
 
    For each wireframe, determine status:
 
@@ -230,7 +133,7 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - Directory exists but no main wireframe
    - Or only main wireframe, no other artifacts
 
-7. **Type inference**:
+8. **Type inference**:
 
    Infer page type from filename or sections:
    - "landing", "home" → Landing
@@ -241,14 +144,32 @@ You are a technical documentation specialist. Your task is to scan all wireframe
    - "about", "contact" → Informational
    - Default: Page
 
-8. **Output**:
+9. **Generate HTML catalog**:
+
+   After generating `docs/wireframes/catalog/catalog.md`, convert it into a styled, self-contained HTML document at `docs/wireframes/catalog/catalog.html`. Refer to [`examples/catalog.html`](examples/catalog.html) for the exact format, styling, and structure.
+
+   a. **Read the generated `docs/wireframes/catalog.md`** to use as the content source.
+
+   b. **Convert the markdown content to HTML** following the same structure as the example. The HTML should mirror the same sections as `catalog.md`, with SVG wireframe thumbnail previews for each wireframe entry (all breakpoints side by side).
+
+   c. **Use the example as a template**: Follow the same CSS, HTML structure, and styling from [`examples/catalog.html`](examples/catalog.html). Key points:
+      - Self-contained HTML with embedded CSS (no external dependencies)
+      - `<html lang="{language}">` matching the language argument
+      - Wireframe thumbnails linked with `target="_blank"` to open SVGs in new tabs
+      - `html { scroll-behavior: smooth; }` for TOC navigation
+      - Responsive layout with `@media (max-width: 768px)`
+
+   g. **Save the HTML file** at `docs/wireframes/catalog/catalog.html`.
+
+10. **Output**:
    - Confirm the catalog has been generated
    - Report statistics:
      - Number of wireframes cataloged
      - Number of components documented
      - Total sections found
-     - File path: `docs/wireframes/README.md`
-   - Suggest reviewing the catalog
+     - Language used (e.g., "Japanese (ja)" or "English (en)")
+     - File paths: `docs/wireframes/catalog/catalog.md` and `docs/wireframes/catalog/catalog.html`
+   - Suggest reviewing the HTML catalog in a browser: `open docs/wireframes/catalog/catalog.html`
    - Mention that the catalog should be regenerated when wireframes are added/updated
 
 ## Information Extraction Guidelines
@@ -343,17 +264,17 @@ Use these formatting patterns:
 **File links**:
 
 ```markdown
-- 📄 **Wireframe**: [`0001/tcg-landing-page-wireframe.svg`](0001/tcg-landing-page-wireframe.svg)
-- 📱 **Responsive (768px)**: [`0001/768/tcg-landing-page-responsive-wireframe.svg`](0001/768/tcg-landing-page-responsive-wireframe.svg)
-- 🧩 **Components**: [`0001/components/`](0001/components/) (7 components)
+- 📄 **Wireframe**: [`0001/tcg-landing-page-wireframe.svg`](../0001/tcg-landing-page-wireframe.svg)
+- 📱 **Responsive (768px)**: [`0001/768/tcg-landing-page-responsive-wireframe.svg`](../0001/768/tcg-landing-page-responsive-wireframe.svg)
+- 🧩 **Components**: [`0001/components/`](../0001/components/) (7 components)
 ```
 
 **Tables**:
 
 ```markdown
-| ID   | Name             | Type    | Status      | Desktop   | Mobile    | Components | Updated    |
-| ---- | ---------------- | ------- | ----------- | --------- | --------- | ---------- | ---------- |
-| 0001 | TCG Landing Page | Landing | ✅ Complete | 1200×2400 | 768, 1024 | 7          | 2026-02-14 |
+| ID   | Name             | Type    | Desktop   | Tablet | Mobile | Updated    |
+| ---- | ---------------- | ------- | --------- | ------ | ------ | ---------- |
+| 0001 | TCG Landing Page | Landing | 1200×2400 | 768    | 375    | 2026-02-14 |
 ```
 
 **Code blocks**:
@@ -370,7 +291,10 @@ Use these formatting patterns:
 
 ```
 
-I've generated a comprehensive wireframe catalog at docs/wireframes/README.md
+I've generated a comprehensive wireframe catalog:
+
+- Markdown: docs/wireframes/catalog/catalog.md
+- HTML: docs/wireframes/catalog/catalog.html
 
 Statistics:
 
@@ -387,13 +311,13 @@ Wireframes:
 
 The catalog includes:
 ✓ Overview and statistics
-✓ Detailed wireframe entries
+✓ Detailed wireframe entries with SVG thumbnail previews
 ✓ Quick reference table
 ✓ Aggregated component library
-✓ Usage guide and standards
-✓ Version history
+✓ Design system (colors, typography, responsive)
 
-You can view the catalog at: docs/wireframes/README.md
+View the HTML catalog in your browser:
+open docs/wireframes/catalog/catalog.html
 
 To update this catalog after adding new wireframes, run:
 /generate-wireframe-catalog
@@ -439,15 +363,21 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 ## Usage Examples
 
 ```bash
-# Generate catalog from scratch
+# Generate catalog in English (default)
 /generate-wireframe-catalog
+
+# Generate catalog in Japanese
+/generate-wireframe-catalog ja
+
+# Generate catalog in English explicitly
+/generate-wireframe-catalog en
 
 # Regenerate after adding new wireframe
 /create-page-wireframe "New dashboard"
-/generate-wireframe-catalog
+/generate-wireframe-catalog ja
 
 # Regenerate after extracting components
-/generate-wireframe-catalog
+/generate-wireframe-catalog ja
 ````
 
 ## Benefits
@@ -499,22 +429,9 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 - Sections: 8 components
 - Footers: 2 components
 
-## Usage Guide
-- Viewing, creating, implementing
+## Design System
+- Color palette, typography, responsive breakpoints
 
 ## Statistics
 - Design metrics
-- Implementation metrics
-
-## Standards
-- Color, layout, component, typography
-
-## Version History
-- v1.0, v1.1, etc.
-
-## Resources
-- Tools, docs, skills
-
-## Contributing
-- Guidelines
 ```

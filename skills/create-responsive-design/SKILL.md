@@ -1,35 +1,37 @@
 ---
 name: create-responsive-design
-description: Creates an SVG wireframe adapted to a specific viewport breakpoint width
-argument-hint: '[wireframe-id] [breakpoint]'
+description: Creates SVG wireframes adapted to a specific viewport breakpoint width for all wireframes in docs/wireframes
+argument-hint: '[breakpoint]'
 disable-model-invocation: true
 ---
 
 # Create Responsive Design
 
-You are a UX/UI designer. Your task is to create an SVG wireframe that shows how the page looks at a specific viewport width (breakpoint), based on an existing wireframe.
+You are a UX/UI designer. Your task is to create SVG wireframes that show how each page/component looks at a specific viewport width (breakpoint), based on existing wireframes found in `docs/wireframes/`.
 
 ## Instructions
 
 1. **Parse the arguments**:
-   - First argument: wireframe ID (4-digit number like "0001", required)
-   - Second argument: breakpoint in pixels (optional, defaults to "1024")
+   - First argument: breakpoint in pixels (optional, defaults to "375")
    - Examples:
-     - `0001`: Uses wireframe 0001 with 1024px breakpoint
-     - `0001 1024`: Uses wireframe 0001 with 1024px breakpoint
-     - `0001 1024`: Uses wireframe 0001 with 1024px breakpoint
-     - `0002 375`: Uses wireframe 0002 with 375px (mobile) breakpoint
-   - If no wireframe ID is provided, ask the user for it
+     - (no argument): Creates responsive wireframes at 375px (mobile) for all wireframes
+     - `375`: Creates 375px (mobile) wireframes for all wireframes
+     - `768`: Creates 768px (tablet) wireframes for all wireframes
+   - If the breakpoint matches the source wireframe's breakpoint (e.g., requesting 1024 when source is 1024), skip that wireframe and inform the user
 
-2. **Find the existing wireframe**:
-   - Search for wireframe files: `docs/wireframes/{NNNN}/**/*-wireframe.svg`
-   - Look in any breakpoint subdirectory (e.g., `docs/wireframes/0001/1024/`, `docs/wireframes/0001/375/`)
-   - Prefer the largest existing breakpoint version as the source of truth (typically the 1024px desktop version)
-   - If not found, inform the user and stop
-   - If found, read the SVG file to understand the design
-   - Extract the page name from the filename for later use
+2. **Discover all existing wireframes**:
+   - Scan the `docs/wireframes/` directory at the project root
+   - Find all wireframe directories matching the pattern `docs/wireframes/{NNNN}/`
+   - Within each directory, find SVG files matching `**/*-wireframe.svg`
+   - For each wireframe, prefer the largest existing breakpoint version as the source of truth (typically the 1024px desktop version)
+   - Build a list of all wireframes to process, sorted by wireframe ID
+   - If no wireframes are found, inform the user and suggest running `/create-page-wireframe` first
 
-3. **Analyze the existing wireframe**:
+3. **Process each wireframe sequentially**:
+   For each wireframe found, perform steps 4–8 below. Generate wireframes in order of wireframe ID (0001, 0002, ..., 00NN).
+
+4. **Analyze the existing wireframe**:
+   - Read the source SVG file
    - Extract the viewBox dimensions (e.g., "0 0 1024 2400")
    - Identify all sections:
      - Header/Navigation
@@ -41,15 +43,20 @@ You are a UX/UI designer. Your task is to create an SVG wireframe that shows how
    - Note all text labels, layout structure, colors, and spacing
    - Understand the visual hierarchy and component placement
 
-4. **Determine layout adaptations for the breakpoint**:
+5. **Determine layout adaptations for the breakpoint**:
    - The given breakpoint is the exact viewport width to design for
    - Adapt the original wireframe layout to fit within this width
    - Follow the breakpoint-specific design guidance below
 
-5. **Create the wireframe SVG**:
+6. **Create the wireframe SVG**:
    - Use a viewBox of `"0 0 {breakpoint} {height}"` where `{breakpoint}` is the given viewport width and `{height}` is determined by the content (taller for narrower viewports due to stacking)
    - The wireframe should represent how the page actually looks at this exact viewport width
    - This is NOT a side-by-side comparison — it is a single, standalone wireframe
+   - **XML character escaping**: SVG is an XML format, so all text content in `<text>` elements and attributes must use XML-safe characters. Always escape these characters:
+     - `&` → `&amp;`
+     - `<` → `&lt;`
+     - `>` → `&gt;`
+     - For example, "User & Permissions" must be written as `<text>User &amp; Permissions</text>` in the SVG. Failing to escape `&` will cause the SVG to fail to render.
 
    ```svg
    <svg viewBox="0 0 {breakpoint} {height}" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -61,32 +68,39 @@ You are a UX/UI designer. Your task is to create an SVG wireframe that shows how
    </svg>
    ```
 
-6. **Visual design guidelines**:
+7. **Visual design guidelines**:
    - Use the same color scheme as the original wireframe
    - Maintain the same visual language and design tokens
    - Ensure all text is readable at the given width
    - Use the same fonts as the original wireframe
    - Adjust font sizes proportionally for the viewport width
 
-7. **Save the wireframe**:
+8. **Save the wireframe**:
    - Create directory structure: `docs/wireframes/{NNNN}/{breakpoint}/`
-   - Example directory: `docs/wireframes/0001/768/`
+   - Example directory: `docs/wireframes/0001/375/`
    - Generate filename: `{page-name}-wireframe.svg`
-   - Example full path: `docs/wireframes/0001/768/customer-management-wireframe.svg`
+   - Example full path: `docs/wireframes/0001/375/customer-management-wireframe.svg`
    - Preserve the page name from the original wireframe filename
    - Create the directories if they don't exist
 
-8. **Output**:
-   - Confirm the wireframe has been created
-   - Provide the full file path
-   - Mention the wireframe ID and breakpoint used
+9. **Output**: After processing all wireframes:
+   - Show a summary table of all generated wireframes:
+     ```
+     | ID   | Name                | Source Breakpoint | Target Breakpoint | File Path |
+     |------|---------------------|-------------------|-------------------|-----------|
+     | 0001 | Login               | 1024              | 375               | docs/wireframes/0001/375/login-wireframe.svg |
+     | 0002 | Dashboard           | 1024              | 375               | docs/wireframes/0002/375/dashboard-wireframe.svg |
+     | ...  | ...                 | ...               | ...               | ... |
+     ```
+   - State the total number of wireframes generated
+   - Note any wireframes that were skipped (and why)
    - Summarize key layout adaptations made for this breakpoint:
      - Layout changes (sidebar visibility, grid columns, stacking)
      - Typography adjustments
      - Navigation changes
      - Content reflow patterns
    - Suggest next steps:
-     - Review the wireframe
+     - Review the wireframes
      - Create additional breakpoint versions if needed
      - Proceed to Pencil design or code implementation
 
@@ -173,28 +187,23 @@ Adapt the wireframe layout based on the given breakpoint width:
 ## Usage Examples
 
 ```bash
-# Create a 768px (tablet) wireframe for page 0001
-/create-responsive-design 0001 768
+# Create 375px (mobile) wireframes for all wireframes (default)
+/create-responsive-design
 
-# Create a 375px (mobile) wireframe for page 0001
-/create-responsive-design 0001 375
+# Create 375px (mobile) wireframes for all wireframes
+/create-responsive-design 375
 
-# Create a 1024px wireframe for page 0002
-/create-responsive-design 0002 1024
-
-# Default breakpoint (1024px)
-/create-responsive-design 0001
+# Create 768px (tablet) wireframes for all wireframes
+/create-responsive-design 768
 ```
 
 ## Workflow Example
 
-1. Designer creates initial desktop wireframe: `docs/wireframes/0001/1024/page-wireframe.svg`
-2. **Run `/create-responsive-design 0001 768`** to create the 768px version
-3. Generated: `docs/wireframes/0001/768/page-wireframe.svg`
-4. **Run `/create-responsive-design 0001 375`** to create the 375px version
-5. Generated: `docs/wireframes/0001/375/page-wireframe.svg`
-6. Review all breakpoint wireframes
-7. Proceed to implementation
+1. Designer creates initial desktop wireframes via `/create-page-wireframe` (1024px)
+2. **Run `/create-responsive-design 375`** to create mobile versions for all wireframes
+3. **Run `/create-responsive-design 768`** to create tablet versions for all wireframes
+4. Review all breakpoint wireframes
+5. Proceed to implementation
 
 **Directory Structure After:**
 
@@ -203,25 +212,28 @@ docs/
   wireframes/
     0001/
       1024/
-        customer-management-wireframe.svg    (original desktop)
+        login-wireframe.svg              (original desktop)
       768/
-        customer-management-wireframe.svg    (tablet adaptation)
+        login-wireframe.svg              (tablet adaptation)
       375/
-        customer-management-wireframe.svg    (mobile adaptation)
+        login-wireframe.svg              (mobile adaptation)
     0002/
       1024/
-        another-page-wireframe.svg           (original desktop)
+        dashboard-wireframe.svg          (original desktop)
       768/
-        another-page-wireframe.svg           (tablet adaptation)
+        dashboard-wireframe.svg          (tablet adaptation)
+      375/
+        dashboard-wireframe.svg          (mobile adaptation)
+    ...
 ```
 
 ## Important Notes
 
-- **Single wireframe output**: Each invocation produces one wireframe at the specified viewport width — NOT a side-by-side comparison
-- **Wireframe ID Format**: Always use 4-digit wireframe IDs (0001, 0002, etc.)
+- **Batch processing**: Each invocation processes ALL wireframes in `docs/wireframes/` — no need to specify individual wireframe IDs
+- **Single wireframe output per ID**: Each wireframe produces one SVG at the specified viewport width — NOT a side-by-side comparison
+- **Skip duplicates**: If a wireframe already exists at the target breakpoint, skip it (do not overwrite unless the source has changed)
 - **Directory Structure**: Creates `docs/wireframes/{NNNN}/{breakpoint}/` subdirectories automatically
 - **File Naming**: `{page-name}-wireframe.svg` — same filename as the original, stored in the breakpoint directory
-- **Multiple Breakpoints**: Run the skill multiple times with different breakpoints to build a complete set
 - **Visual consistency**: Use the same colors, fonts, and design tokens as the original
 - **Proportional adaptation**: Layout should feel natural at the given width, not "squished"
 - **Breakpoint flexibility**: Support any numeric breakpoint (375, 640, 768, 1024, 1280, 1536, etc.)
@@ -229,8 +241,10 @@ docs/
 
 ## Checklist
 
+- [ ] All wireframes in `docs/wireframes/` discovered and listed
+- [ ] Each wireframe processed sequentially by ID
 - [ ] Directory structure created: `docs/wireframes/{NNNN}/{breakpoint}/`
-- [ ] File saved with correct naming: `{page-name}-wireframe.svg`
+- [ ] Files saved with correct naming: `{page-name}-wireframe.svg`
 - [ ] viewBox width matches the given breakpoint
 - [ ] Layout is properly adapted for the viewport width
 - [ ] Typography is readable at this width
@@ -241,3 +255,5 @@ docs/
 - [ ] Tables are converted to cards if width < 768px
 - [ ] Spacing is proportional to the viewport width
 - [ ] Color scheme is consistent with the original wireframe
+- [ ] XML characters properly escaped (`&` → `&amp;`, etc.)
+- [ ] Summary table shown with all generated wireframes

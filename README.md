@@ -44,14 +44,16 @@ All skills work together in a seamless workflow, ensuring consistency from desig
 project/
 ├── .claude/
 │   └── settings.json              # Claude Code settings
-├── skills/                        # Custom Claude Code skills (7 skills)
+├── skills/                        # Custom Claude Code skills (9 skills)
+│   ├── generate-spec/
 │   ├── create-page-wireframe/
 │   ├── create-responsive-design/
 │   ├── create-pencil-design/
 │   ├── create-page-from-pencil/
 │   ├── generate-pencil-images/
 │   ├── convert-images-to-webp/
-│   └── generate-wireframe-catalog/
+│   ├── generate-wireframe-catalog/
+│   └── generate-catalog-pdf/
 ├── docs/                          # Example artifacts and documentation
 │   └── wireframes/                # Wireframe files
 │       ├── README.md              # Wireframe catalog (auto-generated)
@@ -72,7 +74,49 @@ project/
 
 ## Skills
 
-### 1. create-page-wireframe
+### 1. generate-spec
+
+**Purpose**: Generates a structured `spec.md` from a requirements document for use by create-page-wireframe
+
+**Usage**:
+
+```bash
+# Single-page application (one wireframe)
+/generate-spec docs/requirements.md single
+
+# Multi-page application (multiple wireframes with Wireframe Map)
+/generate-spec docs/requirements.md multi
+```
+
+**Input**:
+
+- Path to a markdown file (required): Requirements definitions or system requirements document
+- Application type (required): `single` or `multi`
+  - `single`: Generates a single-page spec with one wireframe ID
+  - `multi`: Generates a multi-wireframe spec with a Wireframe Map listing all pages and shared components
+
+**Output**: `spec.md` in the project root. Format depends on application type:
+- `single`: One page spec with Page ID, Sections, Layout, Key Components, Notes
+- `multi`: Wireframe Map table + individual specs for each page and component, each with a wireframe ID
+
+**Features**:
+
+- Reads abstract requirements and translates them into concrete UI specifications
+- Auto-determines the next available wireframe ID from existing wireframes
+- Infers layout, components, and sections from functional requirements
+- For `multi`: identifies all pages, shared components, and navigation relationships
+- Produces a specification ready for immediate use by `/create-page-wireframe`
+
+**When to use**:
+
+- When you have a requirements document and need to create page designs
+- Before running `/create-page-wireframe` when no `spec.md` exists yet
+- Use `single` for landing pages, portfolios, or single-screen apps
+- Use `multi` for business systems, admin panels, or apps with multiple screens
+
+---
+
+### 2. create-page-wireframe
 
 **Purpose**: Creates SVG wireframe designs for pages based on specifications or existing web pages
 
@@ -121,7 +165,7 @@ project/
 
 ---
 
-### 2. create-responsive-design
+### 3. create-responsive-design
 
 **Purpose**: Creates side-by-side visualization of mobile and desktop layouts
 
@@ -144,7 +188,7 @@ project/
 
 ---
 
-### 3. create-pencil-design
+### 4. create-pencil-design
 
 **Purpose**: Generates high-fidelity Pencil (.pen) design frames from existing SVG wireframes
 
@@ -186,7 +230,7 @@ project/
 
 ---
 
-### 4. generate-pencil-images
+### 5. generate-pencil-images
 
 **Purpose**: Generates or regenerates AI images for image nodes within the currently selected Pencil (.pen) design frame
 
@@ -223,7 +267,7 @@ project/
 
 ---
 
-### 5. create-page-from-pencil
+### 6. create-page-from-pencil
 
 **Purpose**: Implements responsive React, Astro, or HTML pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
 
@@ -279,7 +323,7 @@ project/
 
 ---
 
-### 6. convert-images-to-webp
+### 7. convert-images-to-webp
 
 **Purpose**: Converts PNG and JPEG images to WebP format for significantly reduced file sizes
 
@@ -321,7 +365,7 @@ project/
 
 ---
 
-### 7. generate-wireframe-catalog
+### 8. generate-wireframe-catalog
 
 **Purpose**: Automatically generates a comprehensive wireframe catalog
 
@@ -335,8 +379,9 @@ project/
 
 **Output**:
 
-- Comprehensive catalog at `docs/wireframes/README.md`
-- Includes all wireframes, statistics, and usage guide
+- Markdown catalog at `docs/wireframes/catalog/catalog.md`
+- HTML catalog at `docs/wireframes/catalog/catalog.html`
+- Includes all wireframes with SVG thumbnails, statistics, and usage guide
 
 **When to use**:
 
@@ -351,6 +396,47 @@ project/
 - Calculates statistics and metrics
 - Generates quick reference table
 - Includes usage guide and standards
+- SVG references use `../` prefix (relative to `catalog/` subdirectory)
+
+---
+
+### 9. generate-catalog-pdf
+
+**Purpose**: Converts wireframe catalog HTML to PDF, with SVG-to-PNG conversion for reliable rendering
+
+**Usage**:
+
+```bash
+/generate-catalog-pdf
+```
+
+**Input**: None (reads `docs/wireframes/catalog/catalog.html`)
+
+**Output**:
+
+- PNG images in `docs/wireframes/catalog/images/` (converted from SVG)
+- PDF-optimized HTML at `docs/wireframes/catalog/catalog-pdf.html`
+- PDF file at `docs/wireframes/catalog/catalog.pdf`
+
+**Features**:
+
+- Converts SVG wireframe thumbnails to PNG using `rsvg-convert` at 150 DPI
+- Generates PDF-optimized HTML with inline-block layout (Puppeteer-compatible)
+- Fixed-height image containers for uniform thumbnail rendering
+- Page-break rules to keep wireframe entries on single pages
+- PNG naming flattens directory structure with `--` separator (e.g., `0001--1024--login-wireframe.png`)
+
+**Prerequisites**:
+
+- `docs/wireframes/catalog/catalog.html` must exist (run `/generate-wireframe-catalog` first)
+- `rsvg-convert` must be installed (`brew install librsvg` on macOS)
+- `html-to-pdf.js` must exist at the project root
+
+**When to use**:
+
+- After running `/generate-wireframe-catalog` to update the catalog
+- When wireframes are added or modified
+- When the PDF needs to be refreshed
 
 ---
 
@@ -361,6 +447,12 @@ project/
 When creating a new page from scratch:
 
 ```bash
+# PHASE 0: SPECIFICATION
+# ----------------------------------------
+0. /generate-spec <path-to-requirements> <single|multi>
+   -> Reads: requirements markdown file
+   -> Creates: spec.md in project root (single-page or multi-wireframe format)
+
 # PHASE 1: DESIGN
 # ----------------------------------------
 1. /create-page-wireframe
@@ -403,6 +495,7 @@ When creating a new page from scratch:
 
 | Step | Skill                          | Input                     | Output                      | Required? |
 | ---- | ------------------------------ | ------------------------- | --------------------------- | --------- |
+| 0    | generate-spec                  | Requirements path + type  | spec.md                     | Optional  |
 | 1    | create-page-wireframe          | Specification             | Wireframe SVG               | Yes       |
 | 2    | [MANUAL] Create .pen in Pencil | -                         | pencil/design.pen           | Yes       |
 | 3    | create-pencil-design           | Wireframe ID + Breakpoint | .pen design frame (desktop) | Yes       |
@@ -514,7 +607,8 @@ npm run dev
 ### Example: Creating a Landing Page
 
 ```bash
-# 1. Create spec.md in the project root, then create wireframe
+# 1. Generate spec.md from requirements (or create it manually)
+/generate-spec docs/requirements.md multi
 /create-page-wireframe
 # Output: docs/wireframes/0001/tcg-landing-page-wireframe.svg
 
@@ -822,7 +916,7 @@ For issues or questions:
 
 ---
 
-**Version**: 2.1
-**Last Updated**: 2026-03-06
+**Version**: 2.2
+**Last Updated**: 2026-03-14
 **Frameworks**: React, Astro, HTML
-**Skills**: 7 (create-page-wireframe, create-responsive-design, create-pencil-design, generate-pencil-images, create-page-from-pencil, convert-images-to-webp, generate-wireframe-catalog)
+**Skills**: 9 (generate-spec, create-page-wireframe, create-responsive-design, create-pencil-design, generate-pencil-images, create-page-from-pencil, convert-images-to-webp, generate-wireframe-catalog, generate-catalog-pdf)

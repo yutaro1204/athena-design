@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireframe Catalog — Keio Store Budget Management</title>
+  <style>
+    :root {
+      --color-primary: #1a365d;
+      --color-accent: #2b6cb0;
+      --color-keio: #e91e8a;
+      --color-bg: #ffffff;
+      --color-bg-alt: #f7fafc;
+      --color-border: #e2e8f0;
+      --color-text: #2d3748;
+      --color-text-light: #718096;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Meiryo", sans-serif;
+      color: var(--color-text);
+      background: var(--color-bg-alt);
+      line-height: 1.7;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    header {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      color: #fff;
+      padding: 48px 0 36px;
+      margin-bottom: 32px;
+    }
+    header h1 { font-size: 28px; margin-bottom: 8px; }
+    header .lead { font-size: 14px; opacity: 0.9; }
+    nav.toc {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+    }
+    nav.toc a {
+      color: var(--color-accent);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    nav.toc a:hover { text-decoration: underline; }
+    main { background: var(--color-bg); border-radius: 8px; padding: 32px; margin-bottom: 32px; border: 1px solid var(--color-border); }
+    h2 {
+      color: var(--color-primary);
+      font-size: 22px;
+      border-bottom: 3px solid var(--color-accent);
+      padding-bottom: 8px;
+      margin: 40px 0 20px;
+    }
+    h2:first-child { margin-top: 0; }
+    h3 { color: var(--color-accent); font-size: 17px; margin: 28px 0 12px; }
+    h4 { color: var(--color-primary); font-size: 14px; margin: 16px 0 8px; }
+    p { margin: 8px 0; font-size: 14px; }
+    ul { margin: 8px 0 8px 20px; font-size: 14px; }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
+    thead { background: var(--color-primary); color: #fff; }
+    th { padding: 10px 12px; text-align: left; font-weight: 600; }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--color-border); }
+    tbody tr:nth-child(even) { background: var(--color-bg-alt); }
+    tbody tr:hover { background: #edf2f7; }
+    code {
+      background: #edf2f7;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: "SF Mono", "Consolas", monospace;
+      font-size: 12px;
+    }
+    pre {
+      background: #1a202c;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 12px 0;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+    a { color: var(--color-accent); }
+    a:hover { text-decoration: underline; }
+    hr { border: none; border-top: 1px solid var(--color-border); margin: 32px 0; }
+    .wireframe-entry { margin: 20px 0 32px; padding: 20px; background: var(--color-bg-alt); border-radius: 8px; border: 1px solid var(--color-border); break-inside: avoid; page-break-inside: avoid; }
+    .wireframe-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 8px 0 12px; font-size: 13px; color: var(--color-text-light); }
+    .wireframe-meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .wireframe-row { margin: 12px 0; font-size: 0; white-space: nowrap; }
+    .wireframe-thumb-wrapper { display: inline-block; width: 31%; margin-right: 2%; text-align: center; vertical-align: top; white-space: normal; font-size: 13px; }
+    .wireframe-thumb-wrapper:last-child { margin-right: 0; }
+    .wireframe-thumb-wrapper .label { font-size: 10px; color: var(--color-text-light); margin-bottom: 4px; font-weight: 600; }
+    .wireframe-thumb-wrapper a {
+      display: block;
+      height: 260px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      background: #fff;
+    }
+    .wireframe-thumb {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .color-swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid var(--color-border);
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .status-badge { font-size: 13px; }
+    footer {
+      text-align: center;
+      padding: 24px 0;
+      color: var(--color-text-light);
+      font-size: 12px;
+    }
+    @media (max-width: 768px) {
+      header { padding: 32px 0 24px; }
+      header h1 { font-size: 22px; }
+      main { padding: 20px 16px; }
+      .wireframe-row { flex-direction: column; }
+      .wireframe-thumb { max-width: 100%; }
+      nav.toc { flex-direction: column; gap: 6px; }
+      table { font-size: 11px; }
+      th, td { padding: 6px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Wireframe Catalog</h1>
+    <p class="lead">Keio Store Budget Management System — Complete wireframe catalog for all pages and components</p>
+  </div>
+</header>
+
+<div class="container">
+
+<nav class="toc">
+  <a href="#overview">Overview</a>
+  <a href="#wireframes">Wireframes</a>
+  <a href="#quick-ref">Quick Reference</a>
+  <a href="#components">Component Library</a>
+  <a href="#design-system">Design System</a>
+  <a href="#stats">Statistics</a>
+</nav>
+
+<main>
+
+<!-- Overview -->
+<h2 id="overview">Overview</h2>
+<table>
+  <thead><tr><th>Item</th><th>Value</th></tr></thead>
+  <tbody>
+    <tr><td>Total Wireframes</td><td>15 (Pages: 11, Components: 4)</td></tr>
+    <tr><td>Total Components</td><td>0 (not yet extracted)</td></tr>
+    <tr><td>Responsive Breakpoints</td><td>375px, 768px, 1024px</td></tr>
+    <tr><td>Last Updated</td><td>2026-03-14</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- Wireframes -->
+<h2 id="wireframes">Wireframes</h2>
+
+<div class="wireframe-entry">
+  <h3>0001: Login</h3>
+  <div class="wireframe-meta">
+    <span>Type: Authentication</span>
+    <span>Size: 1024x768</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>User authentication screen. Provides a login form with email and password fields.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0001--1024--login-wireframe.png" target="_blank"><img src="images/0001--1024--login-wireframe.png" alt="0001: Login — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0001--768--login-wireframe.png" target="_blank"><img src="images/0001--768--login-wireframe.png" alt="0001: Login — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0001--375--login-wireframe.png" target="_blank"><img src="images/0001--375--login-wireframe.png" alt="0001: Login — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0002: Dashboard</h3>
+  <div class="wireframe-meta">
+    <span>Type: Dashboard</span>
+    <span>Size: 1024x1100</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Main dashboard screen. Displays KPI summary cards, monthly trend charts, budget vs. actuals comparison, and alert notifications.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0002--1024--dashboard-wireframe.png" target="_blank"><img src="images/0002--1024--dashboard-wireframe.png" alt="0002: Dashboard — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0002--768--dashboard-wireframe.png" target="_blank"><img src="images/0002--768--dashboard-wireframe.png" alt="0002: Dashboard — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0002--375--dashboard-wireframe.png" target="_blank"><img src="images/0002--375--dashboard-wireframe.png" alt="0002: Dashboard — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0003: Budget Entry</h3>
+  <div class="wireframe-meta">
+    <span>Type: Data Entry</span>
+    <span>Size: 1024x850</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Budget data entry screen. Allows monthly budget input by account item with automatic total calculation.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0003--1024--budget-entry-wireframe.png" target="_blank"><img src="images/0003--1024--budget-entry-wireframe.png" alt="0003: Budget Entry — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0003--768--budget-entry-wireframe.png" target="_blank"><img src="images/0003--768--budget-entry-wireframe.png" alt="0003: Budget Entry — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0003--375--budget-entry-wireframe.png" target="_blank"><img src="images/0003--375--budget-entry-wireframe.png" alt="0003: Budget Entry — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0004: Budget Approval</h3>
+  <div class="wireframe-meta">
+    <span>Type: Workflow</span>
+    <span>Size: 1024x850</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Budget approval workflow screen. Provides a pending approval list, approve/reject actions, and comment history.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0004--1024--budget-approval-wireframe.png" target="_blank"><img src="images/0004--1024--budget-approval-wireframe.png" alt="0004: Budget Approval — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0004--768--budget-approval-wireframe.png" target="_blank"><img src="images/0004--768--budget-approval-wireframe.png" alt="0004: Budget Approval — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0004--375--budget-approval-wireframe.png" target="_blank"><img src="images/0004--375--budget-approval-wireframe.png" alt="0004: Budget Approval — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0005: Forecast Management</h3>
+  <div class="wireframe-meta">
+    <span>Type: Data Entry</span>
+    <span>Size: 1024x850</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Forecast management screen. Allows forecast value input by account item, displaying comparisons with previous forecasts and prior-year actuals.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0005--1024--forecast-management-wireframe.png" target="_blank"><img src="images/0005--1024--forecast-management-wireframe.png" alt="0005: Forecast Management — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0005--768--forecast-management-wireframe.png" target="_blank"><img src="images/0005--768--forecast-management-wireframe.png" alt="0005: Forecast Management — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0005--375--forecast-management-wireframe.png" target="_blank"><img src="images/0005--375--forecast-management-wireframe.png" alt="0005: Forecast Management — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0006: Actuals Review</h3>
+  <div class="wireframe-meta">
+    <span>Type: Data View</span>
+    <span>Size: 1024x900</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Actuals data review screen. Provides actuals display by account item, drill-down detail views, and data import history.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0006--1024--actuals-review-wireframe.png" target="_blank"><img src="images/0006--1024--actuals-review-wireframe.png" alt="0006: Actuals Review — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0006--768--actuals-review-wireframe.png" target="_blank"><img src="images/0006--768--actuals-review-wireframe.png" alt="0006: Actuals Review — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0006--375--actuals-review-wireframe.png" target="_blank"><img src="images/0006--375--actuals-review-wireframe.png" alt="0006: Actuals Review — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0007: Variance Analysis</h3>
+  <div class="wireframe-meta">
+    <span>Type: Analysis</span>
+    <span>Size: 1024x900</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Budget vs. actuals variance analysis screen. A three-panel layout with variance cards, comparison charts, and comment input.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0007--1024--variance-analysis-wireframe.png" target="_blank"><img src="images/0007--1024--variance-analysis-wireframe.png" alt="0007: Variance Analysis — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0007--768--variance-analysis-wireframe.png" target="_blank"><img src="images/0007--768--variance-analysis-wireframe.png" alt="0007: Variance Analysis — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0007--375--variance-analysis-wireframe.png" target="_blank"><img src="images/0007--375--variance-analysis-wireframe.png" alt="0007: Variance Analysis — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0008: Report Export</h3>
+  <div class="wireframe-meta">
+    <span>Type: Report</span>
+    <span>Size: 1024x850</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Report export screen. Provides template selection, condition settings, preview, and PDF/Excel download.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0008--1024--report-export-wireframe.png" target="_blank"><img src="images/0008--1024--report-export-wireframe.png" alt="0008: Report Export — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0008--768--report-export-wireframe.png" target="_blank"><img src="images/0008--768--report-export-wireframe.png" alt="0008: Report Export — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0008--375--report-export-wireframe.png" target="_blank"><img src="images/0008--375--report-export-wireframe.png" alt="0008: Report Export — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0009: Master Management (Accounts)</h3>
+  <div class="wireframe-meta">
+    <span>Type: Master Management</span>
+    <span>Size: 1024x850</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Account master management screen. Provides a tree view for hierarchical display, with add, edit, and deactivate operations.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0009--1024--master-management-accounts-wireframe.png" target="_blank"><img src="images/0009--1024--master-management-accounts-wireframe.png" alt="0009: Master Management (Accounts) — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0009--768--master-management-accounts-wireframe.png" target="_blank"><img src="images/0009--768--master-management-accounts-wireframe.png" alt="0009: Master Management (Accounts) — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0009--375--master-management-accounts-wireframe.png" target="_blank"><img src="images/0009--375--master-management-accounts-wireframe.png" alt="0009: Master Management (Accounts) — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0010: Master Management (Departments &amp; Stores)</h3>
+  <div class="wireframe-meta">
+    <span>Type: Master Management</span>
+    <span>Size: 1024x850</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Department and store master management screen. Provides a store list with business type badges, and filtering by area and status.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0010--1024--master-management-departments-stores-wireframe.png" target="_blank"><img src="images/0010--1024--master-management-departments-stores-wireframe.png" alt="0010: Master Management (Departments & Stores) — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0010--768--master-management-departments-stores-wireframe.png" target="_blank"><img src="images/0010--768--master-management-departments-stores-wireframe.png" alt="0010: Master Management (Departments & Stores) — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0010--375--master-management-departments-stores-wireframe.png" target="_blank"><img src="images/0010--375--master-management-departments-stores-wireframe.png" alt="0010: Master Management (Departments & Stores) — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0011: User &amp; Permission Management</h3>
+  <div class="wireframe-meta">
+    <span>Type: Administration</span>
+    <span>Size: 1024x900</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>User management and permission settings screen. Provides a user list, role badges, and a permission matrix.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0011--1024--user-permission-management-wireframe.png" target="_blank"><img src="images/0011--1024--user-permission-management-wireframe.png" alt="0011: User & Permission Management — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0011--768--user-permission-management-wireframe.png" target="_blank"><img src="images/0011--768--user-permission-management-wireframe.png" alt="0011: User & Permission Management — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0011--375--user-permission-management-wireframe.png" target="_blank"><img src="images/0011--375--user-permission-management-wireframe.png" alt="0011: User & Permission Management — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0012: Navigation Header (Component)</h3>
+  <div class="wireframe-meta">
+    <span>Type: Component</span>
+    <span>Size: 1024x200</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Shared navigation header. A top bar containing the logo, menu items, notification icon, and user avatar.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0012--1024--navigation-header-wireframe.png" target="_blank"><img src="images/0012--1024--navigation-header-wireframe.png" alt="0012: Navigation Header — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0012--768--navigation-header-wireframe.png" target="_blank"><img src="images/0012--768--navigation-header-wireframe.png" alt="0012: Navigation Header — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0012--375--navigation-header-wireframe.png" target="_blank"><img src="images/0012--375--navigation-header-wireframe.png" alt="0012: Navigation Header — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0013: Sidebar (Component)</h3>
+  <div class="wireframe-meta">
+    <span>Type: Component</span>
+    <span>Size: 1024x700</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Shared sidebar navigation. A side panel with menu items, active state indicator, and collapsible support.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0013--1024--sidebar-wireframe.png" target="_blank"><img src="images/0013--1024--sidebar-wireframe.png" alt="0013: Sidebar — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0013--768--sidebar-wireframe.png" target="_blank"><img src="images/0013--768--sidebar-wireframe.png" alt="0013: Sidebar — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0013--375--sidebar-wireframe.png" target="_blank"><img src="images/0013--375--sidebar-wireframe.png" alt="0013: Sidebar — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0014: Data Table (Component)</h3>
+  <div class="wireframe-meta">
+    <span>Type: Component</span>
+    <span>Size: 1024x900</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>Generic data table component. A table with sorting, filtering, pagination, and row selection.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0014--1024--data-table-wireframe.png" target="_blank"><img src="images/0014--1024--data-table-wireframe.png" alt="0014: Data Table — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0014--768--data-table-wireframe.png" target="_blank"><img src="images/0014--768--data-table-wireframe.png" alt="0014: Data Table — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0014--375--data-table-wireframe.png" target="_blank"><img src="images/0014--375--data-table-wireframe.png" alt="0014: Data Table — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<div class="wireframe-entry">
+  <h3>0015: KPI Summary Card (Component)</h3>
+  <div class="wireframe-meta">
+    <span>Type: Component</span>
+    <span>Size: 1024x400</span>
+    <span>Updated: 2026-03-14</span>
+  </div>
+  <p>KPI display summary card. A card component containing numeric values, period-over-period comparison, and trend indicators.</p>
+  <div class="wireframe-row">
+    <div class="wireframe-thumb-wrapper"><div class="label">Desktop (1024px)</div><a href="images/0015--1024--kpi-summary-card-wireframe.png" target="_blank"><img src="images/0015--1024--kpi-summary-card-wireframe.png" alt="0015: KPI Summary Card — Desktop" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Tablet (768px)</div><a href="images/0015--768--kpi-summary-card-wireframe.png" target="_blank"><img src="images/0015--768--kpi-summary-card-wireframe.png" alt="0015: KPI Summary Card — Tablet" class="wireframe-thumb"></a></div>
+    <div class="wireframe-thumb-wrapper"><div class="label">Mobile (375px)</div><a href="images/0015--375--kpi-summary-card-wireframe.png" target="_blank"><img src="images/0015--375--kpi-summary-card-wireframe.png" alt="0015: KPI Summary Card — Mobile" class="wireframe-thumb"></a></div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Quick Reference -->
+<h2 id="quick-ref">Quick Reference</h2>
+<table>
+  <thead>
+    <tr><th>ID</th><th>Name</th><th>Type</th><th>Desktop</th><th>Tablet</th><th>Mobile</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>0001</td><td>Login</td><td>Authentication</td><td>1024x768</td><td>768</td><td>375</td></tr>
+    <tr><td>0002</td><td>Dashboard</td><td>Dashboard</td><td>1024x1100</td><td>768</td><td>375</td></tr>
+    <tr><td>0003</td><td>Budget Entry</td><td>Data Entry</td><td>1024x850</td><td>768</td><td>375</td></tr>
+    <tr><td>0004</td><td>Budget Approval</td><td>Workflow</td><td>1024x850</td><td>768</td><td>375</td></tr>
+    <tr><td>0005</td><td>Forecast Management</td><td>Data Entry</td><td>1024x850</td><td>768</td><td>375</td></tr>
+    <tr><td>0006</td><td>Actuals Review</td><td>Data View</td><td>1024x900</td><td>768</td><td>375</td></tr>
+    <tr><td>0007</td><td>Variance Analysis</td><td>Analysis</td><td>1024x900</td><td>768</td><td>375</td></tr>
+    <tr><td>0008</td><td>Report Export</td><td>Report</td><td>1024x850</td><td>768</td><td>375</td></tr>
+    <tr><td>0009</td><td>Master Management (Accounts)</td><td>Master Management</td><td>1024x850</td><td>768</td><td>375</td></tr>
+    <tr><td>0010</td><td>Master Management (Departments &amp; Stores)</td><td>Master Management</td><td>1024x850</td><td>768</td><td>375</td></tr>
+    <tr><td>0011</td><td>User &amp; Permission Management</td><td>Administration</td><td>1024x900</td><td>768</td><td>375</td></tr>
+    <tr><td>0012</td><td>Navigation Header</td><td>Component</td><td>1024x200</td><td>768</td><td>375</td></tr>
+    <tr><td>0013</td><td>Sidebar</td><td>Component</td><td>1024x700</td><td>768</td><td>375</td></tr>
+    <tr><td>0014</td><td>Data Table</td><td>Component</td><td>1024x900</td><td>768</td><td>375</td></tr>
+    <tr><td>0015</td><td>KPI Summary Card</td><td>Component</td><td>1024x400</td><td>768</td><td>375</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- Component Library -->
+<h2 id="components">Component Library</h2>
+<p>No individual components have been extracted yet. The following wireframes are defined as shared components:</p>
+<table>
+  <thead><tr><th>Component</th><th>ID</th><th>Size</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Navigation Header</td><td>0012</td><td>1024x200</td><td>Shared top bar for all authenticated pages</td></tr>
+    <tr><td>Sidebar</td><td>0013</td><td>1024x700</td><td>Side panel for menu navigation</td></tr>
+    <tr><td>Data Table</td><td>0014</td><td>1024x900</td><td>Table with sorting, filtering, and pagination</td></tr>
+    <tr><td>KPI Summary Card</td><td>0015</td><td>1024x400</td><td>Card displaying values, period comparison, and trends</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- Design System -->
+<h2 id="design-system">Design System</h2>
+
+<h3>Color Palette</h3>
+<table>
+  <thead><tr><th>Color</th><th>Code</th><th>Usage</th></tr></thead>
+  <tbody>
+    <tr><td><span class="color-swatch" style="background:#e91e8a"></span>Keio Pink</td><td><code>#e91e8a</code></td><td>Accent color, primary buttons, active state</td></tr>
+    <tr><td><span class="color-swatch" style="background:#2b6cb0"></span>Blue</td><td><code>#2b6cb0</code></td><td>Links, info badges, charts</td></tr>
+    <tr><td><span class="color-swatch" style="background:#dbeafe"></span>Light Blue</td><td><code>#dbeafe</code></td><td>Info badge background</td></tr>
+    <tr><td><span class="color-swatch" style="background:#16a34a"></span>Green</td><td><code>#16a34a</code></td><td>Success/active status, positive variance</td></tr>
+    <tr><td><span class="color-swatch" style="background:#e8f5e9"></span>Light Green</td><td><code>#e8f5e9</code></td><td>Success badge background</td></tr>
+    <tr><td><span class="color-swatch" style="background:#e53e3e"></span>Red</td><td><code>#e53e3e</code></td><td>Error, negative variance, alerts</td></tr>
+    <tr><td><span class="color-swatch" style="background:#fee2e2"></span>Light Red</td><td><code>#fee2e2</code></td><td>Error badge background</td></tr>
+    <tr><td><span class="color-swatch" style="background:#fce4f1"></span>Pink Background</td><td><code>#fce4f1</code></td><td>Keio Pink badge background</td></tr>
+    <tr><td><span class="color-swatch" style="background:#333"></span>Dark Gray</td><td><code>#333</code></td><td>Primary text</td></tr>
+    <tr><td><span class="color-swatch" style="background:#666"></span>Medium Gray</td><td><code>#666</code></td><td>Secondary text</td></tr>
+    <tr><td><span class="color-swatch" style="background:#999"></span>Light Gray</td><td><code>#999</code></td><td>Placeholder, disabled text</td></tr>
+    <tr><td><span class="color-swatch" style="background:#ddd"></span>Border</td><td><code>#ddd</code></td><td>Borders, dividers</td></tr>
+    <tr><td><span class="color-swatch" style="background:#eee"></span>Light Border</td><td><code>#eee</code></td><td>Subtle dividers</td></tr>
+    <tr><td><span class="color-swatch" style="background:#f5f5f5"></span>Background</td><td><code>#f5f5f5</code></td><td>Page background</td></tr>
+    <tr><td><span class="color-swatch" style="background:#f8f8f8"></span>Light Background</td><td><code>#f8f8f8</code></td><td>Card background (alternate)</td></tr>
+    <tr><td><span class="color-swatch" style="background:#f0f0f0"></span>Cell Background</td><td><code>#f0f0f0</code></td><td>Disabled cells, unselected state</td></tr>
+    <tr><td><span class="color-swatch" style="background:#fff; border-color:#ccc"></span>White</td><td><code>#fff</code></td><td>Card background, input fields</td></tr>
+    <tr><td><span class="color-swatch" style="background:#fff5f5"></span>Pink Light Background</td><td><code>#fff5f5</code></td><td>Alert background</td></tr>
+  </tbody>
+</table>
+
+<h3>Typography</h3>
+<table>
+  <thead><tr><th>Element</th><th>Font</th><th>Size</th><th>Weight</th></tr></thead>
+  <tbody>
+    <tr><td>Page Title</td><td>Arial, "Hiragino Sans", sans-serif</td><td>22px</td><td>bold</td></tr>
+    <tr><td>Section Heading</td><td>Arial, "Hiragino Sans", sans-serif</td><td>14px</td><td>bold</td></tr>
+    <tr><td>Subheading</td><td>Arial, "Hiragino Sans", sans-serif</td><td>13px</td><td>bold</td></tr>
+    <tr><td>Body Text</td><td>Arial, "Hiragino Sans", sans-serif</td><td>11px</td><td>normal</td></tr>
+    <tr><td>Label</td><td>Arial, "Hiragino Sans", sans-serif</td><td>10px</td><td>normal</td></tr>
+    <tr><td>Small Text</td><td>Arial, "Hiragino Sans", sans-serif</td><td>9px</td><td>normal</td></tr>
+  </tbody>
+</table>
+
+<h3>Responsive Design</h3>
+<table>
+  <thead><tr><th>Breakpoint</th><th>Width</th><th>Layout</th><th>Navigation</th><th>Sidebar</th></tr></thead>
+  <tbody>
+    <tr><td>Desktop</td><td>1024px</td><td>Multi-column</td><td>Full navigation</td><td>Visible (200px)</td></tr>
+    <tr><td>Tablet</td><td>768px</td><td>2-column (max)</td><td>Simplified nav</td><td>Icon-only (60px)</td></tr>
+    <tr><td>Mobile</td><td>375px</td><td>Single-column</td><td>Hamburger menu</td><td>Hidden</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- Statistics -->
+<h2 id="stats">Statistics</h2>
+<table>
+  <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+  <tbody>
+    <tr><td>Total Wireframes</td><td>15</td></tr>
+    <tr><td>Pages</td><td>11</td></tr>
+    <tr><td>Components</td><td>4</td></tr>
+    <tr><td>Responsive Breakpoints</td><td>375px, 768px, 1024px</td></tr>
+    <tr><td>Total SVG Files</td><td>45 (15 x 3 breakpoints)</td></tr>
+    <tr><td>Average Wireframe Height</td><td>813px</td></tr>
+    <tr><td>Maximum Height</td><td>1100px (Dashboard)</td></tr>
+    <tr><td>Minimum Height</td><td>200px (Navigation Header)</td></tr>
+  </tbody>
+</table>
+
+</main>
+
+<footer>
+  <p>Last updated: 2026-03-14</p>
+</footer>
+
+</div>
+
+</body>
+</html>
