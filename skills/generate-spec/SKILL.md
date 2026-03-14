@@ -56,6 +56,12 @@ You are a frontend specification writer. Your task is to read a requirements doc
    - Infer pages and components from the requirements even if not explicitly listed — e.g., a "user authentication" feature implies a login page; a "master management" module implies CRUD pages for each master
 
    **For both types**:
+   - **Authorization awareness**: If the requirements mention authorization, authentication, roles, permissions, or access control, reflect those specifications in the generated `spec.md`:
+     - Add an `## Authorization` section after `## Overview` that summarizes the authorization model (roles, permissions, access levels) defined in the requirements
+     - For each page, annotate the `### Notes` section with which roles can access it and any role-specific UI differences (e.g., "Visible to: Admin, Manager", "Edit button shown only for Admin role")
+     - If role-based UI differences exist (e.g., admin sees extra controls, viewer sees read-only), describe these in the page's `### Sections` or `### Key Components` as conditional elements
+     - For shared components like Navigation Header or Sidebar, note role-dependent menu items or controls in their `### Variants` or `### Notes`
+     - If the requirements define a permission matrix or role hierarchy, include it as a markdown table in the `## Authorization` section
    - Infer components even if not explicitly stated in the requirements
    - Reference components within page specs using "(Component {NNNN})" notation in the Sections list
    - **Component vs Key Component**: Not every UI element needs its own wireframe ID. Use the following criteria to decide:
@@ -86,6 +92,15 @@ You are a frontend specification writer. Your task is to read a requirements doc
 
    ## Overview
    {1-2 sentence summary of the system and its purpose}
+
+   ## Authorization
+   {Include this section only if the requirements mention authorization, roles, permissions, or access control.}
+
+   | Role | Description | Access Level |
+   |---|---|---|
+   | {Role Name} | {Brief description} | {Pages/features accessible} |
+
+   {Additional authorization rules, permission matrix, or role hierarchy as needed.}
 
    ## Wireframe Map
    | ID | Wireframe Type | Name | Description |
