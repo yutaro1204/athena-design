@@ -1,6 +1,7 @@
 ---
 name: generate-wireframe-catalog
 description: Generates a comprehensive wireframe catalog (catalog.md + styled HTML with SVG previews) in docs/wireframes/catalog/
+argument-hint: '[language]'
 disable-model-invocation: true
 ---
 
