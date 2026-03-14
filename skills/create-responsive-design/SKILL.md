@@ -58,10 +58,12 @@ You are a UX/UI designer. Your task is to create SVG wireframes that show how ea
      - `>` → `&gt;`
      - For example, "User & Permissions" must be written as `<text>User &amp; Permissions</text>` in the SVG. Failing to escape `&` will cause the SVG to fail to render.
 
+   - **Background**: Always include a full-size background `<rect>` as the first child element of the `<svg>`, matching the viewBox dimensions. This is required for all wireframes to ensure a visible background color:
+
    ```svg
-   <svg viewBox="0 0 {breakpoint} {height}" xmlns="http://www.w3.org/2000/svg" fill="none">
+   <svg viewBox="0 0 {breakpoint} {height}" xmlns="http://www.w3.org/2000/svg" font-family="...">
      <!-- Background -->
-     <rect width="{breakpoint}" height="{height}" fill="#f5f5f5"/>
+     <rect width="{breakpoint}" height="{height}" fill="#f0f0f0"/>
 
      <!-- Sections adapted to the breakpoint width -->
      <!-- ... -->
@@ -246,6 +248,7 @@ docs/
 - [ ] Directory structure created: `docs/wireframes/{NNNN}/{breakpoint}/`
 - [ ] Files saved with correct naming: `{page-name}-wireframe.svg`
 - [ ] viewBox width matches the given breakpoint
+- [ ] Background `<rect>` with `fill="#f0f0f0"` is the first child element, matching viewBox dimensions
 - [ ] Layout is properly adapted for the viewport width
 - [ ] Typography is readable at this width
 - [ ] Touch targets are adequate if breakpoint < 768px (≥44px)
