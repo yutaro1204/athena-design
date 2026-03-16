@@ -184,8 +184,7 @@ The project has 10 custom Claude Code skills for frontend development (React, As
 
 ### When User Asks About Wireframe Catalog or Documentation
 
-1. **Check existing catalog**: Look at `docs/wireframes/README.md`
-2. **Generate/update catalog**: Use `/generate-wireframe-catalog`
+1. **Generate/update catalog**: Use `/generate-wireframe-catalog`
 3. **When to regenerate**:
    - After creating new wireframes
    - After implementing wireframes

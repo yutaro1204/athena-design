@@ -195,21 +195,6 @@ docs/wireframes/0001/
 
 → Breakpoints: 768px, 1024px, 1280px
 
-**Components**:
-
-```
-docs/wireframes/0001/components/
-  headers/
-    header-logo-nav.svg
-  heroes/
-    hero-split-cta.svg
-  sections/
-    feature-grid-3col.svg
-    product-cards-3col.svg
-```
-
-→ 4 components (1 header, 1 hero, 2 sections)
-
 ### From File Metadata
 
 **Creation date**:
@@ -231,7 +216,6 @@ Use these formatting patterns:
 ```markdown
 - 📄 **Wireframe**: [`0001/tcg-landing-page-wireframe.svg`](../0001/tcg-landing-page-wireframe.svg)
 - 📱 **Responsive (768px)**: [`0001/768/tcg-landing-page-responsive-wireframe.svg`](../0001/768/tcg-landing-page-responsive-wireframe.svg)
-- 🧩 **Components**: [`0001/components/`](../0001/components/) (7 components)
 ```
 
 **Tables**:
