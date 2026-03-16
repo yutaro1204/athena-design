@@ -1,50 +1,43 @@
 ---
 name: create-pencil-design
-description: Generates a Pencil (.pen) design frame from an existing SVG wireframe
-argument-hint: '[wireframe-id] [breakpoint] [pen-file-path]'
+description: Generates Pencil (.pen) design frames for all Page wireframes found in docs/wireframes
+argument-hint: '[pen-file-path]'
 disable-model-invocation: true
 ---
 
 # Create Pencil Design
 
-You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen) design frame that faithfully reproduces an existing SVG wireframe, preserving its color scheme, content positions, typography, and layout structure.
+You are a design engineer. Your task is to generate high-fidelity Pencil (.pen) design frames for all Page wireframes found in `docs/wireframes/`, preserving each wireframe's color scheme, content positions, typography, and layout structure. Component wireframes are built first as standalone reusable Pencil components, then Page designs reference them via component instances.
 
 ## Instructions
 
 1. **Parse the arguments**:
-   - First argument: wireframe ID (4-digit number like "0001", required)
-   - Second argument: breakpoint in pixels (required)
-   - Third argument: `.pen` file path (optional, defaults to `pencil/design.pen`)
+   - First argument: `.pen` file path (optional, defaults to `pencil/design.pen`)
    - Examples:
-     - `0001 1200`: Desktop frame from wireframe 0001 (1200px wide), using default `pencil/design.pen`
-     - `0001 375`: Mobile frame from wireframe 0001 (375px wide), using default `pencil/design.pen`
-     - `0002 768`: Tablet frame from wireframe 0002 (768px wide), using default `pencil/design.pen`
-     - `0001 1200 pencil/my-design.pen`: Desktop frame targeting a specific `.pen` file
-   - If no wireframe ID is provided, ask the user for it
-   - If no breakpoint is provided, ask the user for it
+     - _(no arguments)_: Process all Page wireframes, using default `pencil/design.pen`
+     - `pencil/my-design.pen`: Process all Page wireframes, targeting a specific `.pen` file
    - If no `.pen` file path is provided, use `pencil/design.pen` as the default
 
-2. **Locate the wireframe SVG**:
-   - All breakpoints use the same path pattern: `docs/wireframes/{NNNN}/{breakpoint}/*-wireframe.svg`
-   - Examples:
-     - `docs/wireframes/0001/1024/rpg-landing-page-wireframe.svg` (desktop)
-     - `docs/wireframes/0001/768/rpg-landing-page-wireframe.svg` (tablet)
-     - `docs/wireframes/0001/375/rpg-landing-page-wireframe.svg` (mobile)
-   - Each breakpoint has its own dedicated wireframe SVG sized for that viewport — read the entire file as-is
-   - If the wireframe file is not found, inform the user and stop
-   - Extract the page name from the filename for naming the design frame
+2. **Read `spec.md` and discover all wireframes**:
+   - Read `spec.md` from the project root (sibling of `docs/`)
+   - **If `spec.md` is not found**: warn the user that `spec.md` is missing and stop. The skill requires `spec.md` to determine Page vs Component wireframe types.
+   - Find the **Wireframe Map** table and classify each wireframe ID as `Page` or `Component`
+   - Collect all **Page** wireframe IDs (e.g., 0001, 0002) — these are the wireframes that will be designed
+   - Collect all **Component** wireframe IDs (e.g., 0003, 0004, 0005) — these will be built as standalone reusable Pencil components before any Page processing
+   - For each Page, note which Component wireframe IDs it references (e.g., "Navigation Header: (Component 0003)") so the correct component instances can be inserted later
+   - If no Page wireframes are found, inform the user and stop
 
-3. **Analyze the wireframe SVG**:
-   - **Sections**: Identify all sections by `<g id="...">` groups (header, hero, featured-models, categories, features, footer, etc.)
-   - **Colors**: Extract all `fill` and `stroke` hex values used (e.g., `#ffffff`, `#f5f5f5`, `#000000`, `#333333`, `#666666`, `#e0e0e0`)
-   - **Typography**: Note all `font-size`, `font-weight`, `font-family`, `text-anchor`, and `fill` on `<text>` elements
-   - **Layout**: Determine grid structures (number of columns, gaps between elements) from `<rect>` positions
-   - **Dimensions**: Extract widths, heights, and positions of all `<rect>` elements to understand spacing
-   - **Content**: Collect all text labels, titles, descriptions, and placeholder text
-   - **Icons/Symbols**: Note any special characters (checkmarks, lightning bolts, infinity symbols) for icon mapping
+3. **Discover all breakpoints**:
+   - **For each Page wireframe ID**, list all subdirectories under `docs/wireframes/{NNNN}/` that are numeric (e.g., `375`, `768`, `1024`)
+   - **For each Component wireframe ID**, list all subdirectories under `docs/wireframes/{NNNN}/` that are numeric
+   - Exclude non-numeric directories (e.g., `components`)
+   - Sort breakpoints in descending order (largest first, e.g., 1024 → 768 → 375) so desktop is built first
+   - Each breakpoint directory contains a wireframe SVG: `docs/wireframes/{NNNN}/{breakpoint}/*-wireframe.svg`
+   - If a wireframe has no numeric breakpoint directories, warn the user and skip it
+   - Extract the page/component name from the wireframe filename for naming
 
 4. **Set up the Pencil directory and editor**:
-   - Determine the target `.pen` file path from the third argument (default: `pencil/design.pen`)
+   - Determine the target `.pen` file path from the first argument (default: `pencil/design.pen`)
    - Create the parent directory of the target `.pen` file if it does not exist:
      ```bash
      mkdir -p pencil  # or the parent directory of the specified .pen file path
@@ -53,6 +46,7 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
      ```
      pencil/
      ├── design.pen          # Pencil design file (default target)
+     ├── coverage.md       # Coverage manifest (auto-generated)
      └── images/             # AI-generated images referenced by design.pen
      ```
    - **Verify the `.pen` file exists** — the `.pen` format is proprietary and must be created manually in the Pencil application. If the file does not exist, inform the user:
@@ -60,38 +54,87 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
    - **Always open the target `.pen` file** using `open_document("{pen-file-path}")` — do this unconditionally, regardless of what file is currently active in the editor.
    - Call `get_editor_state` after opening to confirm the file is active and inspect existing content
    - Call `get_guidelines("landing-page")` for design rules and best practices
-   - Call `find_empty_space_on_canvas` to find a clear area for the new frame, using the breakpoint as width and an estimated height (e.g., 3200px for desktop, 4000px for mobile)
 
-5. **Create the page container**:
+5. **Check coverage manifest for already-applied wireframes**:
+   - Look for `pencil/coverage.md` (in the same directory as the `.pen` file)
+   - **If the manifest exists**: Read it and extract the list of wireframes with `"status": "applied"`. These wireframes already have corresponding Pencil nodes and should be **skipped** in steps 6 and 7 below.
+     - For applied Components: record their `nodeId` values so they can be referenced when building Page designs (no need to recreate them)
+     - For applied Pages: skip them entirely — they already exist on the canvas
+   - **If the manifest does not exist**: Proceed normally — all wireframes will be processed
+   - **If a wireframe is listed as `"applied"` in the manifest but you cannot find its `nodeId` in the Pencil file** (e.g., it was deleted): treat it as `"missing"` and rebuild it
+   - Print a summary of what will be skipped vs built:
+     ```
+     Coverage manifest found. Skipping 8 already-applied wireframes.
+     Will build: 0005/375 (Component/Mobile Player Bar), 0002/375 (Favorites - 375px)
+     ```
+
+6. **Build all Component wireframes as reusable Pencil components** (BEFORE any Page processing):
+   - This is the **components-first phase**. All Component wireframes from `spec.md` are built as standalone reusable Pencil components before any Page designs are created.
+   - **Skip components already covered**: If step 5 found applied components in the coverage manifest, skip those — use their existing `nodeId` values directly. Only build components that are missing or new.
+   - For each Component wireframe ID (e.g., 0003, 0004, 0005), and for each breakpoint discovered in step 3:
+     a. **Check coverage**: If this component + breakpoint is already applied (from step 5), skip it and record the existing nodeId
+     b. **Read and analyze the Component wireframe SVG** at `docs/wireframes/{NNNN}/{breakpoint}/*-wireframe.svg`
+     c. Analyze all variants shown in the wireframe (e.g., Default, Playing, Hover states; Compact, Expanded, Idle variants)
+     d. Extract colors, typography, layout dimensions, and content from the SVG
+     e. **Find empty space** on the canvas using `find_empty_space_on_canvas`
+     f. **Create the reusable component** with `reusable: true` directly on the `document` (not inside any page frame):
+        ```
+        comp=I(document, {type: "frame", name: "Component/{Name}", reusable: true, layout: "horizontal", width: {width}, height: {height}, fill: "#ffffff", x: {empty_x}, y: {empty_y}})
+        ```
+     g. Build the component's internal structure with named child elements that have stable IDs for later override via `U(instance+"/childId", {...})`
+   - **Breakpoint-specific components**: When a Component wireframe has different layouts at different breakpoints (e.g., desktop navigation with full nav links vs mobile navigation with hamburger menu), create separate reusable components for each breakpoint variant:
+     - Desktop: `"Component/Navigation Header"` (1024px wide, full nav links)
+     - Mobile: `"Component/Mobile Navigation Header"` (375px wide, hamburger menu)
+   - **Multiple variants**: If the wireframe shows multiple variants (e.g., Default, Playing, Hover), build the default/primary variant as the reusable component. Other variants can be noted for reference but the primary variant is what gets instantiated in Page designs.
+   - **Record component IDs**: Keep a mapping of Component wireframe ID + breakpoint → Pencil node ID for use in step 9 when building Page designs. This includes both newly created components and pre-existing ones from the coverage manifest.
+
+   Example component structure:
+   ```
+   comp=I(document, {type: "frame", name: "Component/Track List Item", reusable: true, layout: "horizontal", width: 960, height: 64, fill: "#ffffff", stroke: {fill: "#e0e0e0", thickness: 1}, x: {x}, y: {y}})
+   thumb=I(comp, {type: "frame", name: "albumArt", layout: "none", width: 48, height: 48, fill: "#d4c4b0", cornerRadius: 4})
+   info=I(comp, {type: "frame", name: "trackInfo", layout: "vertical", width: "fill_container", justifyContent: "center"})
+   title=I(info, {type: "text", name: "trackTitle", content: "Track Title", fontSize: 14, fontWeight: "bold", fill: "#333333"})
+   meta=I(info, {type: "text", name: "trackMeta", content: "Artist · Album", fontSize: 11, fill: "#888888"})
+   dur=I(comp, {type: "text", name: "duration", content: "0:00", fontSize: 12, fill: "#888888"})
+   heart=I(comp, {type: "icon_font", name: "heartIcon", iconFontFamily: "lucide", iconFontName: "heart", width: 16, height: 16, fill: "#cccccc"})
+   ```
+
+7. **Process each Page wireframe and its breakpoints sequentially**:
+   - Iterate through all Page wireframes in order (e.g., 0001, then 0002)
+   - For each Page wireframe, iterate through all its breakpoints (largest first)
+   - **Skip pages already covered**: If step 5 found this Page + breakpoint already applied in the coverage manifest, skip it entirely
+   - For each remaining Page + breakpoint combination, perform steps 8–15 below to create a design frame
+   - Each breakpoint produces its own frame on the canvas (e.g., "Music Library - 1024px", "Music Library - 375px")
+   - All reusable components were already created in step 6 (or loaded from coverage) and are shared across all Pages
+
+8. **Read and analyze the wireframe SVG for the current breakpoint**:
+   - **Sections**: Identify all sections by `<g id="...">` groups (header, hero, featured-models, categories, features, footer, etc.)
+   - **Colors**: Extract all `fill` and `stroke` hex values used (e.g., `#ffffff`, `#f5f5f5`, `#000000`, `#333333`, `#666666`, `#e0e0e0`)
+   - **Typography**: Note all `font-size`, `font-weight`, `font-family`, `text-anchor`, and `fill` on `<text>` elements
+   - **Layout**: Determine grid structures (number of columns, gaps between elements) from `<rect>` positions
+   - **Dimensions**: Extract widths, heights, and positions of all `<rect>` elements to understand spacing
+   - **Content**: Collect all text labels, titles, descriptions, and placeholder text
+   - **Icons/Symbols**: Note any special characters (checkmarks, lightning bolts, infinity symbols) for icon mapping
+
+9. **Create the page container**:
+   - Call `find_empty_space_on_canvas` to find a clear area for the new frame
    - Use `batch_design` to insert a top-level frame into `document`:
      ```
-     page=I(document, {type: "frame", name: "{Page Name} - {Desktop|Mobile}", placeholder: true, layout: "vertical", width: {breakpoint}, height: "fit_content({estimated_height})", fill: "{background_color}", x: {empty_x}, y: {empty_y}})
+     page=I(document, {type: "frame", name: "{Page Name} - {breakpoint}px", placeholder: true, layout: "vertical", width: {breakpoint}, height: "fit_content({estimated_height})", fill: "{background_color}", x: {empty_x}, y: {empty_y}})
      ```
    - Set `placeholder: true` — this MUST remain true until the design is fully complete
-   - Set width to the breakpoint value (e.g., 1200 for desktop, 375 for mobile)
+   - Set width to the current breakpoint value (e.g., 1024 for desktop, 375 for mobile)
    - Use `fit_content` for height so it adapts to content
 
-6. **Build reusable components**:
-   - Identify repeated patterns in the wireframe (e.g., product cards, category boxes)
-   - Create reusable components with `reusable: true` placed on the side of the canvas (e.g., x offset +200 from main frame)
-   - Each component should have named child elements with stable IDs for later override via `U(instance+"/childId", {...})`
-   - Example card component structure:
-     ```
-     card=I(document, {type: "frame", name: "Component/ModelCard", reusable: true, layout: "vertical", width: 360, height: 320, fill: "#ffffff", stroke: {fill: "#000000", thickness: 1}, x: {side_x}, y: 0})
-     img=I(card, {type: "frame", name: "Image", layout: "vertical", width: "fill_container", height: 240, fill: "#e0e0e0", ...})
-     imgLabel=I(img, {type: "text", name: "imgLabel", content: "[Placeholder]", ...})
-     info=I(card, {type: "frame", name: "CardInfo", layout: "vertical", width: "fill_container", height: "fill_container", ...})
-     title=I(info, {type: "text", name: "cardTitle", content: "Title", ...})
-     meta=I(info, {type: "text", name: "cardMeta", content: "Meta", ...})
-     ```
-
-7. **Build sections sequentially**:
+10. **Build sections sequentially using component instances**:
    - Work through each section from top to bottom, using `batch_design` with **maximum 25 operations per call**
    - For each section:
      a. Create a section frame inside the page container with appropriate layout, padding, and background
-     b. Add content elements (text, frames, icons, buttons)
-     c. For grids: create row frames with `layout: "horizontal"` containing instances or child frames
-     d. For card grids: insert component instances with `{type: "ref", ref: "{componentId}"}` and override content using `U(instance+"/childId", {content: "..."})`
+     b. **Where `spec.md` maps a section to a Component wireframe** (e.g., "Navigation Header: (Component 0003)"), insert an instance of the corresponding reusable component built in step 6: `{type: "ref", ref: "{componentId}"}`. Use the component ID for the matching breakpoint (desktop component for desktop pages, mobile component for mobile pages). Override content as needed with `U(instance+"/childId", {content: "..."})`.
+     c. Add content elements (text, frames, icons, buttons)
+     d. For grids: create row frames with `layout: "horizontal"` containing instances or child frames
+     e. For card grids or repeated items: insert component instances with `{type: "ref", ref: "{componentId}"}` and override content using `U(instance+"/childId", {content: "..."})`
+   - **Also identify repeated patterns within the Page wireframe** (e.g., product cards, category boxes) that are NOT already Component wireframes. Create additional reusable components for these if they repeat 3+ times.
    - Use flexbox layout throughout:
      - `layout: "vertical"` for section stacking
      - `layout: "horizontal"` for row layouts
@@ -101,17 +144,13 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
      - `gap` for spacing between children
      - `padding` for internal spacing
 
-   **Section building order:**
-   - Header/Navigation
-   - Hero Section
-   - Content grids (featured items, products, etc.)
-   - Category/browse sections
-   - Features/benefits section
-   - Additional content sections (new releases, testimonials, etc.)
-   - CTA Section
-   - Footer
+   **Section building order**: Follow the order defined in the Page's spec section in `spec.md`. Typical order:
+   - Header/Navigation (often a Component reference)
+   - Main content sections (as listed in spec)
+   - Repeated item lists (using Component instances)
+   - Footer or persistent elements (e.g., Player Bar as a Component reference)
 
-8. **Apply correct styling**:
+11. **Apply correct styling**:
    - **Text**: Always set `fill` property for text color (text is invisible without it)
    - **Font**: Use `"Inter"` as the font family (mapped from wireframe's `"Arial"`)
    - **Font sizes**: Preserve exact `fontSize` values from the wireframe SVG
@@ -125,7 +164,7 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
      - Infinity (&#8734;) → `iconFontName: "infinity"`
    - **Icon circles**: Use a frame with `layout: "none"` containing an `ellipse` and an `icon_font` overlaid with explicit x/y positioning
 
-9. **Handle breakpoint-specific adaptations**:
+12. **Handle breakpoint-specific adaptations**:
 
    **Desktop (>= 1024px):**
    - Full-width header with logo and all nav links
@@ -143,7 +182,7 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
    - Vertically stacked features (may show fewer items)
    - Omit sections not present in mobile wireframe (e.g., New Releases, CTA, Footer may be absent)
 
-10. **Remove placeholder and verify**:
+13. **Remove placeholder and verify**:
     - Set `placeholder: false` on the page container:
       ```
       U("{pageId}", {placeholder: false})
@@ -158,7 +197,7 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
       - Spacing and padding are proportional
       - All text content matches
 
-11. **Fix any issues**:
+14. **Fix any issues**:
     - If screenshots reveal misalignment, overlapping, or missing content, use `batch_design` to correct
     - Common fixes:
       - Move icon containers to position 0 in parent: `M("{iconContainerId}", "{parentId}", 0)`
@@ -166,13 +205,19 @@ You are a design engineer. Your task is to generate a high-fidelity Pencil (.pen
       - Fix text visibility: ensure `fill` is set on all text nodes
       - Restructure icon-in-circle: replace separate ellipse + icon with a `layout: "none"` container frame holding both
 
-12. **Output**:
-    - Confirm the design frame has been created
-    - Provide the page container node ID
-    - State the breakpoint and frame dimensions
-    - List all sections built
-    - Mention any reusable components created
+15. **Update coverage manifest** (after all Components and Pages are processed):
+    - Run `/report-pencil-coverage` (or perform its logic inline) to generate/update `pencil/coverage.md`
+    - This records all Components and Pages now present in the `.pen` file, so that the next run of `/create-pencil-design` can skip them
+    - If the manifest already existed, the new manifest replaces it with the current state
+
+16. **Output**:
+    - Confirm all reusable components and design frames have been created (noting which were newly built vs skipped from coverage)
+    - List all reusable components from Component wireframes, with their node IDs and breakpoint variants
+    - List each Page wireframe processed with its breakpoints, page container node IDs, and frame dimensions
+    - List all sections built per Page per breakpoint
+    - Note which component instances are used in each Page
     - Summarize the color scheme used
+    - Confirm that `pencil/coverage.md` has been updated
     - Suggest running `get_screenshot` on specific sections for detailed review
 
 ## SVG-to-Pen Property Mapping
@@ -252,67 +297,69 @@ Key rules:
 - **Maximum 25 operations per `batch_design` call**
 - Split large sections across multiple calls
 - Recommended grouping:
-  - Call 1: Page container creation
-  - Call 2: Reusable component definitions
-  - Call 3: Header + Hero section
-  - Call 4-N: Content sections (one call per major section)
-  - Call N+1: Footer
-  - Final call: Remove placeholder
+  - **Phase 1 — Components**: One or more calls per Component wireframe (one call per component variant/breakpoint)
+  - **Phase 2 — Pages**: Page container creation, then one call per major section (inserting Component instances where spec.md maps them)
+  - **Final call per Page**: Remove placeholder
+  - **Post-processing**: Update `pencil/coverage.md` via `/report-pencil-coverage`
 
 ## Usage Examples
 
 ```bash
-# Desktop design from wireframe 0001 (1200px wide), default pencil/design.pen
-/create-pencil-design 0001 1200
+# Process all Page wireframes, default pencil/design.pen
+/create-pencil-design
 
-# Mobile design from wireframe 0001 (375px wide), default pencil/design.pen
-/create-pencil-design 0001 375
-
-# Tablet design from wireframe 0002 (768px wide), default pencil/design.pen
-/create-pencil-design 0002 768
-
-# Desktop design at 1440px, default pencil/design.pen
-/create-pencil-design 0003 1440
-
-# Desktop design targeting a specific .pen file
-/create-pencil-design 0001 1200 pencil/my-project.pen
-
-# Mobile design targeting a specific .pen file
-/create-pencil-design 0001 375 pencil/landing-page.pen
+# Process all Page wireframes, targeting a specific .pen file
+/create-pencil-design pencil/my-project.pen
 ```
 
 ## Workflow Example
 
-1. Designer creates wireframes in breakpoint subdirectories:
-   - `docs/wireframes/0001/1024/landing-page-wireframe.svg` (desktop)
-   - `docs/wireframes/0001/768/landing-page-wireframe.svg` (tablet)
-   - `docs/wireframes/0001/375/landing-page-wireframe.svg` (mobile)
-2. **[MANUAL] Create the `.pen` file** in the Pencil application and save as `pencil/design.pen`
-3. **Run `/create-pencil-design 0001 1024`** to generate the desktop Pencil design frame
-4. **Run `/create-pencil-design 0001 768`** to generate the tablet Pencil design frame
-5. **Run `/create-pencil-design 0001 375`** to generate the mobile Pencil design frame
-6. All frames appear on the Pencil canvas for review and refinement
+1. `spec.md` defines Page wireframes (0001: Music Library, 0002: Favorites) and Component wireframes (0003: Navigation Header, 0004: Track List Item, 0005: Player Bar)
+2. Designer creates wireframes in breakpoint subdirectories:
+   - `docs/wireframes/0001/1024/music-library-wireframe.svg`
+   - `docs/wireframes/0001/375/music-library-wireframe.svg`
+   - `docs/wireframes/0002/1024/favorites-wireframe.svg`
+   - `docs/wireframes/0002/375/favorites-wireframe.svg`
+   - `docs/wireframes/0003/1024/navigation-header-wireframe.svg` (Component)
+   - `docs/wireframes/0003/375/navigation-header-wireframe.svg` (Component)
+   - `docs/wireframes/0004/1024/track-list-item-wireframe.svg` (Component)
+   - `docs/wireframes/0004/375/track-list-item-wireframe.svg` (Component)
+   - `docs/wireframes/0005/1024/player-bar-wireframe.svg` (Component)
+   - `docs/wireframes/0005/375/player-bar-wireframe.svg` (Component)
+3. **[MANUAL] Create the `.pen` file** in the Pencil application and save as `pencil/design.pen`
+4. **Run `/create-pencil-design`** — the skill automatically:
+   - Checks `pencil/coverage.md` for already-applied wireframes (skips them if found)
+   - Reads `spec.md` to find Pages (0001, 0002) and Components (0003, 0004, 0005)
+   - **Phase 1 — Components**: Builds ALL Component wireframes as standalone reusable Pencil components for each breakpoint (e.g., Component/Navigation Header for 1024px, Component/Mobile Navigation Header for 375px, etc.)
+   - **Phase 2 — Pages**: Generates design frames for all Pages x all breakpoints, inserting component instances with content overrides
+   - **Phase 3 — Coverage**: Updates `pencil/coverage.md` with the current state
+5. All components and page frames appear on the Pencil canvas for review and refinement
+6. Later, if new wireframes are added (e.g., 0006), run `/create-pencil-design` again — it reads the manifest and only builds the new wireframes
 7. Use as high-fidelity reference for implementation with `/create-page-from-pencil pencil/design.pen`
 
 **Using a custom `.pen` file:**
 
 ```bash
-# Target a specific .pen file for all breakpoints
-/create-pencil-design 0001 1024 pencil/my-project.pen
-/create-pencil-design 0001 375 pencil/my-project.pen
+/create-pencil-design pencil/my-project.pen
 ```
 
 **Typical output on canvas:**
 
 ```
-[Desktop Frame - 1024px]  [Tablet Frame - 768px]  [Mobile Frame - 375px]  [Components]
+[Component/Navigation Header]  [Component/Mobile Nav Header]  [Component/Track List Item]  [Component/Mobile Track List Item]  [Component/Player Bar]  [Component/Mobile Player Bar]
+[Music Library - 1024px]  [Music Library - 768px]  [Music Library - 375px]  [Favorites - 1024px]  [Favorites - 768px]  [Favorites - 375px]
 ```
 
 ## Important Notes
 
-- **Wireframe ID Format**: Always use 4-digit wireframe IDs (0001, 0002, etc.)
+- **spec.md Required**: The skill requires `spec.md` to determine Page vs Component wireframe types. If `spec.md` is missing, the skill stops and asks the user to create it.
+- **Automatic Discovery**: The skill automatically discovers all Page and Component wireframes from `spec.md` and all breakpoints from `docs/wireframes/`. No wireframe ID argument is needed.
+- **Incremental Design**: The skill reads `pencil/coverage.md` (if it exists) to determine which wireframes have already been applied to the Pencil file. Only missing or new wireframes are processed — already-applied wireframes are skipped. After completion, the coverage manifest is updated. Run `/report-pencil-coverage` manually at any time to regenerate the manifest from the current `.pen` file state.
+- **Components-First Workflow**: All Component wireframes are built as standalone reusable Pencil components BEFORE any Page designs are created. This ensures components exist and can be referenced by all Pages. Changes to a reusable component automatically propagate to all Page designs that use it.
+- **Breakpoint-Specific Components**: When a Component wireframe has fundamentally different layouts at different breakpoints (e.g., desktop nav with links vs mobile nav with hamburger), create separate reusable components per breakpoint variant (e.g., "Component/Navigation Header" for desktop, "Component/Mobile Navigation Header" for mobile).
+- **Component Independence**: Reusable components are standalone items on the canvas (inserted into `document`, not inside any page frame). Deleting a Page design does not affect the components, and components can be shared across all Pages.
 - **Pen File Prerequisite**: The target `.pen` file must be created manually in the Pencil application before running this skill — the `.pen` format is proprietary and cannot be created by Claude or standard file tools
-- **Pen File Path**: Defaults to `pencil/design.pen` if no third argument is provided. Pass a custom path to target a different `.pen` file.
+- **Pen File Path**: Defaults to `pencil/design.pen` if no argument is provided. Pass a custom path to target a different `.pen` file.
 - **Pencil MCP Tools**: This skill uses the Pencil MCP server tools exclusively for .pen file operations — never use `Read` or `Grep` on .pen files
 - **Placeholder Workflow**: Always set `placeholder: true` on the page frame before building, remove it only when fully complete
 - **Text Visibility**: Text nodes MUST have a `fill` property set or they will be invisible
@@ -328,16 +375,27 @@ Key rules:
 
 ## Checklist
 
-- [ ] Page container created with correct width matching breakpoint
-- [ ] All sections from wireframe present and in correct order
-- [ ] Color scheme matches wireframe exactly (all hex values preserved)
-- [ ] Typography sizes and weights match wireframe
-- [ ] Grid column counts match (3-col desktop, 1-col mobile, etc.)
-- [ ] All text content matches wireframe labels
-- [ ] Icons correctly mapped from wireframe symbols to Lucide icons
-- [ ] Reusable components created for repeated patterns
-- [ ] Component instance overrides applied correctly
-- [ ] Padding and spacing proportional to wireframe
-- [ ] Placeholder flag removed from page container
-- [ ] Full-page screenshot taken and verified
-- [ ] Individual section screenshots checked for detail accuracy
+- [ ] `spec.md` read and all Page + Component wireframes identified
+- [ ] All breakpoints discovered for both Page and Component wireframes
+- [ ] Coverage manifest (`pencil/coverage.md`) checked for already-applied wireframes
+- [ ] **Phase 1 — Components**:
+  - [ ] All Component wireframes built as standalone reusable Pencil components
+  - [ ] Breakpoint-specific component variants created (desktop + mobile where layouts differ)
+  - [ ] Component IDs recorded for use in Page designs
+- [ ] **Phase 2 — Pages** (for each Page x breakpoint):
+  - [ ] Page container created with correct width matching breakpoint
+  - [ ] All sections from wireframe present and in correct order
+  - [ ] Component instances inserted where spec.md maps sections to Components
+  - [ ] Component instance overrides applied correctly (using actual child node IDs)
+  - [ ] Additional reusable components created for repeated patterns within the Page
+  - [ ] Color scheme matches wireframe exactly (all hex values preserved)
+  - [ ] Typography sizes and weights match wireframe
+  - [ ] Grid column counts match (3-col desktop, 1-col mobile, etc.)
+  - [ ] All text content matches wireframe labels
+  - [ ] Icons correctly mapped from wireframe symbols to Lucide icons
+  - [ ] Padding and spacing proportional to wireframe
+  - [ ] Placeholder flag removed from page container
+  - [ ] Full-page screenshot taken and verified
+  - [ ] Individual section screenshots checked for detail accuracy
+- [ ] **Post-processing**:
+  - [ ] Coverage manifest (`pencil/coverage.md`) updated via `/report-pencil-coverage`

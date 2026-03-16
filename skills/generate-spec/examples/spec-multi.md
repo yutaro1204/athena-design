@@ -3,6 +3,66 @@
 ## Overview
 A budget-versus-actual management system for Keio Store's corporate planning department. Moving away from Excel dependency to centrally manage budgets, forecasts, and actuals. Automatically imports actual data via accounting system integration and provides real-time visualization of budget-vs-actual comparisons and variance analysis by store and account.
 
+## Screen Transition Diagram
+
+```
++-------------------+                  +-------------------+
+|                   |   Login success  |                   |
+|  Login            | ---------------> |  Dashboard        |
+|  (0001)           |                  |  (0002)           |
+|                   |                  |                   |
++-------------------+                  +-------------------+
+                                          |
+               +-------------+------------+------------+-------------------+
+               |             |            |            |                   |
+               v             v            v            v                   v
++--------------+  +----------+--+  +------+-------+  +-+---------------+  +------------------+
+| Budget Entry |  | Budget      |  | Forecast     |  | Actuals Review |  | Variance         |
+| (0003)       |  | Approval    |  | Management   |  | (0006)         |  | Analysis (0007)  |
+|              |  | (0004)      |  | (0005)       |  |                |  |                  |
++------+-------+  +-------------+  +--------------+  +-------+--------+  +---------+--------+
+       |                                                      |                    |
+       | Submit                                    Drill-down |          Link from  |
+       v                                                      v          KPI cards  |
++-------------+                                      +-------+--------+            |
+| Budget      |                                      | Variance       | <----------+
+| Approval    |                                      | Analysis       |
+| (0004)      |                                      | (0007)         |
++-------------+                                      +----------------+
+
+                    +-------------------+
+                    | Report Export     |
+                    | (0008)            |
+                    +-------------------+
+
++---------+  +-----------------+  +----------------------+
+| Master  |  | Master (Dept &  |  | User & Permission    |
+| (Accts) |  | Stores) (0010)  |  | Management (0011)    |
+| (0009)  |  |                 |  |                      |
++---------+  +-----------------+  +----------------------+
+
++-------------------------------------------------------+
+|  Navigation Header (0012) + Sidebar (0013)            |
+|  Persistent across all authenticated pages (0002-0011)|
++-------------------------------------------------------+
+```
+
+### Transitions
+
+| From | Action | To |
+|---|---|---|
+| Login (0001) | Successful login | Dashboard (0002) |
+| Dashboard (0002) | Click KPI card | Variance Analysis (0007) |
+| Dashboard (0002) | Click store table row | Actuals Review (0006) |
+| Dashboard (0002) | Click chart section | Report Export (0008) |
+| Budget Entry (0003) | Submit budget | Budget Approval (0004) |
+| Budget Approval (0004) | Approval complete | Dashboard (0002) |
+| Actuals Review (0006) | Drill-down link | Variance Analysis (0007) |
+| Variance Analysis (0007) | Drill-down link | Actuals Review (0006) |
+| Sidebar (0013) | Click menu item | Any page (0002-0011) |
+| Navigation Header (0012) | Click user dropdown > User Management | User & Permission Management (0011) |
+| Navigation Header (0012) | Click user dropdown > Logout | Login (0001) |
+
 ## Wireframe Map
 | ID | Wireframe Type | Name | Description |
 |---|---|---|---|

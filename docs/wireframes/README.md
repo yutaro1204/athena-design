@@ -140,8 +140,7 @@ See [`0001/components/README.md`](0001/components/README.md) for full component 
 
 ```bash
 /create-page-wireframe "TCG landing page with hero, features, products"
-/create-pencil-design 0001 1200
-/create-pencil-design 0001 375
+/create-pencil-design
 /create-page-from-pencil pencil/design.pen
 ```
 
@@ -290,8 +289,7 @@ When creating a new wireframe, reference existing components for consistency:
 ```bash
 # Full implementation workflow (Pencil Design Path)
 # [MANUAL] Create pencil/design.pen in Pencil app
-/create-pencil-design {NNNN} 1200
-/create-pencil-design {NNNN} 375
+/create-pencil-design
 /create-page-from-pencil pencil/design.pen
 npm run dev
 ```

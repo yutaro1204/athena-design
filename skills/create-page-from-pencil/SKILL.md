@@ -1,7 +1,7 @@
 ---
 name: create-page-from-pencil
 description: Implements a responsive Astro/React/HTML page from a Pencil (.pen) design file
-argument-hint: '[pen-file-path] [framework] [output-path] [assets-dir]'
+argument-hint: '[pen-file-path] [output-path] [framework] [assets-dir]'
 disable-model-invocation: true
 ---
 
@@ -498,8 +498,7 @@ import heroBgImg from '../assets/images/hero-bg.webp'
 
 1. Designer creates wireframe: `docs/wireframes/0001/landing-wireframe.svg`
 2. **[MANUAL] Create the `.pen` file** in the Pencil application and save as `pencil/design.pen`
-3. Run `/create-pencil-design 0001 1200` to generate desktop Pencil frame
-4. Run `/create-pencil-design 0001 375` to generate mobile Pencil frame
+3. Run `/create-pencil-design` to generate Pencil frames for all Page wireframes and breakpoints
 5. Refine design in Pencil editor (add images, adjust layout, etc.)
 6. **Run `/create-page-from-pencil pencil/design.pen astro`** to implement the page (or `html` for plain HTML)
 7. Review at `http://localhost:4321/` (Astro/React) or open the `.html` file in a browser (HTML) and iterate

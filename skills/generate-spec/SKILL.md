@@ -102,6 +102,38 @@ You are a frontend specification writer. Your task is to read a requirements doc
 
    {Additional authorization rules, permission matrix, or role hierarchy as needed.}
 
+   ## Screen Transition Diagram
+   {ASCII box diagram showing navigation flow. For `multi`, show pages as boxes with labeled arrows between them. For `single`, show tabs/routes as boxes within a single page container, with arrows indicating in-page transitions. Include persistent components (e.g., player bars, sidebars, tab navigation) as shared elements. Below the diagram, add a Transitions table listing all navigation actions.}
+
+   ```
+   {For multi:}
+   +-------------------+                  +-------------------+
+   |  {Page Name}      | -- {action} -->  |  {Page Name}      |
+   |  (NNNN) {path}    |                  |  (NNNN) {path}    |
+   |                   | <-- {action} --  |                   |
+   +-------------------+                  +-------------------+
+
+   {For single:}
+   +---------------------------------------------------------------+
+   |                       {Page Name} (NNNN)                      |
+   |  +-----------+  +-----------+  +-----------+  +-----------+   |
+   |  | {Tab/     |  | {Tab/     |  | {Tab/     |  | {Tab/     |   |
+   |  |  Route 1} |  |  Route 2} |  |  Route 3} |  |  Route 4} |   |
+   |  +-----+-----+  +-----+-----+  +-----------+  +-----------+   |
+   |        | {action}      |                                      |
+   |        v               v                                      |
+   |  +-----------+  +-----------+                                 |
+   |  | {Tab/     |  | {Tab/     |                                 |
+   |  |  Route X} |  |  Route Y} |                                 |
+   |  +-----------+  +-----------+                                 |
+   +---------------------------------------------------------------+
+   ```
+
+   ### Transitions
+   | From | Action | To |
+   |---|---|---|
+   | {Page or Tab/Route} | {User action} | {Page or Tab/Route} |
+
    ## Wireframe Map
    | ID | Wireframe Type | Name | Description |
    |---|---|---|---|
@@ -168,6 +200,8 @@ You are a frontend specification writer. Your task is to read a requirements doc
    - **Extract components thoughtfully**: Apply the Component vs Key Component criteria from step 3. Complex, reusable, or multi-variant elements become Components with wireframe IDs. Simple, single-use elements stay as Key Component bullets.
    - **Reference components in Sections**: When a page uses a Component, reference it in the Sections list as `(Component {NNNN})`, not in Key Components. Key Components lists only inline elements without their own wireframe ID.
    - **State usage locations**: In every Component's Description, list which pages use it
+   - **For both `single` and `multi`**:
+     - **Include screen transition diagram**: Add an ASCII box diagram between Overview and Wireframe Map. For `multi`, show pages as boxes with labeled arrows for navigation actions. For `single`, show tabs/routes within a single page container with arrows for in-page transitions. Always include a Transitions table listing all From/Action/To relationships. Show persistent components (e.g., navigation bars, player bars, tab navigation) as shared elements.
    - For `multi` only:
      - **Be exhaustive**: List every page and component the system needs. Do not omit pages that are implied by the requirements (e.g., login, error pages, settings)
      - **Show navigation flow**: In each page's Notes, mention which pages link to/from it
@@ -354,6 +388,54 @@ A web-based project management tool for small teams.
 
 ## Overview
 A web-based project management tool for small teams, featuring Kanban boards, team collaboration, and activity tracking.
+
+## Screen Transition Diagram
+
+```
++-------------------+                  +-------------------+
+|                   |   Login success  |                   |
+|  Login            | ---------------> |  Dashboard        |
+|  (0001)           |                  |  (0002)           |
+|                   |                  |                   |
++-------------------+                  +-------------------+
+                                          |            |
+                              Click       |            |  Click
+                              project     |            |  "Settings"
+                                          v            v
+                                +---------------+  +-------------------+
+                                |               |  |                   |
+                                | Kanban Board  |  | User Settings     |
+                                | (0003)        |  | (0005)            |
+                                |               |  |                   |
+                                +---------------+  +-------------------+
+                                       |
+                              Click    |
+                              settings |
+                                       v
+                                +-------------------+
+                                |                   |
+                                | Project Settings  |
+                                | (0004)            |
+                                |                   |
+                                +-------------------+
+
++-------------------------------------------------------+
+|              Navigation Header (0006)                 |
+|  Persistent across all authenticated pages (0002-0005)|
++-------------------------------------------------------+
+```
+
+### Transitions
+
+| From | Action | To |
+|---|---|---|
+| Login (0001) | Successful login | Dashboard (0002) |
+| Dashboard (0002) | Click project card | Kanban Board (0003) |
+| Dashboard (0002) | Click user avatar / settings | User Settings (0005) |
+| Kanban Board (0003) | Click board settings | Project Settings (0004) |
+| Any authenticated page | Click logo / Dashboard nav | Dashboard (0002) |
+| Any authenticated page | Click user dropdown > Settings | User Settings (0005) |
+| Any authenticated page | Click user dropdown > Logout | Login (0001) |
 
 ## Wireframe Map
 | ID | Wireframe Type | Name | Description |

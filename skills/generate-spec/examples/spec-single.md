@@ -3,6 +3,51 @@
 ## Overview
 A budget-vs-actual management system for Keio Store's corporate planning department. A single-page dashboard that moves away from Excel dependency to centrally manage budgets, forecasts, and actuals. Integrates all functions — budget entry, forecast management, actuals review, variance analysis, report export, and master management — via tab navigation, with automatic actuals import through accounting system integration and real-time budget-vs-actual comparison.
 
+## Screen Transition Diagram
+
+```
++-----------------------------------------------------------------------+
+|                    Budget Management Dashboard (0001)                  |
+|                                                                       |
+|  +------------+  +-----------+  +----------+  +---------+             |
+|  | Dashboard  |  | Budget    |  | Forecast |  | Actuals |             |
+|  | (default)  |  | Entry     |  | Mgmt     |  | Review  |             |
+|  +-----+------+  +-----+-----+  +----------+  +----+----+             |
+|        |               |                            |                 |
+|        | Click KPI      | Submit          Drill-down |                 |
+|        v               v                            v                 |
+|  +------------+  +-----------+              +-------------+           |
+|  | Variance   |  | Budget    |              | Variance    |           |
+|  | Analysis   |  | Approval* |              | Analysis    |           |
+|  +------------+  +-----------+              +-------------+           |
+|                                                                       |
+|  +----------+  +-----------+  +-------------------+                   |
+|  | Reports  |  | Master    |  | (Admin only)      |                   |
+|  |          |  | Mgmt      |  |                   |                   |
+|  +----------+  +-----------+  +-------------------+                   |
+|                                                                       |
+|  * Budget Approval is handled within the Budget Entry tab             |
++-----------------------------------------------------------------------+
+
++-----------------------------------------------------------------------+
+|  Navigation Header (0002) + Tab Navigation (0003)                     |
+|  Persistent — always visible at top of page                           |
++-----------------------------------------------------------------------+
+```
+
+### Transitions
+
+| From | Action | To |
+|---|---|---|
+| Dashboard tab | Click KPI card | Variance Analysis tab |
+| Dashboard tab | Click store table row | Actuals Review tab |
+| Dashboard tab | Click chart section | Reports tab |
+| Budget Entry tab | Submit budget | Budget approval flow (within tab) |
+| Actuals Review tab | Click drill-down row | Variance Analysis tab |
+| Any tab | Click tab in Tab Navigation (0003) | Corresponding tab |
+| Navigation Header (0002) | Click notification bell | Variance Analysis tab (alert items) |
+| Navigation Header (0002) | Click user dropdown > Logout | Login (external) |
+
 ## Wireframe Map
 | ID | Wireframe Type | Name | Description |
 |---|---|---|---|
