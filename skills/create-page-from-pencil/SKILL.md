@@ -1,7 +1,7 @@
 ---
 name: create-page-from-pencil
 description: Implements a responsive Astro/React/HTML page from a Pencil (.pen) design file
-argument-hint: '[pen-file-path] [output-path] [framework] [assets-dir]'
+argument-hint: '[pen-file-path] [framework] [assets-dir]'
 disable-model-invocation: true
 ---
 
@@ -14,17 +14,14 @@ You are a frontend developer. Your task is to implement a responsive page from a
 1. **Parse the arguments**:
    - First argument: path to .pen file (optional, defaults to `pencil/design.pen`)
    - Second argument: framework - "react", "astro", or "html" (optional, will auto-detect if not provided)
-   - Third argument: output file path (optional, uses framework defaults if not provided)
-   - Fourth argument: assets directory path (optional, defaults to `src/assets/images`)
+   - Third argument: assets directory path (optional, defaults to `src/assets/images`)
    - Examples:
-     - (no args): Uses `pencil/design.pen`, auto-detect framework, default output, assets in `src/assets/images`
+     - (no args): Uses `pencil/design.pen`, auto-detect framework, assets in `src/assets/images`
      - `pencil/design.pen`: Explicit pen file, auto-detect framework
      - `pencil/design.pen astro`: Pen file with Astro framework
      - `pencil/design.pen react`: Pen file with React framework
      - `pencil/design.pen html`: Pen file with plain HTML (no build tool)
-     - `pencil/design.pen astro src/pages/index.astro`: Pen file, Astro, custom output path
-     - `pencil/design.pen html index.html`: Pen file, HTML, custom output path
-     - `pencil/design.pen astro src/pages/index.astro src/assets/images`: All arguments explicit
+     - `pencil/design.pen astro src/assets/images`: Pen file, Astro, custom assets directory
    - If the pen file does not exist, inform the user that the `.pen` file must be created manually in the Pencil application first, and stop
 
 2. **Auto-detect framework** (if not explicitly provided):
@@ -237,7 +234,7 @@ You are a frontend developer. Your task is to implement a responsive page from a
 12. **Output**:
     - Confirm the page has been implemented
     - Mention the framework used (React, Astro, or HTML)
-    - Mention the .pen file and output file path
+    - Mention the .pen file and framework used
     - List the file(s) created or modified
     - List all images copied to the public directory
     - Summarize the responsive behavior:
@@ -484,14 +481,8 @@ import heroBgImg from '../assets/images/hero-bg.webp'
 # HTML (plain HTML, no build tool needed)
 /create-page-from-pencil pencil/design.pen html
 
-# Astro with custom output path
-/create-page-from-pencil pencil/design.pen astro src/pages/index.astro
-
-# HTML with custom output path
-/create-page-from-pencil pencil/design.pen html index.html
-
-# All arguments explicit (pen file, framework, output path, assets directory)
-/create-page-from-pencil pencil/design.pen astro src/pages/index.astro src/assets/images
+# All arguments explicit (pen file, framework, assets directory)
+/create-page-from-pencil pencil/design.pen astro src/assets/images
 ```
 
 ## Workflow Example
