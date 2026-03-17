@@ -40,7 +40,7 @@ You are a build tools specialist. Your task is to generate a PDF from the wirefr
    b. Verify the SVG file exists. If not, log a warning and skip it.
    c. Determine the PNG output path by flattening the directory structure with `--` as separator:
       - `../0001/1024/login-wireframe.svg` → `docs/wireframes/catalog/images/0001--1024--login-wireframe.png`
-      - `../0005/375/forecast-management-wireframe.svg` → `docs/wireframes/catalog/images/0005--375--forecast-management-wireframe.png`
+      - `../0005/375/quiz-wireframe.svg` → `docs/wireframes/catalog/images/0005--375--quiz-wireframe.png`
    d. Convert using `rsvg-convert`:
       ```bash
       rsvg-convert -f png -d 150 -p 150 "{svg-path}" -o "{png-path}"

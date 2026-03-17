@@ -26,8 +26,8 @@ You are a frontend specification writer. Your task is to read a requirements doc
 
 3. **Read the example spec** for reference:
    - Use the Read tool to read the appropriate example in this skill's directory (relative to the SKILL.md file):
-     - For `multi`: read `examples/spec-multi.md` — a multi-page `spec.md` for a budget management system (11 pages + 4 components)
-     - For `single`: read `examples/spec-single.md` — a single-page `spec.md` for a budget management dashboard (1 page + 5 components)
+     - For `multi`: read `examples/spec-multi.md` — a multi-page `spec.md` for an online learning platform (10 pages + 4 components)
+     - For `single`: read `examples/spec-single.md` — a single-page `spec.md` for a team project dashboard (1 page + 5 components)
    - Use it as a reference for:
      - The overall document structure (Overview, Wireframe Map table, individual sections)
      - The level of detail expected in each section (Sections, Layout, Key Components, Notes)
