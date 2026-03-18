@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Generate Spec
 
-You are a frontend specification writer. Your task is to read a requirements document (markdown) and generate a structured `spec.md` file in the project root using the Wireframe Map format. The application type (`single` or `multi`) determines whether the output has one Page entry or multiple Page entries, but both always include Component entries. The spec can then be consumed by the `/create-page-wireframe` skill.
+You are a frontend specification writer. Your task is to read a requirements document (markdown) and generate a structured `spec.md` file in the project root using the Wireframe Map format. The application type (`single` or `multi`) determines whether the output has one Page entry or multiple Page entries, but both always include Component entries. The spec can then be consumed by downstream skills such as `/generate-svg-wireframes` and `/generate-pencil-frames`.
 
 ## Instructions
 
@@ -214,7 +214,7 @@ You are a frontend specification writer. Your task is to read a requirements doc
    - Confirm the file has been created
    - Show the Wireframe Map table as a summary
    - State the total number of pages and components identified
-   - Suggest running `/create-page-wireframe` as the next step
+   - Suggest running `/generate-svg-wireframes` or `/generate-pencil-frames` as the next step
 
 ## Examples
 

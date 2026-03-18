@@ -16,20 +16,23 @@ A comprehensive set of Claude Code skills for wireframe-driven frontend developm
 
 This skill collection enables a structured, design-first approach to frontend development.
 
+> **Note:** The current workflows are designed for **developer-only environments** where Claude handles both design and implementation. A **Figma-based workflow** for teams with dedicated designers is planned for a future update.
+
 ### Workflow: Pencil Design Path
 
 The workflow uses Pencil (.pen) designs as a high-fidelity design step between wireframes and code:
 
-1. **Design Phase**: Create wireframes as SVG files
-2. **Pencil Setup**: Create the `.pen` file manually in the Pencil application (required before Claude can design)
-3. **Pencil Design Phase**: Generate high-fidelity designs from wireframes with AI-generated images
-4. **Implementation Phase**: Implement responsive pages directly from Pencil designs
+1. **Spec Phase**: Generate `spec.md` from requirements
+2. **Design Phase** (optional): Create wireframes as SVG files for reference
+3. **Pencil Setup**: Create the `.pen` file manually in the Pencil application (required before Claude can design)
+4. **Pencil Design Phase**: Generate high-fidelity designs directly from spec.md with AI-generated images
+5. **Implementation Phase**: Implement responsive pages directly from Pencil designs
 
 ```bash
-/create-page-wireframe
+/generate-svg-wireframes                # Optional - for wireframe reference
 # [MANUAL] Open Pencil app and create pencil/design.pen
-/create-pencil-design                  # All Page wireframes, all breakpoints
-/create-page-from-pencil pencil/design.pen
+/generate-pencil-frames                  # Designs from spec.md, all breakpoints
+/generate-pages-from-pencil pencil/design.pen
 npm run dev
 ```
 
@@ -37,20 +40,36 @@ This path produces responsive pages with images in fewer steps, allows visual ve
 
 All skills work together in a seamless workflow, ensuring consistency from design to implementation. Skills automatically detect whether your project uses React, Astro, or plain HTML, or you can specify the framework explicitly.
 
+### Workflow: SVG Wireframe Path
+
+A faster prototyping path that skips the Pencil design step, going directly from SVG wireframes to code:
+
+1. **Spec Phase**: Generate `spec.md` from requirements
+2. **Design Phase**: Create wireframes as SVG files
+3. **Implementation Phase**: Implement responsive pages directly from wireframes and spec.md
+
+```bash
+/generate-spec docs/requirements.md single
+/generate-svg-wireframes
+/generate-pages-from-wireframes
+npm run dev
+```
+
+This path is faster but produces less polished results (placeholder images, theme-approximated colors). Best for rapid prototyping or when visual fidelity is less critical.
+
 ## Directory Structure
 
 ```
 project/
 ├── .claude/
 │   └── settings.json              # Claude Code settings
-├── skills/                        # Custom Claude Code skills (9 skills)
+├── skills/                        # Custom Claude Code skills (8 skills)
 │   ├── generate-spec/
-│   ├── create-page-wireframe/
-│   ├── create-responsive-design/
-│   ├── create-pencil-design/
-│   ├── create-page-from-pencil/
+│   ├── generate-svg-wireframes/
+│   ├── generate-pencil-frames/
+│   ├── generate-pages-from-pencil/
 │   ├── generate-pencil-images/
-│   ├── convert-images-to-webp/
+│   ├── convert-images-into-webp/
 │   ├── generate-wireframe-catalog/
 │   └── generate-catalog-pdf/
 ├── docs/                          # Example artifacts and documentation
@@ -75,7 +94,7 @@ project/
 
 ### 1. generate-spec
 
-**Purpose**: Generates a structured `spec.md` from a requirements document for use by create-page-wireframe
+**Purpose**: Generates a structured `spec.md` from a requirements document for use by generate-svg-wireframes
 
 **Usage**:
 
@@ -104,134 +123,110 @@ project/
 - Auto-determines the next available wireframe ID from existing wireframes
 - Infers layout, components, and sections from functional requirements
 - For `multi`: identifies all pages, shared components, and navigation relationships
-- Produces a specification ready for immediate use by `/create-page-wireframe`
+- Produces a specification ready for immediate use by `/generate-svg-wireframes`
 
 **When to use**:
 
 - When you have a requirements document and need to create page designs
-- Before running `/create-page-wireframe` when no `spec.md` exists yet
+- Before running `/generate-svg-wireframes` when no `spec.md` exists yet
 - Use `single` for landing pages, portfolios, or single-screen apps
 - Use `multi` for business systems, admin panels, or apps with multiple screens
 
 ---
 
-### 2. create-page-wireframe
+### 2. generate-svg-wireframes
 
-**Purpose**: Creates SVG wireframe designs for pages based on specifications or existing web pages
+**Purpose**: Creates SVG wireframe designs for all pages and components across multiple breakpoints
 
 **Usage**:
 
 ```bash
-# From spec.md only (desktop, default 1024px)
-/create-page-wireframe
+# All default breakpoints [1024, 768, 375], English
+/generate-svg-wireframes
 
-# From existing web page URL
-/create-page-wireframe "https://stripe.com"
+# Desktop only
+/generate-svg-wireframes [1024]
 
-# Mobile wireframe (375px)
-/create-page-wireframe "" 375
+# Desktop + mobile
+/generate-svg-wireframes [1024, 375]
 
-# Mobile wireframe from URL
-/create-page-wireframe "https://stripe.com" 375
+# All breakpoints in Japanese
+/generate-svg-wireframes [1024, 768, 375] ja
 
-# Tablet wireframe (768px)
-/create-page-wireframe "" 768
+# Mobile only in Japanese
+/generate-svg-wireframes [375] ja
 ```
 
 **Input**:
 
-- URL (optional): Reference to existing web page for design inspiration
-- Breakpoint (optional, numeric): Viewport width for the wireframe. Defaults to `1024`. Controls SVG viewBox width and layout style (e.g., `375` for mobile, `768` for tablet)
+- Breakpoints (optional, array): List of viewport widths. Defaults to `[1024, 768, 375]`.
+- Language (optional, string): ISO 639-1 code. Defaults to `en`.
 
 **Reads**: `spec.md` from the project root for page specification
 
-**Output**: `{project-root}/docs/wireframes/{NNNN}/{page-name}-wireframe.svg` (always created at the project root directory, not inside the skill/plugin directory)
+**Output**: `{project-root}/docs/wireframes/{NNNN}/{breakpoint}/{page-name}-wireframe.svg` for all entries × all breakpoints
 
 **Features**:
 
-- Auto-extracts design system from URL (colors, typography, spacing)
-- Replicates section structure from analyzed pages
-- Combines URL structure with custom specifications
-- Uses WebFetch to analyze live web pages
-- Adapts layout to breakpoint: mobile (< 768px) uses single-column stacked layout, tablet (768-1023px) uses reduced columns, desktop (>= 1024px) uses multi-column grids
+- Generates wireframes for all breakpoints in a single invocation
+- Largest breakpoint generated first as the "primary" wireframe
+- Smaller breakpoints adapted from the primary with responsive layout rules
+- Adapts layout per breakpoint: mobile (< 768px) single-column, tablet (768-1023px) reduced columns, desktop (>= 1024px) multi-column grids
 
 **When to use**:
 
 - Start of every new page design
-- When you want to replicate an existing page's structure
-- When you need design system inspiration from real websites
-- When you need a mobile or tablet wireframe for a specific viewport width
+- When you need wireframes at multiple viewport widths
 
 ---
 
-### 3. create-responsive-design
+### 3. generate-pencil-frames
 
-**Purpose**: Creates side-by-side visualization of mobile and desktop layouts
+**Purpose**: Generates high-fidelity Pencil (.pen) design frames for all Pages and Components defined in `spec.md`. Reads `spec.md` to discover Page and Component types and to drive all design decisions (layout, sections, components, content). Builds all Components as standalone reusable Pencil components first, then generates Page designs that reference them via component instances.
 
 **Usage**:
 
 ```bash
-/create-responsive-design 0001           # Uses 1024px breakpoint (default)
-/create-responsive-design 0001 1024      # Uses 1024px breakpoint
-/create-responsive-design 0002 640       # Uses 640px breakpoint
+# Default breakpoints [1024, 768, 375], default pencil/design.pen
+/generate-pencil-frames
+
+# Desktop only
+/generate-pencil-frames [1024]
+
+# Desktop + mobile, custom pen file
+/generate-pencil-frames [1024, 375] pencil/my-design.pen
 ```
 
 **Input**:
 
-- Wireframe ID (required)
-- Breakpoint in pixels (optional, default: 1024)
-
-**Output**: `docs/wireframes/{NNNN}/{breakpoint}/{page-name}-responsive-wireframe.svg`
-
-**When to use**: To visualize and approve responsive layouts, or to generate responsive wireframe variants from the original design
-
----
-
-### 4. create-pencil-design
-
-**Purpose**: Generates high-fidelity Pencil (.pen) design frames for all Page wireframes in `docs/wireframes/`. Reads `spec.md` to discover Page and Component wireframe types, automatically processes all Page wireframes across all breakpoints, and builds referenced Component wireframes as reusable Pencil components within each Page design.
-
-**Usage**:
-
-```bash
-# Process all Page wireframes, default pencil/design.pen
-/create-pencil-design
-
-# Process all Page wireframes, targeting a specific .pen file
-/create-pencil-design pencil/my-design.pen
-```
-
-**Input**:
-
+- Breakpoints (optional, array): List of viewport widths. Defaults to `[1024, 768, 375]`.
 - `.pen` file path (optional, defaults to `pencil/design.pen`)
 
-**Output**: Design frames for all Page wireframes × all breakpoints in the `.pen` file, with Component wireframes built as reusable Pencil components and composed into each Page design
+**Output**: Design frames for all Pages × all breakpoints in the `.pen` file, with Components built as reusable Pencil components and composed into each Page design
 
 **Features**:
 
-- Reads `spec.md` to discover all Page wireframes and their referenced Component wireframes
-- Automatically processes all Page wireframes and all breakpoints in a single invocation
-- Builds Component wireframes (e.g., Navigation Header, Player Bar) as reusable Pencil components
+- Reads `spec.md` to discover all Pages and their referenced Components, and to drive layout and content decisions
+- Uses Pencil design guidelines and style guide for visual decisions (colors, typography, spacing)
+- Automatically processes all Pages and all breakpoints in a single invocation
+- Builds Components (e.g., Navigation Header, Player Bar) as reusable Pencil components
 - Composes Component instances into Page sections where `spec.md` maps them
-- Faithfully reproduces wireframe colors, typography, and layout
-- Creates additional reusable components for repeated patterns within the Page wireframe
+- Creates additional reusable components for repeated patterns
 - Generates AI images for placeholders
-- Supports desktop and mobile breakpoints
+- Supports configurable breakpoints (desktop, tablet, mobile)
 - Uses Pencil MCP tools for all .pen file operations
 
 **Prerequisites**:
 
 - `spec.md` must exist in the project root (generated by `/generate-spec`)
-- Page wireframe SVGs must exist in `docs/wireframes/{NNNN}/{breakpoint}/`
-- Component wireframes referenced by Pages must also exist in `docs/wireframes/`
 - **The `pencil/design.pen` file must be created manually in the Pencil application** -- the `.pen` format is proprietary and cannot be created by Claude or standard file tools
 - The Pencil application must be running with its MCP server connected
 
-**When to use**: After wireframe is created and the `.pen` file has been set up in the Pencil application, when you want a visual design phase with generated images before implementing code
+**When to use**: After `spec.md` exists and the `.pen` file has been set up in the Pencil application, when you want a visual design phase with generated images before implementing code
 
 ---
 
-### 5. generate-pencil-images
+### 4. generate-pencil-images
 
 **Purpose**: Generates or regenerates AI images for image nodes within the currently selected Pencil (.pen) design frame
 
@@ -268,7 +263,7 @@ project/
 
 ---
 
-### 6. create-page-from-pencil
+### 5. generate-pages-from-pencil
 
 **Purpose**: Implements responsive React, Astro, or HTML pages from Pencil (.pen) design files, copying images from `pencil/images/` to the assets directory
 
@@ -276,19 +271,19 @@ project/
 
 ```bash
 # Auto-detect framework, default assets directory (src/assets/images)
-/create-page-from-pencil pencil/design.pen
+/generate-pages-from-pencil pencil/design.pen
 
 # Specify framework
-/create-page-from-pencil pencil/design.pen astro
-/create-page-from-pencil pencil/design.pen react
-/create-page-from-pencil pencil/design.pen html
+/generate-pages-from-pencil pencil/design.pen astro
+/generate-pages-from-pencil pencil/design.pen react
+/generate-pages-from-pencil pencil/design.pen html
 
 # Specify output path
-/create-page-from-pencil pencil/design.pen astro src/pages/landing.astro
-/create-page-from-pencil pencil/design.pen html landing.html
+/generate-pages-from-pencil pencil/design.pen astro src/pages/landing.astro
+/generate-pages-from-pencil pencil/design.pen html landing.html
 
 # Specify output path and assets directory
-/create-page-from-pencil pencil/design.pen astro src/pages/index.astro src/assets/images
+/generate-pages-from-pencil pencil/design.pen astro src/pages/index.astro src/assets/images
 ```
 
 **Input**:
@@ -318,13 +313,13 @@ project/
 
 - A `.pen` file with at least one design screen
 - Pencil MCP server available for reading .pen files
-- Images generated in `pencil/images/` (via `/generate-pencil-images` or `/create-pencil-design`)
+- Images generated in `pencil/images/` (via `/generate-pencil-images` or `/generate-pencil-frames`)
 
 **When to use**: After Pencil designs are approved and ready for implementation
 
 ---
 
-### 7. convert-images-to-webp
+### 6. convert-images-into-webp
 
 **Purpose**: Converts PNG and JPEG images to WebP format for significantly reduced file sizes
 
@@ -332,14 +327,14 @@ project/
 
 ```bash
 # Convert images in current directory with default quality (80)
-/convert-images-to-webp
+/convert-images-into-webp
 
 # Convert images in a specific directory
-/convert-images-to-webp public/images
+/convert-images-into-webp public/images
 
 # Convert with custom quality (0-100)
-/convert-images-to-webp public/images 90
-/convert-images-to-webp images 75
+/convert-images-into-webp public/images 90
+/convert-images-into-webp images 75
 ```
 
 **Input**:
@@ -366,7 +361,7 @@ project/
 
 ---
 
-### 8. generate-wireframe-catalog
+### 7. generate-wireframe-catalog
 
 **Purpose**: Automatically generates a comprehensive wireframe catalog
 
@@ -401,7 +396,7 @@ project/
 
 ---
 
-### 9. generate-catalog-pdf
+### 8. generate-catalog-pdf
 
 **Purpose**: Converts wireframe catalog HTML to PDF, with SVG-to-PNG conversion for reliable rendering
 
@@ -454,11 +449,12 @@ When creating a new page from scratch:
    -> Reads: requirements markdown file
    -> Creates: spec.md in project root (single-page or multi-wireframe format)
 
-# PHASE 1: DESIGN
+# PHASE 1: DESIGN (Optional)
 # ----------------------------------------
-1. /create-page-wireframe
+1. /generate-svg-wireframes
    -> Reads: spec.md from project root
    -> Creates: docs/wireframes/{NNNN}/{page-name}-wireframe.svg
+   -> Optional: For wireframe reference only; not required for Pencil design
 
 # PHASE 2: PENCIL SETUP
 # ----------------------------------------
@@ -469,11 +465,11 @@ When creating a new page from scratch:
 
 # PHASE 3: PENCIL DESIGN
 # ----------------------------------------
-3. /create-pencil-design
-   -> Reads: spec.md to discover all Page wireframes and their referenced Components
-   -> Scans: docs/wireframes/ to find all breakpoints for each Page wireframe
-   -> Creates: Design frames for all Page wireframes × all breakpoints in .pen file
-   -> Builds: Referenced Component wireframes as reusable Pencil components
+3. /generate-pencil-frames [breakpoints] [pen-file-path]
+   -> Reads: spec.md to discover all Pages and Components, and to drive all design decisions
+   -> Uses: Pencil design guidelines and style guide for visual decisions
+   -> Creates: Design frames for all Pages × all breakpoints in .pen file
+   -> Builds: Components as reusable Pencil components
 
 # PHASE 4: REVIEW
 # ----------------------------------------
@@ -481,7 +477,7 @@ When creating a new page from scratch:
 
 # PHASE 5: IMPLEMENTATION
 # ----------------------------------------
-5. /create-page-from-pencil pencil/design.pen
+5. /generate-pages-from-pencil pencil/design.pen
    -> Creates: Responsive page with images (React, Astro, or HTML, auto-detected)
    -> Handles responsive design and image integration in one step
 
@@ -497,11 +493,11 @@ When creating a new page from scratch:
 | Step | Skill                          | Input                            | Output                                                       | Required? |
 | ---- | ------------------------------ | -------------------------------- | ------------------------------------------------------------ | --------- |
 | 0    | generate-spec                  | Requirements path + type         | spec.md                                                      | Optional  |
-| 1    | create-page-wireframe          | Specification                    | Wireframe SVGs                                               | Yes       |
+| 1    | generate-svg-wireframes         | Specification + breakpoints      | Wireframe SVGs (all breakpoints)                             | Optional  |
 | 2    | [MANUAL] Create .pen in Pencil | -                                | pencil/design.pen                                            | Yes       |
-| 3    | create-pencil-design           | (none, or .pen file path)        | .pen design frames for all Pages × all breakpoints           | Yes       |
+| 3    | generate-pencil-frames           | Breakpoints + pen file path      | .pen design frames for all Pages × all breakpoints           | Yes       |
 | 4    | [Optional review]              | -                                | Refined designs                                              | No        |
-| 5    | create-page-from-pencil        | .pen file + Framework            | Responsive page with images                                  | Yes       |
+| 5    | generate-pages-from-pencil        | .pen file + Framework            | Responsive page with images                                  | Yes       |
 | 6    | npm run dev                    | -                                | Running dev server                                           | Yes       |
 
 ### Minimal Workflows
@@ -509,32 +505,32 @@ When creating a new page from scratch:
 **Standard: Pencil Design Path (responsive page with images):**
 
 ```bash
-# Wireframe -> Pencil setup -> Pencil design -> Code
-/create-page-wireframe
+# Spec -> Pencil setup -> Pencil design -> Code
+/generate-svg-wireframes                # Optional - for wireframe reference
 # [MANUAL] Open Pencil app -> Create new document -> Save as pencil/design.pen
-/create-pencil-design                  # All Page wireframes, all breakpoints
+/generate-pencil-frames                  # Designs from spec.md, all breakpoints
 # Review and refine in Pencil editor
-/create-page-from-pencil pencil/design.pen
+/generate-pages-from-pencil pencil/design.pen
 npm run dev
 ```
 
 **Astro-Specific Workflow (Multiple Pages):**
 
 ```bash
-# Create all wireframes, then generate all Pencil designs at once
-/create-page-wireframe
+# Generate spec, then create Pencil designs directly
+/generate-svg-wireframes                # Optional
 # [MANUAL] Create pencil/design.pen
-/create-pencil-design                  # Processes all Page wireframes (0001, 0002, etc.)
-/create-page-from-pencil pencil/design.pen astro
+/generate-pencil-frames                  # Processes all Pages (0001, 0002, etc.)
+/generate-pages-from-pencil pencil/design.pen astro
 
 npm run dev
 ```
 
 ### Important Rules
 
-1. **Never skip create-page-wireframe** - It's the foundation
-2. **Ensure `spec.md` exists** - `create-pencil-design` reads it to discover all Page and Component wireframe types
-3. **Create `pencil/design.pen` in the Pencil app BEFORE running create-pencil-design** - The `.pen` format is proprietary and cannot be created by Claude
+1. **Ensure `spec.md` exists** - `generate-pencil-frames` reads it to discover all Pages and Components, and to drive all design decisions
+2. **Create `pencil/design.pen` in the Pencil app BEFORE running generate-pencil-frames** - The `.pen` format is proprietary and cannot be created by Claude
+3. **Wireframes are optional** - `generate-svg-wireframes` can be run for reference, but `generate-pencil-frames` does not depend on wireframe SVGs
 4. **Test after each phase** - Catch issues early
 
 ### Iterative Updates
@@ -542,9 +538,9 @@ npm run dev
 **Update design:**
 
 ```bash
-[Edit wireframe manually]
-/create-pencil-design
-/create-page-from-pencil pencil/design.pen
+[Edit spec.md]
+/generate-pencil-frames
+/generate-pages-from-pencil pencil/design.pen
 ```
 
 ---
@@ -555,12 +551,10 @@ npm run dev
 
 ```
 +-----------------------------------------------------------------+
-|                     1. DESIGN PHASE                              |
+|                  1. DESIGN PHASE (Optional)                      |
 +-----------------------------------------------------------------+
                               |
-        /create-page-wireframe
-                              |
-              docs/wireframes/0001/page-wireframe.svg
+        /generate-svg-wireframes (optional reference)
                               |
 +-----------------------------------------------------------------+
 |               2. PENCIL SETUP PHASE [MANUAL]                     |
@@ -573,10 +567,11 @@ npm run dev
 |                  3. PENCIL DESIGN PHASE                          |
 +-----------------------------------------------------------------+
                               |
-                    /create-pencil-design
+                    /generate-pencil-frames
                               |
-       Reads spec.md -> discovers all Page wireframes
-       Builds Component wireframes as reusable Pencil components
+       Reads spec.md -> discovers all Pages and Components
+       Uses design guidelines + style guide for visual decisions
+       Builds Components as reusable Pencil components
        Creates design frames for all Pages x all breakpoints
                               |
          [Review and refine designs in Pencil editor]
@@ -585,7 +580,7 @@ npm run dev
 |                4. IMPLEMENTATION PHASE                           |
 +-----------------------------------------------------------------+
                               |
-               /create-page-from-pencil pencil/design.pen
+               /generate-pages-from-pencil pencil/design.pen
                               |
       Responsive page with images (React, Astro, or HTML)
                               |
@@ -602,23 +597,23 @@ npm run dev
 ```bash
 # 1. Generate spec.md from requirements (or create it manually)
 /generate-spec docs/requirements.md multi
-/create-page-wireframe
-# Output: docs/wireframes/0001/tcg-landing-page-wireframe.svg
+/generate-svg-wireframes              # Optional - for wireframe reference
 
 # 2. [MANUAL] Create .pen file in Pencil application
 #    Open Pencil app -> Create new document -> Save as pencil/design.pen
 #    Ensure the Pencil MCP server is running and connected
 
-# 3. Create Pencil design frames for all Page wireframes
-/create-pencil-design
-# Reads spec.md to discover all Page wireframes (0001, 0002) and their referenced Components (0003, 0004, 0005)
-# Builds Component wireframes as reusable Pencil components
+# 3. Create Pencil design frames from spec.md
+/generate-pencil-frames
+# Reads spec.md to discover all Pages (0001, 0002) and their referenced Components (0003, 0004, 0005)
+# Uses design guidelines + style guide for visual decisions
+# Builds Components as reusable Pencil components
 # Output: Design frames for all Pages x all breakpoints in pencil/design.pen
 
 # 4. (Optional) Review and refine designs in Pencil editor
 
 # 5. Implement the page from Pencil design (auto-detects framework)
-/create-page-from-pencil pencil/design.pen
+/generate-pages-from-pencil pencil/design.pen
 # Output: src/pages/tcg-landing-page.astro (Astro), src/App.tsx (React), or index.html (HTML)
 # Includes: responsive design, extracted images, mobile-first Tailwind
 
@@ -629,26 +624,26 @@ npm run dev
 ### Example: Explicitly Specifying Framework
 
 ```bash
-/create-page-from-pencil pencil/design.pen astro
-/create-page-from-pencil pencil/design.pen react
-/create-page-from-pencil pencil/design.pen html
+/generate-pages-from-pencil pencil/design.pen astro
+/generate-pages-from-pencil pencil/design.pen react
+/generate-pages-from-pencil pencil/design.pen html
 ```
 
 ## Detailed Usage
 
 ### Working with Multiple Breakpoints
 
-You can create responsive wireframe variants for different breakpoints:
+The `generate-svg-wireframes` skill generates all breakpoints in a single invocation:
 
 ```bash
-# Create responsive wireframe for tablets (768px)
-/create-responsive-design 0001 768
+# All default breakpoints [1024, 768, 375]
+/generate-svg-wireframes
 
-# Create responsive wireframe for large screens (1024px)
-/create-responsive-design 0001 1024
+# Desktop + mobile only
+/generate-svg-wireframes [1024, 375]
 
-# Create responsive wireframe for extra large screens (1280px)
-/create-responsive-design 0001 1280
+# Custom breakpoints
+/generate-svg-wireframes [1280, 1024, 768, 375]
 ```
 
 **Tailwind CSS Breakpoint Mapping:**
@@ -670,20 +665,20 @@ Skills automatically detect your project framework by checking:
 **Auto-detection (recommended):**
 
 ```bash
-/create-page-from-pencil pencil/design.pen
+/generate-pages-from-pencil pencil/design.pen
 ```
 
 **Manual specification:**
 
 ```bash
 # Force React
-/create-page-from-pencil pencil/design.pen react
+/generate-pages-from-pencil pencil/design.pen react
 
 # Force Astro
-/create-page-from-pencil pencil/design.pen astro
+/generate-pages-from-pencil pencil/design.pen astro
 
 # Force HTML (no build tool needed)
-/create-page-from-pencil pencil/design.pen html
+/generate-pages-from-pencil pencil/design.pen html
 ```
 
 **Key Differences:**
@@ -792,7 +787,7 @@ The workflow supports iteration:
 ls docs/wireframes/0001/
 
 # Create wireframe if missing
-/create-page-wireframe
+/generate-svg-wireframes
 ```
 
 ### Tailwind CSS Not Working
@@ -814,9 +809,9 @@ ls docs/wireframes/0001/
 
 ```bash
 # Explicitly specify the framework
-/create-page-from-pencil pencil/design.pen astro
-/create-page-from-pencil pencil/design.pen react
-/create-page-from-pencil pencil/design.pen html
+/generate-pages-from-pencil pencil/design.pen astro
+/generate-pages-from-pencil pencil/design.pen react
+/generate-pages-from-pencil pencil/design.pen html
 ```
 
 ### Astro Page Not Found
@@ -911,4 +906,4 @@ For issues or questions:
 **Version**: 2.2
 **Last Updated**: 2026-03-14
 **Frameworks**: React, Astro, HTML
-**Skills**: 9 (generate-spec, create-page-wireframe, create-responsive-design, create-pencil-design, generate-pencil-images, create-page-from-pencil, convert-images-to-webp, generate-wireframe-catalog, generate-catalog-pdf)
+**Skills**: 8 (generate-spec, generate-svg-wireframes, generate-pencil-frames, generate-pencil-images, generate-pages-from-pencil, convert-images-into-webp, generate-wireframe-catalog, generate-catalog-pdf)

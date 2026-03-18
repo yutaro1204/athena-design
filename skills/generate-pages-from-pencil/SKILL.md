@@ -1,5 +1,5 @@
 ---
-name: create-page-from-pencil
+name: generate-pages-from-pencil
 description: Implements a responsive Astro/React/HTML page from a Pencil (.pen) design file
 argument-hint: '[pen-file-path] [framework] [assets-dir]'
 disable-model-invocation: true
@@ -467,32 +467,31 @@ import heroBgImg from '../assets/images/hero-bg.webp'
 
 ```bash
 # Auto-detect framework, use pencil/design.pen, assets in src/assets/images
-/create-page-from-pencil
+/generate-pages-from-pencil
 
 # Explicit pen file
-/create-page-from-pencil pencil/design.pen
+/generate-pages-from-pencil pencil/design.pen
 
 # Astro framework
-/create-page-from-pencil pencil/design.pen astro
+/generate-pages-from-pencil pencil/design.pen astro
 
 # React framework
-/create-page-from-pencil pencil/design.pen react
+/generate-pages-from-pencil pencil/design.pen react
 
 # HTML (plain HTML, no build tool needed)
-/create-page-from-pencil pencil/design.pen html
+/generate-pages-from-pencil pencil/design.pen html
 
 # All arguments explicit (pen file, framework, assets directory)
-/create-page-from-pencil pencil/design.pen astro src/assets/images
+/generate-pages-from-pencil pencil/design.pen astro src/assets/images
 ```
 
 ## Workflow Example
 
-1. Designer creates wireframe: `docs/wireframes/0001/landing-wireframe.svg`
-2. **[MANUAL] Create the `.pen` file** in the Pencil application and save as `pencil/design.pen`
-3. Run `/create-pencil-design` to generate Pencil frames for all Page wireframes and breakpoints
-5. Refine design in Pencil editor (add images, adjust layout, etc.)
-6. **Run `/create-page-from-pencil pencil/design.pen astro`** to implement the page (or `html` for plain HTML)
-7. Review at `http://localhost:4321/` (Astro/React) or open the `.html` file in a browser (HTML) and iterate
+1. **[MANUAL] Create the `.pen` file** in the Pencil application and save as `pencil/design.pen`
+2. Run `/generate-pencil-frames` to generate Pencil frames for all Pages and breakpoints
+3. Refine design in Pencil editor (add images, adjust layout, etc.)
+4. **Run `/generate-pages-from-pencil pencil/design.pen astro`** to implement the page (or `html` for plain HTML)
+5. Review at `http://localhost:4321/` (Astro/React) or open the `.html` file in a browser (HTML) and iterate
 
 **Typical file output:**
 

@@ -1,5 +1,5 @@
 ---
-name: convert-images-to-webp
+name: convert-images-into-webp
 description: Converts PNG and JPEG images to WebP format for optimized file sizes
 argument-hint: '[directory] [quality]'
 disable-model-invocation: true

@@ -230,7 +230,7 @@ Use these formatting patterns:
 
 ````markdown
 ```bash
-/create-page-wireframe "description"
+/generate-svg-wireframes "description"
 ```
 ````
 
@@ -279,7 +279,7 @@ To update this catalog after adding new wireframes, run:
 If `docs/wireframes/` has no {NNNN} directories:
 - Create catalog with "No wireframes yet" message
 - Include usage guide and standards
-- Encourage creating first wireframe with `/create-page-wireframe`
+- Encourage creating first wireframe with `/generate-svg-wireframes`
 
 ### No components extracted
 If wireframes don't have components/ directories:
@@ -315,7 +315,7 @@ The catalog will be completely regenerated each time, ensuring it stays in sync 
 /generate-wireframe-catalog en
 
 # Regenerate after adding new wireframe
-/create-page-wireframe "New dashboard"
+/generate-svg-wireframes "New dashboard"
 /generate-wireframe-catalog ja
 
 # Regenerate after extracting components
