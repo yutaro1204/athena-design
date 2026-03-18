@@ -1,7 +1,7 @@
 ---
 name: generate-pages-from-wireframes
 description: Implements responsive pages directly from SVG wireframes and spec.md
-argument-hint: '[wireframe-ids] [framework] [output-path]'
+argument-hint: '[framework] [output-path]'
 disable-model-invocation: true
 ---
 
@@ -12,15 +12,13 @@ You are a frontend developer. Your task is to implement a responsive page direct
 ## Instructions
 
 1. **Parse the arguments**:
-   - First argument: comma-separated wireframe IDs or "all" (optional, defaults to all Page wireframes from spec.md)
-   - Second argument: framework - "react", "astro", or "html" (optional, will auto-detect if not provided)
-   - Third argument: output path (optional, framework-dependent default)
+   - First argument: framework - "react", "astro", or "html" (optional, will auto-detect if not provided)
+   - Second argument: output path (optional, framework-dependent default)
+   - All Page wireframes from spec.md are always generated (no selective IDs)
    - Examples:
      - (no args): All Page wireframes, auto-detect framework, default output path
-     - `all`: Explicit all wireframes, auto-detect framework
-     - `0001,0002`: Specific wireframe IDs
-     - `all react`: All wireframes with React framework
-     - `0001 astro src/pages/landing.astro`: Specific wireframe, Astro, custom output path
+     - `react`: All Page wireframes with React framework
+     - `astro src/pages/landing.astro`: All Page wireframes, Astro, custom output path
    - Default output paths by framework:
      - React: `src/App.tsx`
      - Astro: `src/pages/{page-name}.astro`
@@ -438,17 +436,11 @@ const features = [
 # All Page wireframes, auto-detect framework, default output path
 /generate-pages-from-wireframes
 
-# All wireframes explicitly
-/generate-pages-from-wireframes all
-
-# Specific wireframe IDs
-/generate-pages-from-wireframes 0001,0002
-
 # Specify framework
-/generate-pages-from-wireframes all react
+/generate-pages-from-wireframes react
 
-# All arguments explicit
-/generate-pages-from-wireframes 0001 astro src/pages/landing.astro
+# Specify framework and output path
+/generate-pages-from-wireframes astro src/pages/landing.astro
 ```
 
 ## Important Notes

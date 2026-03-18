@@ -35,9 +35,21 @@ You are a wireframe designer. Your task is to read the `spec.md` file in the pro
    - Generate wireframes for **every entry** in the Wireframe Map.
    - **Cross-references**: When a page references a shared component (e.g., "Navigation Header: (Component 0012)"), look up that component's spec within the same file and incorporate its layout into the page wireframe. Shared components referenced within pages should be rendered inline as part of the page wireframe.
 
-3. **Generate wireframes for each entry at all breakpoints**:
+3. **Check coverage for already-generated wireframes**:
+   - Look for `docs/wireframes/coverage.md` in the project root
+   - **If the file exists**: Read it and extract entries with `"status": "applied"`. These wireframes have already been generated and should be **skipped** in step 4 below.
+     - For each applied entry, verify the SVG file still exists on disk using the Read tool. If the file is missing, treat the entry as `"missing"` and regenerate it.
+   - **If the file does not exist**: Proceed normally — all wireframes will be generated.
+   - Print a summary of what will be skipped and what will be generated:
+     ```
+     Coverage check:
+     Skipping: 0001/1024 (applied), 0001/768 (applied), 0001/375 (applied)
+     Will generate: 0002/1024, 0002/768, 0002/375
+     ```
 
-   For each page/component in the spec, create SVG wireframes for **all specified breakpoints**. The largest breakpoint is generated first as the "primary" wireframe, and smaller breakpoints are adapted from it.
+4. **Generate wireframes for each entry at all breakpoints**:
+
+   For each page/component in the spec that was not skipped in step 3, create SVG wireframes for **all specified breakpoints**. The largest breakpoint is generated first as the "primary" wireframe, and smaller breakpoints are adapted from it.
 
    a. **For Page wireframes**:
    - Render all sections listed in the spec (header, sidebar, main content, footer, etc.)
@@ -61,7 +73,7 @@ You are a wireframe designer. Your task is to read the `spec.md` file in the pro
    - Generate the largest breakpoint first as the "primary" wireframe
    - For each subsequent (smaller) breakpoint, adapt the primary wireframe following the responsive design guidance below
 
-4. **SVG specifications**:
+5. **SVG specifications**:
    - Use a viewBox of `"0 0 {breakpoint} {height}"` where `{breakpoint}` is the viewport width and `{height}` is determined by the content (taller for narrower viewports due to stacking)
    - **Background**: Always include a full-size background `<rect>` as the first child element of the `<svg>`, matching the viewBox dimensions:
      ```svg
@@ -91,7 +103,7 @@ You are a wireframe designer. Your task is to read the `spec.md` file in the pro
      - `>` → `&gt;`
      - For example, "User & Permissions" must be written as `<text>User &amp; Permissions</text>` in the SVG. Failing to escape `&` will cause the SVG to fail to render.
 
-5. **File naming and directory structure**:
+6. **File naming and directory structure**:
    - **IMPORTANT**: The `docs/` directory MUST be created at the project root directory (the repository root where CLAUDE.md lives), NOT inside the skill or plugin directory. Always resolve the path relative to the project root.
    - Create directory: `{project-root}/docs/wireframes/{NNNN}/{breakpoint}/`
    - Save each wireframe: `{project-root}/docs/wireframes/{NNNN}/{breakpoint}/{page-name}-wireframe.svg`
@@ -104,13 +116,46 @@ You are a wireframe designer. Your task is to read the `spec.md` file in the pro
      - `docs/wireframes/0001/375/login-wireframe.svg`
      - `docs/wireframes/0002/1024/dashboard-wireframe.svg`
 
-6. **Execution order**:
+7. **Execution order**:
    - Generate wireframes sequentially in Wireframe Map order (0001, 0002, ..., 00NN)
    - For each wireframe, generate all breakpoints (largest first, then smaller adaptations)
    - For each wireframe at each breakpoint, create the SVG file and confirm it was saved
    - After all wireframes are generated, output a summary table
 
-7. **Output**: After creating all wireframes:
+8. **Write coverage manifest** (after all generation is complete):
+   - Scan `docs/wireframes/` for all SVG files
+   - Cross-reference against spec.md Wireframe Map × breakpoints (from step 1)
+   - For each wireframe ID × breakpoint, classify as `applied` (SVG file exists) or `missing` (SVG file not found)
+   - Write `docs/wireframes/coverage.md` with the following format:
+
+     ```markdown
+     # SVG Wireframe Coverage
+
+     Generated: {ISO 8601 timestamp}
+
+     ## Summary
+
+     | Metric | Count |
+     |--------|-------|
+     | Total expected | {N} |
+     | Applied | {N} |
+     | Missing | {N} |
+
+     ## Wireframes
+
+     | ID | Name | Type | Breakpoint | Status | File Path |
+     |----|------|------|------------|--------|-----------|
+     | 0001 | Login | Page | 1024 | applied | docs/wireframes/0001/1024/login-wireframe.svg |
+     | 0001 | Login | Page | 768 | applied | docs/wireframes/0001/768/login-wireframe.svg |
+     | 0001 | Login | Page | 375 | applied | docs/wireframes/0001/375/login-wireframe.svg |
+     | 0002 | Dashboard | Page | 1024 | applied | docs/wireframes/0002/1024/dashboard-wireframe.svg |
+     | ... | ... | ... | ... | ... | ... |
+     ```
+
+   - If the manifest already existed, replace it with the current state
+   - Print a human-readable coverage summary (applied/missing counts)
+
+9. **Output**: After creating all wireframes:
    - Show a summary table of all generated wireframes:
      ```
      | ID   | Name                | Breakpoint | File Path |
@@ -121,8 +166,9 @@ You are a wireframe designer. Your task is to read the `spec.md` file in the pro
      | 0002 | Dashboard           | 1024       | docs/wireframes/0002/1024/dashboard-wireframe.svg |
      | ...  | ...                 | ...        | ... |
      ```
-   - State the total number of wireframes generated (entries × breakpoints)
+   - State the total number of wireframes generated (entries × breakpoints), noting how many were skipped (already applied) vs newly generated
    - If language was specified: Mention the language used for all wireframe text
+   - Confirm that `docs/wireframes/coverage.md` has been updated
    - Suggest the next step in the workflow (e.g., `/generate-pencil-frames`)
 
 ## Breakpoint-Specific Design Guidance
@@ -402,7 +448,10 @@ The file can include any level of detail. More detailed specifications produce m
 
 - [ ] `spec.md` read and all wireframe entries extracted
 - [ ] Breakpoints parsed (default [1024, 768, 375] if not specified)
-- [ ] For each wireframe entry, all breakpoints generated (largest first)
+- [ ] Coverage manifest (`docs/wireframes/coverage.md`) checked for already-applied wireframes
+- [ ] Applied entries verified on disk (SVG file still exists); missing files treated as "missing"
+- [ ] Already-applied wireframes skipped during generation
+- [ ] For each remaining wireframe entry, all breakpoints generated (largest first)
 - [ ] Directory structure created: `docs/wireframes/{NNNN}/{breakpoint}/`
 - [ ] Files saved with correct naming: `{page-name}-wireframe.svg`
 - [ ] viewBox width matches the breakpoint for each SVG
@@ -417,4 +466,5 @@ The file can include any level of detail. More detailed specifications produce m
 - [ ] Spacing is proportional to each viewport width
 - [ ] Color scheme is consistent across all breakpoints
 - [ ] XML characters properly escaped (`&` → `&amp;`, etc.)
-- [ ] Summary table shown with all generated wireframes (entries × breakpoints)
+- [ ] Coverage manifest (`docs/wireframes/coverage.md`) written/updated with current state
+- [ ] Summary table shown with all generated wireframes (entries × breakpoints), noting skipped vs newly generated
