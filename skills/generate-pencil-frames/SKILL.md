@@ -54,8 +54,14 @@ You are a design engineer. Your task is to generate high-fidelity Pencil (.pen) 
      "The file `{pen-file-path}` does not exist. Please create it in the Pencil application first, then re-run this skill."
    - **Always open the target `.pen` file** using `open_document("{pen-file-path}")` — do this unconditionally, regardless of what file is currently active in the editor.
    - Call `get_editor_state` after opening to confirm the file is active and inspect existing content
-   - Call `get_guidelines("landing-page")` for design rules and best practices
+   - Call `get_guidelines("landing-page")` for Pencil-specific design rules and best practices
    - Call `get_style_guide_tags` then `get_style_guide` with relevant tags for visual design inspiration (colors, typography, spacing)
+   - **Apply the `frontend-design` skill's aesthetic framework**: Before building any frames, use the Design Thinking process and Frontend Aesthetics Guidelines from the `frontend-design` skill to commit to a bold, intentional visual direction. Specifically:
+     - Choose a clear aesthetic tone (e.g. refined minimal, editorial, utilitarian, soft bento) and execute it consistently
+     - Pick distinctive, characterful typography — **never** default to Inter, Roboto, Arial, or other generic system fonts
+     - Define a cohesive color system: a dominant background, a strong primary accent, and supporting neutrals — avoid timid evenly-distributed palettes
+     - Design for spatial composition: use generous negative space or controlled density, asymmetry where appropriate, and avoid predictable layouts
+     - The Pencil frames must feel production-grade and visually memorable, not generic wireframe placeholders
 
 5. **Check coverage manifest for already-applied designs**:
    - Look for `pencil/coverage.md` (in the same directory as the `.pen` file)
